@@ -1,5 +1,5 @@
 #include "ui_MainWindow.h"
-#include "../include/MainWindow.h"
+#include "MainWindow.h"
 
 
 namespace QT {
