@@ -3,13 +3,13 @@
 //#include <QApplication>
 //#include <QDebug>
 #include "glog/logging.h"
-#include "BmpImage1Bit.h"
+//#include "BmpImage1Bit.h"
 
 int main(int argc, char *argv[]) {
     google::InitGoogleLogging(argv[0]);
-    google::SetStderrLogging(google::INFO);
-    LOG(INFO) << "TEST";
-    BmpImage1Bit bmpImage1Bit("test2.bmp");
+//    google::SetStderrLogging(google::INFO);
+//    LOG(INFO) << "TEST";
+//    BmpImage1Bit bmpImage1Bit("test2.bmp");
 //    bmpImage1Bit.printImage();
 //    Utils::createDirectory("log/log/log/log");
 //    QApplication a(argc, argv);
