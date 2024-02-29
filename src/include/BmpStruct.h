@@ -17,6 +17,7 @@
 // 按1字节压栈对齐
 
 /**
+ * @struct BmpFileHeader
  * @brief Bmp文件头结构体
  */
 struct BmpFileHeader {
@@ -27,6 +28,7 @@ struct BmpFileHeader {
 };
 
 /**
+ * @struct BmpInfoHeader
  * @brief Bmp信息头结构体
  */
 struct BmpInfoHeader {
@@ -44,6 +46,7 @@ struct BmpInfoHeader {
 };
 
 /**
+ * @struct BmpColorPalette
  * @brief 调色板信息结构体
  */
 struct BmpColorPalette {
@@ -54,6 +57,7 @@ struct BmpColorPalette {
 };
 
 /**
+ * @struct BmpPixel24Bit
  * @brief 24bit像素信息结构体
  */
 struct BmpPixel24Bit {
@@ -65,6 +69,7 @@ struct BmpPixel24Bit {
 #pragma pack(pop)
 
 /**
+ * @struct BmpFile
  * @brief BmpFile模版结构体
  * @tparam T 像素点的类型
  * @par 像素点类型: \n

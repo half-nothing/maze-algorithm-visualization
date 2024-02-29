@@ -16,6 +16,7 @@
 
 
 /**
+ * @class CircularlyLinkList
  * @brief 双循环链表
  * @tparam T 链表存储的数据类型
  */
@@ -161,6 +162,10 @@ public:
         }
     }
 
+    /**
+     * @brief 移除指定下标的节点
+     * @param[in] pos 移除节点的下标
+     */
     void remove(uint pos) override {
         NodePtr temp = findPtr(pos);
         if (temp == head) {
@@ -175,23 +180,72 @@ public:
         length--;
     }
 
+    /**
+     * @brief 移除从指定节点开始,len个节点
+     * @param[in] start 开始的节点下标
+     * @param[in] len 要删除的长度
+     */
     void remove(uint start, uint len) override {
+        NodePtr temp;
         if (start + len >= length) {
             if (start == 0) {
                 clear();
                 return;
             }
+            NodePtr startPtr = findPtr(start);
+            startPtr->prev->next = tail->next;
+            tail->next->prev = startPtr->prev;
+            while (startPtr != tail) {
+                temp = startPtr->next;
+                delete startPtr;
+                startPtr = temp;
+            }
+            delete startPtr;
+            tail = head->prev;
+            length = start;
+            return;
         }
+        uint end = start + len - 1;
+        NodePtr startPtr = findPtr(start);
+        NodePtr endPtr = findPtr(end);
+        startPtr->prev->next = endPtr->next;
+        endPtr->next->prev = startPtr->prev;
+        while (startPtr != endPtr) {
+            temp = startPtr->next;
+            delete startPtr;
+            startPtr = temp;
+        }
+        if (start == 0) {
+            head = startPtr->next;
+        }
+        delete startPtr;
+        length -= len;
     }
 
+    /**
+     * @brief 获取指定下标的节点存储的数据
+     * @param[in] pos 指定节点的下标
+     * @return 返回存储数据的引用
+     */
     T &get(uint pos) override {
         return findPtr(pos)->data;
     }
 
+    /**
+     * @brief 设置指定下标的节点的数据
+     * @param[in] pos 指定节点的下标
+     * @param[in] src 要修改成的数据
+     */
     void setValue(uint pos, const T &src) override {
         findPtr(pos)->data = src;
     }
 
+    /**
+     * @brief 获取包含指定数据的节点的下标
+     * @param[in] src 指定包含的数据
+     * @retval >0 包含指定数据的节点下标
+     * @retval -1 未找到包含指定数据的节点下标
+     */
     int getPos(const T &src) override {
         int index = 0;
         if (tail->data == src) {
@@ -206,13 +260,25 @@ public:
         return -1;
     }
 
+    /**
+     * @brief 对[]运算符的重载
+     */
     T &operator[](int pos) override {
         return get(pos);
     }
 
+    /**
+     * @brief 对指定范围内的节点执行某种操作
+     * @param[in] start 开始节点的下标
+     * @param[in] len 指定的长度
+     * @param[in] opt 要进行的操作
+     */
     void forEach(uint start, uint len, void (*opt)(T &)) override {
     }
 
+    /**
+     * @brief 重载对cout的运算符实现打印输出
+     */
     friend std::ostream &operator<<(std::ostream &os, const CircularlyLinkList &list) {
         os << "CircularlyLinkList Length: " << list.length << std::endl
            << "Content: ";
@@ -225,11 +291,22 @@ public:
         return os;
     }
 
+    /**
+     * @brief 初始化迭代器
+     * @param[in] pos 迭代器的开始坐标
+     * @param[in] isReverse 是否为反向迭代器
+     */
     void initIterator(uint pos, bool isReverse = false) {
         currentPtr = findPtr(pos);
         reverse = isReverse;
     }
 
+    /**
+     * @brief 获取迭代器的下一个数据
+     * @pre 首先需要调用::initIterator初始化迭代器
+     * @note 禁止在调用::initIterator之前调用本函数
+     * @return 返回存储数据的引用
+     */
     T &next() {
         if (currentPtr != nullptr) {
             T &temp = currentPtr->data;
