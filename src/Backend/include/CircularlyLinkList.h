@@ -30,7 +30,11 @@ public:
         append(init);
     }
 
+    /**
+     * @see ::clear
+     */
     ~CircularlyLinkList() {
+        // 如果head和tail都没有指向,代表双链表为空或者出错,直接返回
         if (head == nullptr && tail == nullptr) {
             return;
         }
@@ -47,6 +51,9 @@ public:
         std::cout << "Release " << total - length << " nodes." << std::endl;
     }
 
+    /**
+     * @brief 清空循环双链表
+     */
     void clear() override {
         if (head == nullptr && tail == nullptr) {
             return;
@@ -65,14 +72,32 @@ public:
         std::cout << "Release " << total - length << " nodes." << std::endl;
     }
 
+    /**
+     * @brief 判断双链表是否为空
+     * @retval true 双链表是空的
+     * @retval false 双链表非空
+     */
     bool isEmpty() override {
         return length == 0;
     }
 
+    /**
+     * @brief 返回双链表的长度
+     * @return 返回一个类型为unsigned int 类型的整数,表示双链表的长度
+     */
     uint size() override {
         return length;
     }
 
+    /**
+     * @brief 向双链表尾部添加一个节点
+     * @param[in] src 待插入节点的值
+     * @par example:
+     * @code
+     *  CircularlyLinkList linkList{1, 2};
+     *  linkList.append(3);
+     * @endcode
+     */
     void append(const T &src) override {
         auto temp = new Node(src);
         length++;
@@ -86,12 +111,31 @@ public:
         temp->next = head;
     }
 
+    /**
+     * @brief 将一个列表依次插入双链表
+     * @param[in] src 待插入的数字列表
+     * @par example:
+     * @code
+     *  CircularlyLinkList linkList{1, 2};
+     *  linkList.append({3, 4, 5});
+     * @endcode
+     */
     void append(InitList<T> src) override {
         for (const T &tmp: src) {
             append(tmp);
         }
     }
 
+    /**
+     * @brief 向双链表里面插入一个节点
+     * @param[in] pos 节点的插入位置
+     * @param[in] src 待插入节点的值
+     * @par example:
+     * @code
+     *  CircularlyLinkList linkList{1, 2};
+     *  linkList.insert(2, 5);
+     * @endcode
+     */
     void insert(uint pos, const T &src) override {
         NodePtr temp = findPtr(pos);
         auto tmp = new Node(src);
@@ -102,6 +146,15 @@ public:
         length++;
     }
 
+    /**
+     * @brief 将一个列表依次插入双链表的指定位置
+     * @param[in] pos 待插入的数字列表
+     * @par example:
+     * @code
+     *  CircularlyLinkList linkList{1, 2};
+     *  linkList.insert({{2, 5}, {2, 6}});
+     * @endcode
+     */
     void insert(InitList<std::pair<uint, T>> src) override {
         for (const std::pair<uint, T> &tmp: src) {
             insert(tmp.first, tmp.second);
@@ -183,16 +236,20 @@ public:
             currentPtr = reverse ? currentPtr->prev : currentPtr->next;
             return temp;
         }
-        return nullptr;
     }
 
 private:
-    NodePtr head = nullptr;
-    NodePtr tail = nullptr;
-    uint length = 0;
-    bool reverse = false;
-    NodePtr currentPtr = nullptr;
+    NodePtr head = nullptr;         // 指向双链表的头结点
+    NodePtr tail = nullptr;         // 指向双链表的尾节点
+    uint length = 0;                // 表示双链表的长度
+    bool reverse = false;           // 表明是否使用反向迭代器
+    NodePtr currentPtr = nullptr;   // 迭代器当前指向的节点
 
+    /**
+     * @brief 通过给定的下标查找节点
+     * @param[in] pos 想要查找的节点下标
+     * @return 指向节点的指针
+     */
     NodePtr findPtr(uint pos) {
         uint index = 0;
         NodePtr temp = head;

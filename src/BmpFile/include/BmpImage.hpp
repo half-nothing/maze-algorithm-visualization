@@ -25,14 +25,15 @@ public:
         }
 
         inputFile.read(reinterpret_cast<char *>(&bmpFile.infoHeader), sizeof(BmpInfoHeader));
-        width = bmpFile.infoHeader.imageWidth;
-        height = bmpFile.infoHeader.imageHeight;
-        bmpFile.pixels = new T[width * height];
-        vis = new bool[width * height];
-        dis = new int32_t[width * height];
-        memset(bmpFile.pixels, 0, width * height * sizeof(T));
-        memset(vis, 0, width * height * sizeof(bool));
-        memset(dis, 0, width * height * sizeof(int32_t));
+        bmpFile.width = bmpFile.infoHeader.imageWidth;
+        bmpFile.height = bmpFile.infoHeader.imageHeight;
+        bmpFile.pixelNumber = bmpFile.width * bmpFile.height;
+        bmpFile.pixels = new T[bmpFile.pixelNumber];
+        vis = new bool[bmpFile.pixelNumber];
+        dis = new int32_t[bmpFile.pixelNumber];
+        memset(bmpFile.pixels, 0, bmpFile.pixelNumber * sizeof(T));
+        memset(vis, 0, bmpFile.pixelNumber * sizeof(bool));
+        memset(dis, 0, bmpFile.pixelNumber * sizeof(int32_t));
     };
 
     ~BmpImage() {
@@ -73,9 +74,6 @@ protected:
     std::ifstream inputFile = nullptr;
     bool *vis = nullptr;
     int32_t *dis = nullptr;
-    uint32_t width;
-    uint32_t height;
-    uint32_t bytePerLine{};
 };
 
 
