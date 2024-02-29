@@ -10,6 +10,8 @@ public:
 
     void saveImage(const std::string &filename) override;
 
+    void toQPixMap(QPixmap &pixmap) override;
+
 private:
     void readImage() override;
 };

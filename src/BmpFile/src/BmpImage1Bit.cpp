@@ -28,7 +28,7 @@ void BmpImage1Bit::saveImage(const std::string &filename) {
                     break;
                 }
                 temp = temp << 1;
-                temp |= bmpFile.pixels[i * width + k];
+                temp |= bmpFile.pixels[i * width + k] ? 0x01 : 0x00;
             }
             file.write(reinterpret_cast<char *>(&temp), sizeof(uint8_t));
             if (flag)
@@ -63,7 +63,7 @@ void BmpImage1Bit::readImage() {
                     flag = true;
                     continue;
                 }
-                bmpFile.pixels[i * width + k] = temp & 1;
+                bmpFile.pixels[i * width + k] = temp & 1 ? 0xFF : 0x00;
             }
             if (flag)
                 break;
@@ -73,4 +73,9 @@ void BmpImage1Bit::readImage() {
             inputFile.seekg(-1, std::ios::cur);
     }
     inputFile.close();
+}
+
+void BmpImage1Bit::toQPixMap(QPixmap &pixmap) {
+    QImage qImage((uchar *) bmpFile.pixels, width, height, width, QImage::Format_Indexed8);
+    pixmap = QPixmap::fromImage(qImage);
 }

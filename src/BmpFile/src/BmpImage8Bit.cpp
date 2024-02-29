@@ -27,15 +27,24 @@ void BmpImage8Bit::readImage() {
     }
     bytePerLine = (width + 3) / 4 * 4;
 
-    bmpFile.palettes = new BmpColorPalette[256];
-    memset(bmpFile.palettes, 0, sizeof(BmpColorPalette) * 256);
-    bmpFile.paletteSize = 256;
-
-    inputFile.seekg(bmpFile.fileHeader.offsetSize, std::ios::beg);
-    for (int i = 0; i < 256; i++) {
-        inputFile.read(reinterpret_cast<char *>(bmpFile.palettes + i), sizeof(BmpColorPalette));
+    inputFile.seekg(sizeof(BmpFileHeader) + bmpFile.infoHeader.headerSize, std::ios::beg);
+    if (bmpFile.infoHeader.colors == 0) {
+        bmpFile.palettes = new BmpColorPalette[256];
+        memset(bmpFile.palettes, 0, sizeof(BmpColorPalette) * 256);
+        bmpFile.paletteSize = 256;
+        for (int i = 0; i < 256; i++) {
+            inputFile.read(reinterpret_cast<char *>(bmpFile.palettes + i), sizeof(BmpColorPalette));
+        }
+    } else {
+        bmpFile.palettes = new BmpColorPalette[bmpFile.infoHeader.colors];
+        memset(bmpFile.palettes, 0, sizeof(BmpColorPalette) * bmpFile.infoHeader.colors);
+        bmpFile.paletteSize = bmpFile.infoHeader.colors;
+        for (int i = 0; i < bmpFile.infoHeader.colors; i++) {
+            inputFile.read(reinterpret_cast<char *>(bmpFile.palettes + i), sizeof(BmpColorPalette));
+        }
     }
 
+    inputFile.seekg(bmpFile.fileHeader.offsetSize, std::ios::beg);
     for (int i = height - 1; i >= 0; i--) {
         for (int j = 0; j < width; j++) {
             inputFile.read(reinterpret_cast<char *>(bmpFile.pixels + i * width + j), sizeof(uint8_t));
@@ -44,4 +53,9 @@ void BmpImage8Bit::readImage() {
     }
 
     inputFile.close();
+}
+
+void BmpImage8Bit::toQPixMap(QPixmap &pixmap) {
+    QImage qImage(bmpFile.pixels, width, height, width, QImage::Format_Indexed8);
+    pixmap = QPixmap::fromImage(qImage);
 }

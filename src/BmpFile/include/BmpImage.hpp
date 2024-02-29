@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <QPixmap>
 #include "BmpStruct.h"
 
 template<typename T>
@@ -41,6 +42,8 @@ public:
     virtual void readImage() = 0;
 
     virtual void saveImage(const std::string &filename) = 0;
+
+    virtual void toQPixMap(QPixmap &pixmap) = 0;
 
 protected:
     BmpFile<T> bmpFile;

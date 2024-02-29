@@ -21,7 +21,7 @@ namespace QT {
 
         ~ImageDisplay() override;
 
-        void displayImage(QPixmap &Image);
+        void displayImage(QPixmap &image);
 
     private:
         void paintEvent(QPaintEvent *event) override;

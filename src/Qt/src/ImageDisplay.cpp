@@ -7,6 +7,7 @@ namespace QT {
             QWidget(parent), ui(new Ui::ImageDisplay) {
         ui->setupUi(this);
     }
+
     ImageDisplay::~ImageDisplay() {
         delete ui;
     }
@@ -15,15 +16,19 @@ namespace QT {
         this->repaint();
     }
 
-    void ImageDisplay::displayImage(QPixmap &Image) {
-        if (Image.width() != this->imageWidth || Image.height() != this->imageHeight) {
-            return;
+    void ImageDisplay::displayImage(QPixmap &image) {
+        if (image.width() != this->imageWidth || image.height() != this->imageHeight) {
+            this->imageWidth = image.width();
+            this->imageHeight = image.height();
         }
-        currentImage = Image;
+        currentImage = image;
         this->repaint();
     }
 
     void ImageDisplay::paintGrid() {
+        if (zoom < 1) {
+            return;
+        }
         QPainter painter(this);
 
         painter.setPen(QPen(Qt::black, 1));
@@ -52,14 +57,14 @@ namespace QT {
         if (event->angleDelta().y() > 0) {
             zoom += 0.1;
             widthPerPix = 4 * zoom;
-        } else {
-            zoom -= 0.1;
-
-            if (zoom < 1.0) {
-                zoom = 1.0;
-            }
-            widthPerPix = 4 * zoom;
+            this->repaint();
+            return;
         }
+        zoom -= 0.1;
+        if (zoom < 0.2) {
+            zoom = 0.2;
+        }
+        widthPerPix = 4 * zoom;
         this->repaint();
     }
 
@@ -86,20 +91,23 @@ namespace QT {
     }
 
     void ImageDisplay::mousePressEvent(QMouseEvent *event) {
-        if (event->button() == Qt::LeftButton) {
-            leftMousePressed = true;
-            preMousePos = event->position();
+        if (event->button() != Qt::LeftButton) {
+            return;
         }
+        leftMousePressed = true;
+        preMousePos = event->position();
     }
 
     void ImageDisplay::mouseReleaseEvent(QMouseEvent *event) {
-        if (event->button() == Qt::LeftButton) {
-            leftMousePressed = false;
+        if (event->button() != Qt::LeftButton) {
+            return;
         }
+        leftMousePressed = false;
     }
 
     void ImageDisplay::drawPixel(int x, int y, QColor color) {
-        if (x < 0 || y < 0 || x >= imageWidth || y >= imageHeight)return;
+        if (x < 0 || y < 0 || x >= imageWidth || y >= imageHeight)
+            return;
         QPainter painter(this);
         painter.setPen(QPen(Qt::black, 1));
         painter.setBrush(color);

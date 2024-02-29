@@ -2,6 +2,7 @@
 #define DAC_MAINWINDOW_H
 
 #include <QMainWindow>
+#include "ImageDisplay.h"
 
 namespace QT {
     QT_BEGIN_NAMESPACE
