@@ -1,30 +1,32 @@
-/**
+/**********************************************
+ * @file Stack.h
+ * @brief 顺序栈头文件
  * @author Half_nothing
- * @data 2023.06
- * @class SequentialStack
- */
-
+ * @email Half_nothing@163.com
+ * @version 1.0.0
+ * @date 2024.2.29
+ * @license GNU General Public License (GPL)
+ **********************************************/
 #ifndef DAC_SEQUENTIAL_STACK_H
 #define DAC_SEQUENTIAL_STACK_H
 
 #include <exception>
 #include <iostream>
-#include "Stack.h"
-#include "Logger.hpp"
+#include "LimitedSequentialStructure.h"
 
 template<typename T>
-class SequentialStack : public Stack<T> {
+class Stack : public LimitedSequentialStructure<T> {
 public:
-    SequentialStack() {
+    Stack() {
         data = new T[capacity];
     }
 
-    SequentialStack(const std::initializer_list<T> &init) {
+    Stack(InitList<T> init) {
         data = new T[capacity];
         push(init);
     }
 
-    ~SequentialStack() {
+    ~Stack() {
         delete[] data;
     }
 
@@ -71,8 +73,8 @@ public:
         return now + 1;
     }
 
-    friend Logger &operator<<(Logger &os, const SequentialStack &stack) {
-        os << "SequentialStack Capacity Usage: " << stack.now + 1 << "/" << stack.capacity << std::endl
+    friend Logger &operator<<(Logger &os, const Stack &stack) {
+        os << "Stack Capacity Usage: " << stack.now + 1 << "/" << stack.capacity << std::endl
            << "Content: ";
         for (int i = 0; i < stack.now + 1; ++i) {
             std::cout << stack.data[i] << " ";

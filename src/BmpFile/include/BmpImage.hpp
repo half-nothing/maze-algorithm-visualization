@@ -6,12 +6,13 @@
 #include <fstream>
 #include <cstring>
 #include <QPixmap>
+#include <QPainter>
 #include "BmpStruct.h"
 
 template<typename T>
 class BmpImage {
 public:
-    explicit BmpImage(const std::string &filename) {
+    BmpImage(const std::string &filename) {
         inputFile = std::ifstream(filename, std::ios::binary);
         if (!inputFile) {
             std::cerr << "Failed to open file: " << filename << std::endl;
@@ -27,14 +28,30 @@ public:
         width = bmpFile.infoHeader.imageWidth;
         height = bmpFile.infoHeader.imageHeight;
         bmpFile.pixels = new T[width * height];
+        vis = new bool[width * height];
+        dis = new int32_t[width * height];
         memset(bmpFile.pixels, 0, width * height * sizeof(T));
+        memset(vis, 0, width * height * sizeof(bool));
+        memset(dis, 0, width * height * sizeof(int32_t));
     };
 
     ~BmpImage() {
-        if (bmpFile.pixels != nullptr)
+        if (bmpFile.pixels != nullptr) {
             delete[] bmpFile.pixels;
-        if (bmpFile.palettes != nullptr)
+            bmpFile.pixels = nullptr;
+        }
+        if (bmpFile.palettes != nullptr) {
             delete[] bmpFile.palettes;
+            bmpFile.palettes = nullptr;
+        }
+        if (vis != nullptr) {
+            delete[] vis;
+            vis = nullptr;
+        }
+        if (dis != nullptr) {
+            delete[] dis;
+            dis = nullptr;
+        }
         if (inputFile.is_open())
             inputFile.close();
     };
@@ -45,9 +62,17 @@ public:
 
     virtual void toQPixMap(QPixmap &pixmap) = 0;
 
+    virtual void bfs(QPainter &painter, QPoint start, QPoint end) = 0;
+
+    virtual void dfs(QPainter &painter, QPoint start, QPoint end) = 0;
+
+    virtual void aStar(QPainter &painter, QPoint start, QPoint end) = 0;
+
 protected:
     BmpFile<T> bmpFile;
     std::ifstream inputFile = nullptr;
+    bool *vis = nullptr;
+    int32_t *dis = nullptr;
     uint32_t width;
     uint32_t height;
     uint32_t bytePerLine{};

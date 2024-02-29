@@ -79,3 +79,14 @@ void BmpImage1Bit::toQPixMap(QPixmap &pixmap) {
     QImage qImage((uchar *) bmpFile.pixels, width, height, width, QImage::Format_Indexed8);
     pixmap = QPixmap::fromImage(qImage);
 }
+
+void BmpImage1Bit::bfs(QPainter &painter, QPoint start, QPoint end) {
+}
+
+void BmpImage1Bit::dfs(QPainter &painter, QPoint start, QPoint end) {
+
+}
+
+void BmpImage1Bit::aStar(QPainter &painter, QPoint start, QPoint end) {
+
+}

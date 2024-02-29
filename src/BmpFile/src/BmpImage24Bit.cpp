@@ -42,3 +42,14 @@ void BmpImage24Bit::toQPixMap(QPixmap &pixmap) {
     QImage qImage((uchar *) bmpFile.pixels, width, height, width * 3, QImage::Format_BGR888);
     pixmap = QPixmap::fromImage(qImage);
 }
+
+void BmpImage24Bit::bfs(QPainter &painter, QPoint start, QPoint end) {
+
+}
+
+void BmpImage24Bit::dfs(QPainter &painter, QPoint start, QPoint end) {
+
+}
+
+void BmpImage24Bit::aStar(QPainter &painter, QPoint start, QPoint end) {
+}
