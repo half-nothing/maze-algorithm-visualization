@@ -36,5 +36,4 @@ class LimitedSequentialStructure {
     virtual uint size() = 0;
 };
 
-
 #endif

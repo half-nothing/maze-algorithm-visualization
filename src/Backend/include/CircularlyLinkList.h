@@ -15,7 +15,6 @@
 #include "SequentialStructure.h"
 #include "glog/logging.h"
 
-
 /**
  * @class CircularlyLinkList
  * @brief 双循环链表
@@ -174,6 +173,7 @@ public:
      * @param[in] pos 移除节点的下标
      */
     void remove(const int pos) override {
+        if (pos < 0 || pos >= length) return;
         NodePtr temp = findPtr(pos);
         if (temp == head) {
             head = temp->next;
@@ -227,9 +227,7 @@ public:
             delete startPtr;
             startPtr = temp;
         }
-        if (start == 0) {
-            head = startPtr->next;
-        }
+        if (start == 0) { head = startPtr->next; }
         delete startPtr;
         length -= len;
     }
@@ -239,7 +237,9 @@ public:
      * @param[in] pos 指定节点的下标
      * @return 返回存储数据的引用
      */
-    T &get(const uint pos) override {
+    T &get(const int pos) override {
+        if (pos < 0 || pos >= length) throw exceotion();
+        assert(0 <= pos && pos < length);
         return findPtr(pos)->data;
     }
 
@@ -249,6 +249,8 @@ public:
      * @param[in] src 要修改成的数据
      */
     void setValue(const int pos, const T &src) override {
+        if (pos < 0 || pos >= length) return;
+        assert(0 <= pos && pos < length);
         findPtr(pos)->data = src;
     }
 
@@ -276,6 +278,8 @@ public:
      * @brief 对[]运算符的重载
      */
     T &operator[](const int pos) override {
+        if (pos < 0 || pos >= length) throw exceotion();
+        assert(0 <= pos && pos < length);
         return get(pos);
     }
 
@@ -285,7 +289,30 @@ public:
      * @param[in] len 指定的长度
      * @param[in] opt 要进行的操作
      */
-    void forEach(const int start, const int len, void (*opt)(T &)) override {
+    void forEach(int start, const int len, void (*opt)(T &)) override {
+        if (start >= length || len == 0) return;
+        if (len == 1) {
+            opt(findPtr(start)->data);
+            return;
+        }
+        if (start < 0) {
+            start = 0;
+        }
+        NodePtr startPtr = findPtr(start);
+        const int end = start + len;
+        if (end >= length) {
+            while (startPtr != tail) {
+                opt(startPtr->data);
+                startPtr = startPtr->next;
+            }
+            opt(startPtr->data);
+            return;
+        }
+        NodePtr endPtr = findPtr(end);
+        while (startPtr != endPtr) {
+            opt(startPtr->data);
+            startPtr = startPtr->next;
+        }
     }
 
     /**
@@ -308,7 +335,9 @@ public:
      * @param[in] pos 迭代器的开始坐标
      * @param[in] isReverse 是否为反向迭代器
      */
-    void initIterator(const uint pos, const bool isReverse = false) {
+    void initIterator(const int pos, const bool isReverse = false) {
+        if (pos < 0 || pos >= length) return;
+        assert(0 <= pos && pos < length);
         currentPtr = findPtr(pos);
         reverse = isReverse;
     }
@@ -330,10 +359,10 @@ public:
     }
 
 private:
-    NodePtr head = nullptr; // 指向双链表的头结点
-    NodePtr tail = nullptr; // 指向双链表的尾节点
-    uint length = 0; // 表示双链表的长度
-    bool reverse = false; // 表明是否使用反向迭代器
+    NodePtr head = nullptr;       // 指向双链表的头结点
+    NodePtr tail = nullptr;       // 指向双链表的尾节点
+    uint length = 0;              // 表示双链表的长度
+    bool reverse = false;         // 表明是否使用反向迭代器
     NodePtr currentPtr = nullptr; // 迭代器当前指向的节点
 
     /**
@@ -341,7 +370,9 @@ private:
      * @param[in] pos 想要查找的节点下标
      * @return 指向节点的指针
      */
-    NodePtr findPtr(const uint pos) {
+    NodePtr findPtr(const int pos) {
+        if (pos < 0 || pos >= length) throw exceotion();
+        assert(0 <= pos && pos < length);
         uint index = 0;
         NodePtr temp = head;
         while (temp != tail) {
@@ -352,6 +383,5 @@ private:
         return temp;
     }
 };
-
 
 #endif

@@ -10,7 +10,6 @@
 #ifndef DAC_BMPSTRUCT_H
 #define DAC_BMPSTRUCT_H
 
-
 #include <cstdint>
 ;
 #pragma pack(push, 1)
@@ -50,10 +49,10 @@ struct BmpInfoHeader {
  * @brief 调色板信息结构体
  */
 struct BmpColorPalette {
-    uint8_t blue;       // 蓝色分量
-    uint8_t green;      // 绿色分量
-    uint8_t red;        // 红色分量
-    uint8_t reserved;   // 保留位
+    uint8_t blue;     // 蓝色分量
+    uint8_t green;    // 绿色分量
+    uint8_t red;      // 红色分量
+    uint8_t reserved; // 保留位
 };
 
 /**
@@ -61,9 +60,9 @@ struct BmpColorPalette {
  * @brief 24bit像素信息结构体
  */
 struct BmpPixel24Bit {
-    uint8_t blue;   // 蓝色分量
-    uint8_t green;  // 绿色分量
-    uint8_t red;    // 红色分量
+    uint8_t blue;  // 蓝色分量
+    uint8_t green; // 绿色分量
+    uint8_t red;   // 红色分量
 };
 
 #pragma pack(pop)
@@ -72,21 +71,21 @@ struct BmpPixel24Bit {
  * @struct BmpFile
  * @brief BmpFile模版结构体
  * @tparam T 像素点的类型
- * @par 像素点类型: \n
+ * @par 像素点类型:
  *      单色位图和8位位图都是uint8_t \n
  *      24位位图是BmpPixel24Bit
  */
 template<typename T>
 struct BmpFile {
-    BmpFileHeader fileHeader{};             // 位图文件头
-    BmpInfoHeader infoHeader{};             // 位图信息头
-    BmpColorPalette *palettes = nullptr;    // 调色板数组
-    T *pixels = nullptr;                    // 像素点数组
-    uint32_t width = 0;                     // 图片宽度
-    uint32_t height = 0;                    // 图片高度
-    uint32_t bytePerLine = 0;               // 每行像素数量
-    uint32_t pixelNumber = 0;               // 总像素量
-    uint32_t aligningOffset = 0;            // 4K对齐偏移量
+    BmpFileHeader fileHeader{};          /// 位图文件头
+    BmpInfoHeader infoHeader{};          /// 位图信息头
+    BmpColorPalette *palettes = nullptr; /// 调色板数组
+    T *pixels = nullptr;                 // 像素点数组
+    uint32_t width = 0;                  // 图片宽度
+    uint32_t height = 0;                 // 图片高度
+    uint32_t bytePerLine = 0;            // 每行像素数量
+    uint32_t pixelNumber = 0;            // 总像素量
+    uint32_t aligningOffset = 0;         // 4K对齐偏移量
     /**
      * @brief 调色板的数量 \n
      *      一般情况下\n

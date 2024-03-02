@@ -14,7 +14,8 @@ namespace QT {
 //        image8Bit.toQPixMap(pixmap);
 //        BmpImage24Bit image24Bit("map-24bit.bmp");
 //        image24Bit.toQPixMap(pixmap);
-        BmpImage1Bit image1Bit("map-1bit.bmp");
+        BmpImage1Bit image1Bit;
+        image1Bit.readImage("map-1bit.bmp");
         image1Bit.toQPixMap(pixmap);
         ui->image->displayImage(pixmap);
     }

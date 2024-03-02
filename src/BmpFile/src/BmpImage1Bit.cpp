@@ -1,17 +1,7 @@
 #include "../include/BmpImage1Bit.h"
 
-BmpImage1Bit::BmpImage1Bit(const std::string &filename) : BmpImage(filename) {
-    readImage();
-}
-
-void BmpImage1Bit::printImage() {
-    for (int i = 0; i < bmpFile.height; i++) {
-        for (int j = 0; j < bmpFile.width; j++) {
-            std::cout << (bmpFile.pixels[bmpFile.width * i + j] ? '1' : '0');
-        }
-        std::cout << std::endl;
-    }
-}
+BmpImage1Bit::BmpImage1Bit() :
+    BmpImage() {}
 
 void BmpImage1Bit::saveImage(const std::string &filename) {
     std::ofstream file(filename, std::ios::binary | std::ios::out | std::ios::ate);
@@ -31,18 +21,16 @@ void BmpImage1Bit::saveImage(const std::string &filename) {
                 temp |= bmpFile.pixels[i * bmpFile.width + k] ? 0x01 : 0x00;
             }
             file.write(reinterpret_cast<char *>(&temp), sizeof(uint8_t));
-            if (flag)
-                break;
+            if (flag) break;
         }
-        for (int j = 0; j < bmpFile.bytePerLine - (bmpFile.width + 7) / 8 - 1; j++)
-            file.write("0", sizeof(uint8_t));
-        if (bmpFile.width % 8 != 0)
-            file.write("0", sizeof(uint8_t));
+        for (int j = 0; j < bmpFile.bytePerLine - (bmpFile.width + 7) / 8 - 1; j++) file.write("0", sizeof(uint8_t));
+        if (bmpFile.width % 8 != 0) file.write("0", sizeof(uint8_t));
     }
     file.close();
 }
 
-void BmpImage1Bit::readImage() {
+void BmpImage1Bit::readImage(const std::string &filename) {
+    BmpImage::readImage(filename);
     if (bmpFile.infoHeader.bitsPerPixel != 1) {
         std::cerr << "Not 1Bit Image." << std::endl;
         return;
@@ -66,28 +54,21 @@ void BmpImage1Bit::readImage() {
                 }
                 bmpFile.pixels[i * bmpFile.width + k] = temp & 1 ? 0xFF : 0x00;
             }
-            if (flag)
-                break;
+            if (flag) break;
         }
         inputFile.seekg(bmpFile.aligningOffset, std::ios::cur);
-        if (bmpFile.width % 8 == 0)
-            inputFile.seekg(-1, std::ios::cur);
+        if (bmpFile.width % 8 == 0) inputFile.seekg(-1, std::ios::cur);
     }
     inputFile.close();
 }
 
 void BmpImage1Bit::toQPixMap(QPixmap &pixmap) {
-    QImage qImage((uchar *) bmpFile.pixels, bmpFile.width, bmpFile.height, bmpFile.width, QImage::Format_Indexed8);
+    const QImage qImage(bmpFile.pixels, bmpFile.width, bmpFile.height, bmpFile.width, QImage::Format_Indexed8);
     pixmap = QPixmap::fromImage(qImage);
 }
 
-void BmpImage1Bit::bfs(QPainter &painter, QPoint start, QPoint end) {
-}
+void BmpImage1Bit::bfs(QPainter &painter, QPoint start, QPoint end) {}
 
-void BmpImage1Bit::dfs(QPainter &painter, QPoint start, QPoint end) {
+void BmpImage1Bit::dfs(QPainter &painter, QPoint start, QPoint end) {}
 
-}
-
-void BmpImage1Bit::aStar(QPainter &painter, QPoint start, QPoint end) {
-
-}
+void BmpImage1Bit::aStar(QPainter &painter, QPoint start, QPoint end) {}

@@ -1,18 +1,41 @@
+/**********************************************
+ * @file BmpImage.hpp
+ * @brief Bmp文件操作的抽象父类
+ * @author Half_nothing
+ * @email Half_nothing@163.com
+ * @version 1.0.0
+ * @date 2024.3.3
+ * @license GNU General Public License (GPL)
+ **********************************************/
 #ifndef DAC_BMPIMAGE_HPP
 #define DAC_BMPIMAGE_HPP
 
-#include <string>
-#include <iostream>
-#include <fstream>
 #include <cstring>
-#include <QPixmap>
-#include <QPainter>
+#include <fstream>
+#include <iostream>
+#include <string>
 #include "BmpStruct.h"
 
+/**
+ * @brief Bmp文件操作抽象父类
+ * @tparam T 像素点的类型名{@link BmpFile}
+ */
 template<typename T>
 class BmpImage {
 public:
-    explicit BmpImage(const std::string &filename) {
+    BmpImage() = default;
+
+    virtual ~BmpImage() {
+        delete[] bmpFile.pixels;
+        delete[] bmpFile.palettes;
+        if (inputFile.is_open()) inputFile.close();
+    }
+
+    /**
+     * @brief 从指定文件读取图像数据
+     * @param[in] filename 要读取的文件名
+     */
+    virtual void readImage(const std::string &filename) {
         inputFile = std::ifstream(filename, std::ios::binary);
         if (!inputFile) {
             std::cerr << "Failed to open file: " << filename << std::endl;
@@ -23,58 +46,29 @@ public:
             std::cerr << "The file is not a valid BMP file. " << std::endl;
             return;
         }
-
         inputFile.read(reinterpret_cast<char *>(&bmpFile.infoHeader), sizeof(BmpInfoHeader));
         bmpFile.width = bmpFile.infoHeader.imageWidth;
         bmpFile.height = bmpFile.infoHeader.imageHeight;
         bmpFile.pixelNumber = bmpFile.width * bmpFile.height;
         bmpFile.pixels = new T[bmpFile.pixelNumber];
-        vis = new bool[bmpFile.pixelNumber];
-        dis = new int32_t[bmpFile.pixelNumber];
         memset(bmpFile.pixels, 0, bmpFile.pixelNumber * sizeof(T));
-        memset(vis, 0, bmpFile.pixelNumber * sizeof(bool));
-        memset(dis, 0, bmpFile.pixelNumber * sizeof(int32_t));
-    };
+    }
 
-    ~BmpImage() {
-        if (bmpFile.pixels != nullptr) {
-            delete[] bmpFile.pixels;
-            bmpFile.pixels = nullptr;
-        }
-        if (bmpFile.palettes != nullptr) {
-            delete[] bmpFile.palettes;
-            bmpFile.palettes = nullptr;
-        }
-        if (vis != nullptr) {
-            delete[] vis;
-            vis = nullptr;
-        }
-        if (dis != nullptr) {
-            delete[] dis;
-            dis = nullptr;
-        }
-        if (inputFile.is_open())
-            inputFile.close();
-    };
-
-    virtual void readImage() = 0;
-
+    /**
+     * @brief 保存Bmp文件
+     * @param[in] filename Bmp文件保存路径
+     */
     virtual void saveImage(const std::string &filename) = 0;
 
+    /**
+     * @brief 将图像数据转换成Qt的二维向量供QWidget显示
+     * @param[out] pixmap Qt二维向量
+     */
     virtual void toQPixMap(QPixmap &pixmap) = 0;
 
-    virtual void bfs(QPainter &painter, QPoint start, QPoint end) = 0;
-
-    virtual void dfs(QPainter &painter, QPoint start, QPoint end) = 0;
-
-    virtual void aStar(QPainter &painter, QPoint start, QPoint end) = 0;
-
 protected:
-    BmpFile<T> bmpFile;
-    std::ifstream inputFile = nullptr;
-    bool *vis = nullptr;
-    int32_t *dis = nullptr;
+    BmpFile<T> bmpFile{};              //Bmp文件数据
+    std::ifstream inputFile = nullptr; //Bmp文件流
 };
-
 
 #endif

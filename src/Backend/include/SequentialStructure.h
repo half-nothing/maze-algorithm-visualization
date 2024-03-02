@@ -40,7 +40,7 @@ public:
 
     virtual void remove(int start, int len) = 0;
 
-    virtual T &get(uint pos) = 0;
+    virtual T &get(int pos) = 0;
 
     virtual void setValue(int pos, const T &src) = 0;
 

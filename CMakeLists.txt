@@ -28,6 +28,7 @@ include_directories(
         ${PROJECT_SOURCE_DIR}/src/Qt/include
         ${PROJECT_SOURCE_DIR}/src/BmpFile/include
         ${PROJECT_SOURCE_DIR}/src/Backend/include
+        ${PROJECT_SOURCE_DIR}/src/Algorithm/include
 )
 
 find_package(Qt6 COMPONENTS
@@ -40,12 +41,15 @@ file(GLOB_RECURSE HEADERS
         src/include/*
         src/Qt/include/*
         src/Backend/include/*
-        src/BmpFile/include/*)
+        src/BmpFile/include/*
+        src/Algorithm/include/*
+)
 
 file(GLOB_RECURSE SOURCE
         src/Qt/src/*
         src/Backend/src/*
         src/BmpFile/src/*
+        src/Algorithm/src/*
 )
 
 file(GLOB_RECURSE FORMS src/Qt/ui/*)

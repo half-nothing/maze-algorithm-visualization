@@ -1,8 +1,7 @@
 #include "../include/BmpImage24Bit.h"
 
-BmpImage24Bit::BmpImage24Bit(const std::string &filename) : BmpImage(filename) {
-    readImage();
-}
+BmpImage24Bit::BmpImage24Bit() :
+    BmpImage() {}
 
 void BmpImage24Bit::saveImage(const std::string &filename) {
     std::ofstream file(filename, std::ios::binary | std::ios::out | std::ios::ate);
@@ -19,7 +18,8 @@ void BmpImage24Bit::saveImage(const std::string &filename) {
     file.close();
 }
 
-void BmpImage24Bit::readImage() {
+void BmpImage24Bit::readImage(const std::string &filename) {
+    BmpImage::readImage(filename);
     if (bmpFile.infoHeader.bitsPerPixel != 24) {
         std::cerr << "Not 24Bit Image." << std::endl;
         return;
@@ -40,17 +40,13 @@ void BmpImage24Bit::readImage() {
 }
 
 void BmpImage24Bit::toQPixMap(QPixmap &pixmap) {
-    QImage qImage((uchar *) bmpFile.pixels, bmpFile.width, bmpFile.height, bmpFile.width * 3, QImage::Format_BGR888);
+    const QImage qImage(reinterpret_cast<uchar *>(bmpFile.pixels) , bmpFile.width, bmpFile.height, bmpFile.width * 3,
+                        QImage::Format_BGR888);
     pixmap = QPixmap::fromImage(qImage);
 }
 
-void BmpImage24Bit::bfs(QPainter &painter, QPoint start, QPoint end) {
+void BmpImage24Bit::bfs(QPainter &painter, QPoint start, QPoint end) {}
 
-}
+void BmpImage24Bit::dfs(QPainter &painter, QPoint start, QPoint end) {}
 
-void BmpImage24Bit::dfs(QPainter &painter, QPoint start, QPoint end) {
-
-}
-
-void BmpImage24Bit::aStar(QPainter &painter, QPoint start, QPoint end) {
-}
+void BmpImage24Bit::aStar(QPainter &painter, QPoint start, QPoint end) {}
