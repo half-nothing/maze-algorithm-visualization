@@ -13,6 +13,7 @@
 #include <iostream>
 #include "LinkNodes.h"
 #include "SequentialStructure.h"
+#include "glog/logging.h"
 
 
 /**
@@ -21,9 +22,10 @@
  * @tparam T 链表存储的数据类型
  */
 template<typename T>
-class CircularlyLinkList : public SequentialStructure<T> {
+class CircularlyLinkList final : public SequentialStructure<T> {
     using Node = DoubleLinkNode<T>;
     using NodePtr = DoubleLinkNode<T> *;
+
 public:
     CircularlyLinkList() = default;
 
@@ -32,16 +34,16 @@ public:
     }
 
     /**
-     * @see ::clear
+     * @link CircularlyLinkList::clear
      */
-    ~CircularlyLinkList() {
+    ~CircularlyLinkList() override {
         // 如果head和tail都没有指向,代表双链表为空或者出错,直接返回
         if (head == nullptr && tail == nullptr) {
             return;
         }
         NodePtr temp = head;
-        NodePtr delPtr;
-        uint total = length;
+        NodePtr delPtr = temp;
+        const uint total = length;
         while (length > 0) {
             delPtr = temp;
             temp = temp->next;
@@ -60,8 +62,8 @@ public:
             return;
         }
         NodePtr temp = head;
-        NodePtr delPtr;
-        uint total = length;
+        NodePtr delPtr = temp;
+        const uint total = length;
         while (length > 0) {
             delPtr = temp;
             temp = temp->next;
@@ -75,8 +77,8 @@ public:
 
     /**
      * @brief 判断双链表是否为空
-     * @retval true 双链表是空的
-     * @retval false 双链表非空
+     * @return true 双链表是空的
+     * @return false 双链表非空
      */
     bool isEmpty() override {
         return length == 0;
@@ -137,7 +139,12 @@ public:
      *  linkList.insert(2, 5);
      * @endcode
      */
-    void insert(uint pos, const T &src) override {
+    void insert(const int pos, const T &src) override {
+        if (pos < 0) {
+            LOG(ERROR) << "The index must be positive, but got " << pos << std::endl;
+            return;
+        }
+        assert(pos >= 0);
         NodePtr temp = findPtr(pos);
         auto tmp = new Node(src);
         tmp->next = temp;
@@ -149,14 +156,14 @@ public:
 
     /**
      * @brief 将一个列表依次插入双链表的指定位置
-     * @param[in] pos 待插入的数字列表
+     * @param[in] src 待插入的数字列表
      * @par example:
      * @code
      *  CircularlyLinkList linkList{1, 2};
      *  linkList.insert({{2, 5}, {2, 6}});
      * @endcode
      */
-    void insert(InitList<std::pair<uint, T>> src) override {
+    void insert(InitList<std::pair<int, T> > src) override {
         for (const std::pair<uint, T> &tmp: src) {
             insert(tmp.first, tmp.second);
         }
@@ -166,7 +173,7 @@ public:
      * @brief 移除指定下标的节点
      * @param[in] pos 移除节点的下标
      */
-    void remove(uint pos) override {
+    void remove(const int pos) override {
         NodePtr temp = findPtr(pos);
         if (temp == head) {
             head = temp->next;
@@ -185,9 +192,14 @@ public:
      * @param[in] start 开始的节点下标
      * @param[in] len 要删除的长度
      */
-    void remove(uint start, uint len) override {
+    void remove(const int start, const int len) override {
+        if (start < 0 || len <= 0 || start > length - 1) return;
+        if (len == 1) {
+            remove(start);
+            return;
+        }
         NodePtr temp;
-        if (start + len >= length) {
+        if (len >= length || start + len >= length) {
             if (start == 0) {
                 clear();
                 return;
@@ -205,7 +217,7 @@ public:
             length = start;
             return;
         }
-        uint end = start + len - 1;
+        const uint end = start + len - 1;
         NodePtr startPtr = findPtr(start);
         NodePtr endPtr = findPtr(end);
         startPtr->prev->next = endPtr->next;
@@ -227,7 +239,7 @@ public:
      * @param[in] pos 指定节点的下标
      * @return 返回存储数据的引用
      */
-    T &get(uint pos) override {
+    T &get(const uint pos) override {
         return findPtr(pos)->data;
     }
 
@@ -236,7 +248,7 @@ public:
      * @param[in] pos 指定节点的下标
      * @param[in] src 要修改成的数据
      */
-    void setValue(uint pos, const T &src) override {
+    void setValue(const int pos, const T &src) override {
         findPtr(pos)->data = src;
     }
 
@@ -263,7 +275,7 @@ public:
     /**
      * @brief 对[]运算符的重载
      */
-    T &operator[](int pos) override {
+    T &operator[](const int pos) override {
         return get(pos);
     }
 
@@ -273,7 +285,7 @@ public:
      * @param[in] len 指定的长度
      * @param[in] opt 要进行的操作
      */
-    void forEach(uint start, uint len, void (*opt)(T &)) override {
+    void forEach(const int start, const int len, void (*opt)(T &)) override {
     }
 
     /**
@@ -281,7 +293,7 @@ public:
      */
     friend std::ostream &operator<<(std::ostream &os, const CircularlyLinkList &list) {
         os << "CircularlyLinkList Length: " << list.length << std::endl
-           << "Content: ";
+                << "Content: ";
         NodePtr temp = list.head;
         while (temp != list.tail) {
             std::cout << temp->data << " ";
@@ -296,38 +308,40 @@ public:
      * @param[in] pos 迭代器的开始坐标
      * @param[in] isReverse 是否为反向迭代器
      */
-    void initIterator(uint pos, bool isReverse = false) {
+    void initIterator(const uint pos, const bool isReverse = false) {
         currentPtr = findPtr(pos);
         reverse = isReverse;
     }
 
     /**
      * @brief 获取迭代器的下一个数据
+     * @param[out] val 接受数据的变量引用
      * @pre 首先需要调用::initIterator初始化迭代器
      * @note 禁止在调用::initIterator之前调用本函数
      * @return 返回存储数据的引用
      */
-    T &next() {
+    bool next(T &val) {
         if (currentPtr != nullptr) {
-            T &temp = currentPtr->data;
+            val = currentPtr->data;
             currentPtr = reverse ? currentPtr->prev : currentPtr->next;
-            return temp;
+            return true;
         }
+        return false;
     }
 
 private:
-    NodePtr head = nullptr;         // 指向双链表的头结点
-    NodePtr tail = nullptr;         // 指向双链表的尾节点
-    uint length = 0;                // 表示双链表的长度
-    bool reverse = false;           // 表明是否使用反向迭代器
-    NodePtr currentPtr = nullptr;   // 迭代器当前指向的节点
+    NodePtr head = nullptr; // 指向双链表的头结点
+    NodePtr tail = nullptr; // 指向双链表的尾节点
+    uint length = 0; // 表示双链表的长度
+    bool reverse = false; // 表明是否使用反向迭代器
+    NodePtr currentPtr = nullptr; // 迭代器当前指向的节点
 
     /**
      * @brief 通过给定的下标查找节点
      * @param[in] pos 想要查找的节点下标
      * @return 指向节点的指针
      */
-    NodePtr findPtr(uint pos) {
+    NodePtr findPtr(const uint pos) {
         uint index = 0;
         NodePtr temp = head;
         while (temp != tail) {

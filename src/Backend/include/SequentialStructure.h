@@ -10,13 +10,18 @@
 #ifndef DATA_STRUCTURE_LIST_H
 #define DATA_STRUCTURE_LIST_H
 
-#include <initializer_list>
-#include <utility>
 #include "Definition.h"
 
+/**
+ * @class SequentialStructure
+ * @brief 顺序结构的抽象父类
+ * @tparam T 顺序表存储的数据类型
+ */
 template<typename T>
 class SequentialStructure {
 public:
+    virtual ~SequentialStructure() = default;
+
     virtual void clear() = 0;
 
     virtual bool isEmpty() = 0;
@@ -27,23 +32,23 @@ public:
 
     virtual void append(InitList<T> src) = 0;
 
-    virtual void insert(uint pos, const T &src) = 0;
+    virtual void insert(int pos, const T &src) = 0;
 
-    virtual void insert(InitList<std::pair<uint, T>> src) = 0;
+    virtual void insert(InitList<std::pair<int, T> > src) = 0;
 
-    virtual void remove(uint pos) = 0;
+    virtual void remove(int pos) = 0;
 
-    virtual void remove(uint start, uint end) = 0;
+    virtual void remove(int start, int len) = 0;
 
     virtual T &get(uint pos) = 0;
 
-    virtual void setValue(uint pos, const T &src) = 0;
+    virtual void setValue(int pos, const T &src) = 0;
 
     virtual int getPos(const T &src) = 0;
 
     virtual T &operator[](int pos) = 0;
 
-    virtual void forEach(uint start, uint end, void (*opt)(T &)) = 0;
+    virtual void forEach(int start, int len, void (*opt)(T &)) = 0;
 };
 
 #endif

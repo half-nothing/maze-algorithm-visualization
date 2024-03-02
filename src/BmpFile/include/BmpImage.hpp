@@ -12,7 +12,7 @@
 template<typename T>
 class BmpImage {
 public:
-    BmpImage(const std::string &filename) {
+    explicit BmpImage(const std::string &filename) {
         inputFile = std::ifstream(filename, std::ios::binary);
         if (!inputFile) {
             std::cerr << "Failed to open file: " << filename << std::endl;

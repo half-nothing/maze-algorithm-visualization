@@ -1,5 +1,5 @@
 /**********************************************
- * @file Stack.h
+ * @file Stack.hpp
  * @brief 顺序栈头文件
  * @author Half_nothing
  * @email Half_nothing@163.com
@@ -14,8 +14,13 @@
 #include <iostream>
 #include "LimitedSequentialStructure.h"
 
+/**
+ * @class Stack
+ * @brief 顺序栈
+ * @tparam T 链表存储的数据类型
+ */
 template<typename T>
-class Stack : public LimitedSequentialStructure<T> {
+class Stack final : public LimitedSequentialStructure<T> {
 public:
     Stack() {
         data = new T[capacity];
@@ -26,10 +31,14 @@ public:
         push(init);
     }
 
-    ~Stack() {
+    ~Stack() override{
         delete[] data;
     }
 
+    /**
+     *
+     * @param src
+     */
     void push(const T &src) override {
         if (now < capacity - 1) {
             data[++now] = src;
@@ -39,7 +48,7 @@ public:
         data[++now] = src;
     }
 
-    void push(const std::initializer_list<T> &src) override {
+    void push(InitList<T> src) override {
         for (const T &tmp: src) {
             push(tmp);
         }
