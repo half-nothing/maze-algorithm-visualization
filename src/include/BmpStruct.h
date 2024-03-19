@@ -68,17 +68,15 @@ struct BmpPixel24Bit {
 #pragma pack(pop)
 
 /**
- * @struct BmpFile
- * @brief BmpFile模版结构体
+ * @struct BmpPixelInfo
+ * @brief BMP文件像素结构体
  * @tparam T 像素点的类型
  * @par 像素点类型:
  *      单色位图和8位位图都是uint8_t \n
  *      24位位图是BmpPixel24Bit
  */
 template<typename T>
-struct BmpFile {
-    BmpFileHeader fileHeader{};          /// 位图文件头
-    BmpInfoHeader infoHeader{};          /// 位图信息头
+struct BmpPixelInfo {
     BmpColorPalette *palettes = nullptr; /// 调色板数组
     T *pixels = nullptr;                 // 像素点数组
     uint32_t width = 0;                  // 图片宽度

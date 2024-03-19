@@ -36,4 +36,11 @@ struct Point {
     }
 };
 
+enum BmpType {
+    UNKNOWN_BIT,
+    ONE_BIT,
+    EIGHT_BIT,
+    TWENTY_FOUR_BIT
+};
+
 #endif

@@ -5,16 +5,21 @@
 BmpImage8Bit::BmpImage8Bit() :
     BmpImage() {}
 
+BmpImage8Bit::~BmpImage8Bit() {
+    delete [] bmpPixelInfo.pixels;
+    delete [] bmpPixelInfo.palettes;
+}
+
 void BmpImage8Bit::saveImage(const std::string &filename) {
     std::ofstream file(filename, std::ios::binary | std::ios::out | std::ios::ate);
-    file.write(reinterpret_cast<char *>(&bmpFile.fileHeader), sizeof(BmpFileHeader));
-    file.write(reinterpret_cast<char *>(&bmpFile.infoHeader), sizeof(BmpInfoHeader));
-    file.write(reinterpret_cast<char *>(bmpFile.palettes), sizeof(BmpColorPalette) * bmpFile.paletteSize);
-    for (int i = bmpFile.height - 1; i >= 0; i--) {
-        for (int j = 0; j < bmpFile.width; j++) {
-            file.write(reinterpret_cast<char *>(bmpFile.pixels + bmpFile.width * i + j), sizeof(uint8_t));
+    file.write(reinterpret_cast<char *>(&bmpFileHeader), sizeof(BmpFileHeader));
+    file.write(reinterpret_cast<char *>(&bmpInfoHeader), sizeof(BmpInfoHeader));
+    file.write(reinterpret_cast<char *>(bmpPixelInfo.palettes), sizeof(BmpColorPalette) * bmpPixelInfo.paletteSize);
+    for (int i = bmpPixelInfo.height - 1; i >= 0; i--) {
+        for (int j = 0; j < bmpPixelInfo.width; j++) {
+            file.write(reinterpret_cast<char *>(bmpPixelInfo.pixels + bmpPixelInfo.width * i + j), sizeof(uint8_t));
         }
-        for (int j = 0; j < bmpFile.bytePerLine - bmpFile.width; j++) {
+        for (int j = 0; j < bmpPixelInfo.bytePerLine - bmpPixelInfo.width; j++) {
             file.write("0", sizeof(uint8_t));
         }
     }
@@ -23,42 +28,50 @@ void BmpImage8Bit::saveImage(const std::string &filename) {
 
 void BmpImage8Bit::readImage(const std::string &filename) {
     BmpImage::readImage(filename);
-    if (bmpFile.infoHeader.bitsPerPixel != 8) {
+
+    bmpPixelInfo.width = bmpInfoHeader.imageWidth;
+    bmpPixelInfo.height = bmpInfoHeader.imageHeight;
+    bmpPixelInfo.pixelNumber = bmpPixelInfo.width * bmpPixelInfo.height;
+    bmpPixelInfo.pixels = new uint8_t[bmpPixelInfo.pixelNumber];
+    memset(bmpPixelInfo.pixels, 0, bmpPixelInfo.pixelNumber * sizeof(uint8_t));
+
+    if (bmpInfoHeader.bitsPerPixel != 8) {
         LOG(ERROR) << "Not 8Bit Image." << std::endl;
         return;
     }
-    bmpFile.bytePerLine = (bmpFile.width + 3) / 4 * 4;
-    bmpFile.aligningOffset = bmpFile.bytePerLine - bmpFile.width;
+    bmpPixelInfo.bytePerLine = (bmpPixelInfo.width + 3) / 4 * 4;
+    bmpPixelInfo.aligningOffset = bmpPixelInfo.bytePerLine - bmpPixelInfo.width;
 
-    inputFile.seekg(sizeof(BmpFileHeader) + bmpFile.infoHeader.headerSize, std::ios::beg);
-    if (bmpFile.infoHeader.colors == 0) {
-        bmpFile.palettes = new BmpColorPalette[256];
-        memset(bmpFile.palettes, 0, sizeof(BmpColorPalette) * 256);
-        bmpFile.paletteSize = 256;
+    inputFile.seekg(sizeof(BmpFileHeader) + bmpInfoHeader.headerSize, std::ios::beg);
+    if (bmpInfoHeader.colors == 0) {
+        bmpPixelInfo.palettes = new BmpColorPalette[256];
+        memset(bmpPixelInfo.palettes, 0, sizeof(BmpColorPalette) * 256);
+        bmpPixelInfo.paletteSize = 256;
         for (int i = 0; i < 256; i++) {
-            inputFile.read(reinterpret_cast<char *>(bmpFile.palettes + i), sizeof(BmpColorPalette));
+            inputFile.read(reinterpret_cast<char *>(bmpPixelInfo.palettes + i), sizeof(BmpColorPalette));
         }
     } else {
-        bmpFile.palettes = new BmpColorPalette[bmpFile.infoHeader.colors];
-        memset(bmpFile.palettes, 0, sizeof(BmpColorPalette) * bmpFile.infoHeader.colors);
-        bmpFile.paletteSize = bmpFile.infoHeader.colors;
-        for (int i = 0; i < bmpFile.infoHeader.colors; i++) {
-            inputFile.read(reinterpret_cast<char *>(bmpFile.palettes + i), sizeof(BmpColorPalette));
+        bmpPixelInfo.palettes = new BmpColorPalette[bmpInfoHeader.colors];
+        memset(bmpPixelInfo.palettes, 0, sizeof(BmpColorPalette) * bmpInfoHeader.colors);
+        bmpPixelInfo.paletteSize = bmpInfoHeader.colors;
+        for (int i = 0; i < bmpInfoHeader.colors; i++) {
+            inputFile.read(reinterpret_cast<char *>(bmpPixelInfo.palettes + i), sizeof(BmpColorPalette));
         }
     }
 
-    inputFile.seekg(bmpFile.fileHeader.offsetSize, std::ios::beg);
-    for (int i = bmpFile.height - 1; i >= 0; i--) {
-        for (int j = 0; j < bmpFile.width; j++) {
-            inputFile.read(reinterpret_cast<char *>(bmpFile.pixels + i * bmpFile.width + j), sizeof(uint8_t));
+    inputFile.seekg(bmpFileHeader.offsetSize, std::ios::beg);
+    for (int i = bmpPixelInfo.height - 1; i >= 0; i--) {
+        for (int j = 0; j < bmpPixelInfo.width; j++) {
+            inputFile.read(reinterpret_cast<char *>(bmpPixelInfo.pixels + i * bmpPixelInfo.width + j), sizeof(uint8_t));
         }
-        inputFile.seekg(bmpFile.aligningOffset, std::ios::cur);
+        inputFile.seekg(bmpPixelInfo.aligningOffset, std::ios::cur);
     }
 
     inputFile.close();
 }
 
 void BmpImage8Bit::toQPixMap(QPixmap &pixmap) {
-    const QImage qImage(bmpFile.pixels, bmpFile.width, bmpFile.height, bmpFile.width, QImage::Format_Indexed8);
+    const QImage qImage(bmpPixelInfo.pixels, bmpPixelInfo.width, bmpPixelInfo.height, bmpPixelInfo.width,
+                        QImage::Format_Indexed8);
     pixmap = QPixmap::fromImage(qImage);
 }

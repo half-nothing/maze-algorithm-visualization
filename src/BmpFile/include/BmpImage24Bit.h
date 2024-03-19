@@ -11,21 +11,25 @@
 #define DAC_BMPIMAGE24BIT_H
 
 #include <string>
-#include "BmpImage.hpp"
+#include "BmpImage.h"
 
 /**
  * @class BmpImage24Bit
  * @brief 24位位图文件操作类
  */
-class BmpImage24Bit final : public BmpImage<BmpPixel24Bit> {
+class BmpImage24Bit final : public BmpImage {
 public:
     BmpImage24Bit();
+
+    ~BmpImage24Bit() override;
 
     void readImage(const std::string &filename) override;
 
     void saveImage(const std::string &filename) override;
 
     void toQPixMap(QPixmap &pixmap) override;
+private:
+    BmpPixelInfo<BmpPixel24Bit> bmpPixelInfo{};
 };
 
 #endif

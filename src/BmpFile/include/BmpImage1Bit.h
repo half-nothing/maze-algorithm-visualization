@@ -10,22 +10,26 @@
 #ifndef DAC_BMPIMAGE1BIT_H
 #define DAC_BMPIMAGE1BIT_H
 
-#include <cstdint>
-#include "BmpImage.hpp"
+#include "BmpImage.h"
 
 /**
  * @class BmpImage1Bit
  * @brief 单位位图文件操作类
  */
-class BmpImage1Bit final : public BmpImage<uint8_t> {
+class BmpImage1Bit final : public BmpImage {
 public:
     BmpImage1Bit();
+
+    ~BmpImage1Bit() override;
 
     void readImage(const std::string &filename) override;
 
     void saveImage(const std::string &filename) override;
 
     void toQPixMap(QPixmap &pixmap) override;
+
+private:
+    BmpPixelInfo<uint8_t> bmpPixelInfo{};
 };
 
 #endif

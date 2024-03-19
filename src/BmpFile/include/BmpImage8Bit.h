@@ -11,21 +11,25 @@
 #define DAC_BMPIMAGE8BIT_H
 
 #include <string>
-#include "BmpImage.hpp"
+#include "BmpImage.h"
 
 /**
  * @class BmpImage8Bit
  * @brief 8位位图文件操作类
  */
-class BmpImage8Bit final : public BmpImage<uint8_t> {
+class BmpImage8Bit final : public BmpImage {
 public:
     BmpImage8Bit();
+
+    ~BmpImage8Bit() override;
 
     void readImage(const std::string &filename) override;
 
     void saveImage(const std::string &filename) override;
 
     void toQPixMap(QPixmap &pixmap) override;
+private:
+    BmpPixelInfo<uint8_t> bmpPixelInfo{};
 };
 
 #endif

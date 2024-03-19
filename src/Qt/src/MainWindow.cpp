@@ -1,7 +1,9 @@
 #include "ui_MainWindow.h"
 #include "MainWindow.h"
+
+#include <BmpFactory.h>
+#include <BmpImage.h>
 #include <QFileDialog>
-#include <BmpImage8Bit.h>
 
 namespace QT {
     MainWindow::MainWindow(QWidget *parent) :
@@ -15,13 +17,13 @@ namespace QT {
 
     void MainWindow::openImage() {
         QPixmap pixmap;
-        BmpImage8Bit image8Bit;
         const QString filePath = QFileDialog::getOpenFileName(this, tr("打开Bmp文件"), "./", tr("位图文件 (*.bmp)"));
         if (filePath.isEmpty()) {
             return;
         }
-        image8Bit.readImage(filePath.toStdString());
-        image8Bit.toQPixMap(pixmap);
+        BmpImage *image = BmpFactory::createBmpImage(filePath.toStdString());
+        image->readImage(filePath.toStdString());
+        image->toQPixMap(pixmap);
         ui->image->displayImage(pixmap);
     }
 
