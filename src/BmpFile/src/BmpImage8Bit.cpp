@@ -1,4 +1,6 @@
-#include "../include/BmpImage8Bit.h"
+#include "BmpImage8Bit.h"
+
+#include <glog/logging.h>
 
 BmpImage8Bit::BmpImage8Bit() :
     BmpImage() {}
@@ -22,7 +24,7 @@ void BmpImage8Bit::saveImage(const std::string &filename) {
 void BmpImage8Bit::readImage(const std::string &filename) {
     BmpImage::readImage(filename);
     if (bmpFile.infoHeader.bitsPerPixel != 8) {
-        std::cerr << "Not 8Bit Image." << std::endl;
+        LOG(ERROR) << "Not 8Bit Image." << std::endl;
         return;
     }
     bmpFile.bytePerLine = (bmpFile.width + 3) / 4 * 4;

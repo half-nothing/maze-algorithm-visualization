@@ -1,4 +1,6 @@
-#include "../include/BmpImage1Bit.h"
+#include "BmpImage1Bit.h"
+
+#include <glog/logging.h>
 
 BmpImage1Bit::BmpImage1Bit() :
     BmpImage() {}
@@ -32,7 +34,7 @@ void BmpImage1Bit::saveImage(const std::string &filename) {
 void BmpImage1Bit::readImage(const std::string &filename) {
     BmpImage::readImage(filename);
     if (bmpFile.infoHeader.bitsPerPixel != 1) {
-        std::cerr << "Not 1Bit Image." << std::endl;
+        LOG(ERROR) << "Not 1Bit Image." << std::endl;
         return;
     }
     bmpFile.palettes = new BmpColorPalette[2]{{0x00, 0x00, 0x00, 0x00},

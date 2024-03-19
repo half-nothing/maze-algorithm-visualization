@@ -13,8 +13,11 @@ namespace QT {
 
     QT_END_NAMESPACE
 
-    class MainWindow : public QMainWindow {
+    class MainWindow final : public QMainWindow {
         Q_OBJECT
+
+    public slots:
+        void openImage();
 
     public:
         explicit MainWindow(QWidget *parent = nullptr);

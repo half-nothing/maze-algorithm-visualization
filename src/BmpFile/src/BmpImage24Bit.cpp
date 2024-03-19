@@ -1,4 +1,6 @@
-#include "../include/BmpImage24Bit.h"
+#include "BmpImage24Bit.h"
+
+#include <glog/logging.h>
 
 BmpImage24Bit::BmpImage24Bit() :
     BmpImage() {}
@@ -21,7 +23,7 @@ void BmpImage24Bit::saveImage(const std::string &filename) {
 void BmpImage24Bit::readImage(const std::string &filename) {
     BmpImage::readImage(filename);
     if (bmpFile.infoHeader.bitsPerPixel != 24) {
-        std::cerr << "Not 24Bit Image." << std::endl;
+        LOG(ERROR) << "Not 24Bit Image." << std::endl;
         return;
     }
 
