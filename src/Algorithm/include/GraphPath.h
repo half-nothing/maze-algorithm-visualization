@@ -11,15 +11,22 @@
 #ifndef GRAPHPATH_H
 #define GRAPHPATH_H
 
-#include <QPainter>
+#include <ImageDisplay.h>
 
 class GraphPath {
 public:
     static void bfs(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
 
-    static void dfs(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
+    static void dfs(QT::ImageDisplay *imageDisplay, const QPixmap &pixmap, QPoint start, QPoint end);
 
     static void aStar(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
+
+private:
+    static void _bfs(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
+
+    static void _dfs(QT::ImageDisplay *imageDisplay, QImage &image, QPoint start, QPoint end, std::vector<std::vector<bool>> &vis, bool (*opt)(QRgb));
+
+    static void _aStar(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
 };
 
 #endif

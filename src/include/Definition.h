@@ -10,6 +10,8 @@
 #ifndef DAC_DEFINITION_H
 #define DAC_DEFINITION_H
 
+#include <QColor>
+#include <QPoint>
 #include <initializer_list>
 
 #define STACK_MINIMUM_SIZE 8
@@ -20,5 +22,18 @@ using InitList = const std::initializer_list<T> &;
 using exceotion = std::exception;
 
 using uint = unsigned int;
+
+struct Point {
+    QPoint point;
+    QColor color;
+
+    friend bool operator==(const Point &lhs, const Point &rhs) {
+        return lhs.point == rhs.point && lhs.color == rhs.color;
+    }
+
+    friend bool operator!=(const Point &lhs, const Point &rhs) {
+        return !(lhs == rhs);
+    }
+};
 
 #endif

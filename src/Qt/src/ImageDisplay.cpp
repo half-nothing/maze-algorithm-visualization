@@ -4,7 +4,7 @@
 
 namespace QT {
     ImageDisplay::ImageDisplay(QWidget *parent) :
-            QWidget(parent), ui(new Ui::ImageDisplay) {
+        QWidget(parent), ui(new Ui::ImageDisplay) {
         ui->setupUi(this);
     }
 
@@ -16,7 +16,7 @@ namespace QT {
         this->repaint();
     }
 
-    void ImageDisplay::displayImage(QPixmap &image) {
+    void ImageDisplay::displayImage(const QPixmap &image) {
         if (image.width() != this->imageWidth || image.height() != this->imageHeight) {
             this->imageWidth = image.width();
             this->imageHeight = image.height();
@@ -41,14 +41,36 @@ namespace QT {
             lines.append(QLineF(startPoint.x(), y, startPoint.x() + widthPerPix * this->imageWidth, y));
         }
         painter.drawLines(lines);
+
+    }
+
+    const std::vector<Point> &ImageDisplay::getPoints() const {
+        return points;
+    }
+
+    void ImageDisplay::addPoint(const Point &point) {
+        this->points.push_back(point);
+        this->repaint();
+    }
+
+    void ImageDisplay::delPoint(const Point &point) {
+        if (const auto it =
+                    std::find(this->points.begin(),
+                              this->points.end(),
+                              point);
+            it != this->points.end()) {
+            this->points.erase(it);
+            this->repaint();
+        }
     }
 
     void ImageDisplay::paintEvent(QPaintEvent *event) {
         QPainter painter(this);
-        painter.drawPixmap(startPoint.x(), startPoint.y(), imageWidth * widthPerPix, imageHeight * widthPerPix,
+        painter.drawPixmap(startPoint.x(), startPoint.y(),
+                           imageWidth * widthPerPix, imageHeight * widthPerPix,
                            currentImage);
-
         drawPixel(nowMouseImagePos.x(), nowMouseImagePos.y(), QColor(255, 174, 201));
+        drawMap();
         this->paintGrid();
     }
 
@@ -69,17 +91,14 @@ namespace QT {
     }
 
     void ImageDisplay::mouseMoveEvent(QMouseEvent *event) {
-        auto nowpos = event->position();
+        const auto nowpos = event->position();
 
-        auto tmp = this->getLocate(nowpos);
-
-        if (tmp != nowMouseImagePos) {
+        if (const auto tmp = this->getLocate(nowpos); tmp != nowMouseImagePos) {
             nowMouseImagePos = tmp;
 
-            this->ui->cood->setText(QString().asprintf("图像坐标:(%d,%d)",
-                                                       int(nowMouseImagePos.x()),
-                                                       int(nowMouseImagePos.y())
-            ));
+            this->ui->cood->setText(QString::asprintf("图像坐标:(%d,%d)",
+                                                      static_cast<int>(nowMouseImagePos.x()),
+                                                      static_cast<int>(nowMouseImagePos.y())));
             this->repaint();
         }
 
@@ -105,19 +124,25 @@ namespace QT {
         leftMousePressed = false;
     }
 
-    void ImageDisplay::drawPixel(int x, int y, QColor color) {
-        if (x < 0 || y < 0 || x >= imageWidth || y >= imageHeight)
-            return;
+    void ImageDisplay::drawPixel(const int x, const int y, const QColor color) {
+        if (x < 0 || y < 0 || x >= imageWidth || y >= imageHeight) return;
         QPainter painter(this);
         painter.setPen(QPen(Qt::black, 1));
         painter.setBrush(color);
 
-        QRectF PixelArea(startPoint.x() + x * widthPerPix, startPoint.y() + y * widthPerPix, widthPerPix, widthPerPix);
+        const QRectF PixelArea(startPoint.x() + x * widthPerPix, startPoint.y() + y * widthPerPix, widthPerPix,
+                               widthPerPix);
         painter.drawRect(PixelArea);
     }
 
-    QPointF ImageDisplay::getLocate(QPointF pos) {
-        QPointF tmp = pos - startPoint;
+    void ImageDisplay::drawMap() {
+        for (auto &[point, color]: this->points) {
+            drawPixel(point.x(), point.y(), color);
+        }
+    }
+
+    QPointF ImageDisplay::getLocate(const QPointF &pos) const {
+        const QPointF tmp = pos - startPoint;
         return tmp / widthPerPix;
     }
 

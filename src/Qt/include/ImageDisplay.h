@@ -1,6 +1,7 @@
 #ifndef DAC_IMAGEDISPLAY_H
 #define DAC_IMAGEDISPLAY_H
 
+#include <Definition.h>
 #include <QWidget>
 #include <QImage>
 #include <QPixmap>
@@ -10,18 +11,28 @@
 
 namespace QT {
     QT_BEGIN_NAMESPACE
-    namespace Ui { class ImageDisplay; }
+
+    namespace Ui {
+        class ImageDisplay;
+    }
+
     QT_END_NAMESPACE
 
-    class ImageDisplay : public QWidget {
-    Q_OBJECT
+    class ImageDisplay final : public QWidget {
+        Q_OBJECT
 
     public:
         explicit ImageDisplay(QWidget *parent = nullptr);
 
         ~ImageDisplay() override;
 
-        void displayImage(QPixmap &image);
+        void displayImage(const QPixmap &image);
+
+        void addPoint(const Point &point);
+
+        void delPoint(const Point &point);
+
+        const std::vector<Point> &getPoints() const;
 
     private:
         void paintEvent(QPaintEvent *event) override;
@@ -36,9 +47,11 @@ namespace QT {
 
         void mouseReleaseEvent(QMouseEvent *event) override;
 
-        QPointF getLocate(QPointF pos);
+        QPointF getLocate(const QPointF &pos) const;
 
         void drawPixel(int x, int y, QColor color);
+
+        void drawMap();
 
         void paintGrid();
 
@@ -50,6 +63,8 @@ namespace QT {
         QPointF startPoint;
 
         bool leftMousePressed = false;
+
+        std::vector<Point> points;
         QPointF preMousePos;
         QPointF nowMouseImagePos;
         QPixmap currentImage;

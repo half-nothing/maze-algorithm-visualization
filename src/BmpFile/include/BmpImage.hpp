@@ -14,13 +14,14 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <QPixmap>
 #include "BmpStruct.h"
 
 /**
  * @brief Bmp文件操作抽象父类
  * @tparam T 像素点的类型名{@link BmpFile}
  */
-template<typename T>
+template<typename T = uint8_t>
 class BmpImage {
 public:
     BmpImage() = default;

@@ -1,3 +1,5 @@
+#include <BmpImage8Bit.h>
+#include <GraphPath.h>
 #include <QApplication>
 #include "MainWindow.h"
 #include "glog/logging.h"
@@ -9,9 +11,13 @@ int main(int argc, char *argv[]) {
     google::SetStderrLogging(google::INFO);
     LOG(INFO) << "Application start" << std::endl;
     QT::MainWindow w;
-    CircularlyLinkList<int> circularlyLinkList;
-    circularlyLinkList.insert(-1, 2);
+    QPixmap pixmap;
+    BmpImage8Bit image8Bit;
+    image8Bit.readImage("map-8bit.bmp");
+    image8Bit.toQPixMap(pixmap);
+    w.getImageDisplay()->displayImage(pixmap);
     w.show();
+    GraphPath::dfs(w.getImageDisplay(), pixmap, {2, 2}, {8, 2});
     int code = QApplication::exec();
     LOG(INFO) << "Application stop" << std::endl;
     return code;

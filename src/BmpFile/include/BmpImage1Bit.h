@@ -26,12 +26,6 @@ public:
     void saveImage(const std::string &filename) override;
 
     void toQPixMap(QPixmap &pixmap) override;
-
-    void bfs(QPainter &painter, QPoint start, QPoint end) override;
-
-    void dfs(QPainter &painter, QPoint start, QPoint end) override;
-
-    void aStar(QPainter &painter, QPoint start, QPoint end) override;
 };
 
 #endif
