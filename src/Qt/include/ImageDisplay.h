@@ -35,6 +35,7 @@ namespace QT {
         const std::vector<Point> &getPoints() const;
 
     private:
+
         void paintEvent(QPaintEvent *event) override;
 
         void resizeEvent(QResizeEvent *event) override;
@@ -68,6 +69,9 @@ namespace QT {
         QPointF preMousePos;
         QPointF nowMouseImagePos;
         QPixmap currentImage;
+        QPointF start;
+        QPointF end;
+        int set = 0;
         Ui::ImageDisplay *ui;
     };
 }

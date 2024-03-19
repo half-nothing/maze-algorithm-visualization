@@ -6,6 +6,9 @@
 #include "CircularlyLinkList.h"
 
 int main(int argc, char *argv[]) {
+#if WIN64 || WIN32
+    system("chcp 65001");
+#endif
     QApplication a(argc, argv);
     google::InitGoogleLogging(argv[0]);
     google::SetStderrLogging(google::INFO);
@@ -17,7 +20,7 @@ int main(int argc, char *argv[]) {
     image8Bit.toQPixMap(pixmap);
     w.getImageDisplay()->displayImage(pixmap);
     w.show();
-    GraphPath::dfs(w.getImageDisplay(), pixmap, {2, 2}, {8, 2});
+    // GraphPath::dfs(w.getImageDisplay(), pixmap, {2, 2}, {8, 2});
     int code = QApplication::exec();
     LOG(INFO) << "Application stop" << std::endl;
     return code;

@@ -25,8 +25,6 @@ void GraphPath::dfs(QT::ImageDisplay *imageDisplay, const QPixmap &pixmap, const
     _dfs(imageDisplay, image, start, end, vis, [](const QRgb color) {
         return color == black;
     });
-    imageDisplay->addPoint({start, Qt::green});
-    imageDisplay->addPoint({end, Qt::red});
     LOG(INFO) << "Dfs Time Consuming: "
             << 1000.0 * (clock() - timeStart) / CLOCKS_PER_SEC << "ms"
             << std::endl;

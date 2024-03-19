@@ -71,6 +71,8 @@ namespace QT {
                            currentImage);
         drawPixel(nowMouseImagePos.x(), nowMouseImagePos.y(), QColor(255, 174, 201));
         drawMap();
+        drawPixel(start.x(), start.y(), Qt::green);
+        drawPixel(end.x(), end.y(), Qt::red);
         this->paintGrid();
     }
 
@@ -110,6 +112,26 @@ namespace QT {
     }
 
     void ImageDisplay::mousePressEvent(QMouseEvent *event) {
+        if (event->button() == Qt::RightButton) {
+            switch (set) {
+                case 0: {
+                    start = getLocate(event->position());
+                    LOG(INFO) << "开始坐标: (" << static_cast<int>(start.x()) << ", " << static_cast<int>(start.y()) << ")"
+                            << std::endl;
+                    set++;
+                    break;
+                }
+                case 1: {
+                    end = getLocate(event->position());
+                    LOG(INFO) << "结束坐标: (" << static_cast<int>(end.x()) << ", " << static_cast<int>(end.y()) << ")"
+                            << std::endl;
+                    set = 0;
+                    break;
+                }
+                default: set = 0;
+            }
+            return;
+        }
         if (event->button() != Qt::LeftButton) {
             return;
         }
