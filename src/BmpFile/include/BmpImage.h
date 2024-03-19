@@ -11,16 +11,13 @@
 #define DAC_BMPIMAGE_HPP
 
 #include <Definition.h>
-#include <cstring>
-#include <fstream>
-#include <iostream>
-#include <string>
 #include <QPixmap>
+#include <fstream>
+#include <string>
 #include "BmpStruct.h"
 
 /**
  * @brief Bmp文件操作抽象父类
- * @tparam T 像素点的类型名{@link BmpFile}
  */
 class BmpImage {
 public:

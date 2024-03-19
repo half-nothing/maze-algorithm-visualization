@@ -15,6 +15,10 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 endif ()
 
+if (NO_CONSOLE)
+    add_compile_definitions(NO_CONSOLE)
+endif ()
+
 message("Build Type: " ${CMAKE_BUILD_TYPE} ${CMAKE_CXX_FLAGS})
 
 set_target_properties(${TARGET_NAME} PROPERTIES DEBUG_POSTFIX "_d")
@@ -59,11 +63,21 @@ file(GLOB_RECURSE FORMS src/Qt/ui/*)
 file(GLOB_RECURSE STATIC_LIBS lib/static/*)
 file(GLOB_RECURSE SHARED_LIBS lib/shared/*)
 
-add_executable(${PROJECT_NAME} main.cpp
-        ${HEADERS}
-        ${SOURCE}
-        ${FORMS}
-)
+if (NO_CONSOLE)
+    add_executable(${PROJECT_NAME} WIN32
+            main.cpp
+            ${HEADERS}
+            ${SOURCE}
+            ${FORMS}
+    )
+else ()
+    add_executable(${PROJECT_NAME}
+            main.cpp
+            ${HEADERS}
+            ${SOURCE}
+            ${FORMS}
+    )
+endif ()
 
 link_libraries(${PROJECT_NAME} ${SHARED_LIBS})
 

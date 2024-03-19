@@ -1,5 +1,5 @@
 /**********************************************
- * @file SequentialStructure.h
+ * @file SequentialStructure.hpp
  * @brief 顺序结构的抽象父类
  * @author Half_nothing
  * @email Half_nothing@163.com

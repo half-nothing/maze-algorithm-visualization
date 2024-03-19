@@ -12,7 +12,7 @@
 
 #include <exception>
 #include <iostream>
-#include "LimitedSequentialStructure.h"
+#include "LimitedSequentialStructure.hpp"
 
 /**
  * @class Stack

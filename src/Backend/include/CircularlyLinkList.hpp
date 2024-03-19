@@ -12,7 +12,7 @@
 
 #include <iostream>
 #include "LinkNodes.h"
-#include "SequentialStructure.h"
+#include "SequentialStructure.hpp"
 #include "glog/logging.h"
 
 /**
@@ -143,7 +143,6 @@ public:
             LOG(ERROR) << "The index must be positive, but got " << pos << std::endl;
             return;
         }
-        assert(pos >= 0);
         NodePtr temp = findPtr(pos);
         auto tmp = new Node(src);
         tmp->next = temp;
