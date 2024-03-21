@@ -13,20 +13,32 @@
 
 #include <ImageDisplay.h>
 
-class GraphPath {
+class GraphPath final : public QObject {
+    Q_OBJECT
+
+signals:
+    void updatePoint(Point);
+
 public:
-    static void bfs(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
+    static GraphPath *getInstance();
 
-    static void dfs(QT::ImageDisplay *imageDisplay, const QPixmap &pixmap, QPoint start, QPoint end);
+    void bfs(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
 
-    static void aStar(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
+    void dfs(const QPixmap &pixmap, QPoint start, QPoint end);
+
+    void aStar(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
 
 private:
-    static void _bfs(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
+    static GraphPath *instance;
 
-    static void _dfs(QT::ImageDisplay *imageDisplay, QImage &image, QPoint start, QPoint end, std::vector<std::vector<bool>> &vis, bool (*opt)(QRgb));
+    GraphPath() = default;
 
-    static void _aStar(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
+    void _bfs(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
+
+    void _dfs(QImage &image, QPoint start, QPoint end,
+              std::vector<std::vector<bool> > &vis, bool (*opt)(QRgb));
+
+    void _aStar(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
 };
 
 #endif

@@ -15,26 +15,175 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="1" rowspan="2">
+     <layout class="QGridLayout" name="buttonArea">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="startPointLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>23</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>开始坐标：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="endPointValueLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>2</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>(0, 0)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="endPointLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>23</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>结束坐标：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QPushButton" name="openImageButton">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>23</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>打开图片</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0" colspan="2">
+       <widget class="QPushButton" name="pathFindingButton">
+        <property name="text">
+         <string>开始寻路</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <widget class="QPushButton" name="clearPointsButton">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>清空坐标</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="startPointValueLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>2</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>(0, 0)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QComboBox" name="pathFindingComboBox">
+        <item>
+         <property name="text">
+          <string>BFS</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>DFS</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>A*</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="pathFindingLabel">
+        <property name="text">
+         <string>寻路算法</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
     <item row="0" column="1">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="4" column="1">
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="0" column="2" rowspan="7">
      <widget class="ImageDisplay" name="image" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>2</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QPushButton" name="pushButton">
-      <property name="minimumSize">
-       <size>
-        <width>150</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>打开图片</string>
       </property>
      </widget>
     </item>
@@ -49,27 +198,27 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu">
+   <widget class="QMenu" name="fileMenu">
     <property name="title">
      <string>文件</string>
     </property>
-    <addaction name="action"/>
+    <addaction name="loadImageAction"/>
    </widget>
-   <widget class="QMenu" name="menu_2">
+   <widget class="QMenu" name="aboutMenu">
     <property name="title">
      <string>帮助</string>
     </property>
-    <addaction name="action_2"/>
+    <addaction name="aboutAction"/>
    </widget>
-   <addaction name="menu"/>
-   <addaction name="menu_2"/>
+   <addaction name="fileMenu"/>
+   <addaction name="aboutMenu"/>
   </widget>
-  <action name="action">
+  <action name="loadImageAction">
    <property name="text">
     <string>加载图片</string>
    </property>
   </action>
-  <action name="action_2">
+  <action name="aboutAction">
    <property name="text">
     <string>关于</string>
    </property>
@@ -81,28 +230,114 @@
    <extends>QWidget</extends>
    <header>ImageDisplay.h</header>
    <container>1</container>
+   <slots>
+    <signal>startPointUpdate(QString)</signal>
+    <signal>endPointUpdate(QString)</signal>
+    <slot>clearPoints()</slot>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources/>
  <connections>
   <connection>
-   <sender>pushButton</sender>
+   <sender>openImageButton</sender>
    <signal>clicked()</signal>
    <receiver>QT::MainWindow</receiver>
    <slot>openImage()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>77</x>
-     <y>384</y>
+     <x>97</x>
+     <y>387</y>
     </hint>
     <hint type="destinationlabel">
-     <x>178</x>
-     <y>389</y>
+     <x>168</x>
+     <y>376</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>image</sender>
+   <signal>startPointUpdate(QString)</signal>
+   <receiver>startPointValueLabel</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>186</x>
+     <y>317</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>159</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>image</sender>
+   <signal>endPointUpdate(QString)</signal>
+   <receiver>endPointValueLabel</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>217</x>
+     <y>345</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>159</x>
+     <y>345</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clearPointsButton</sender>
+   <signal>clicked()</signal>
+   <receiver>image</receiver>
+   <slot>clearPoints()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>131</x>
+     <y>405</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>167</x>
+     <y>405</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>loadImageAction</sender>
+   <signal>triggered()</signal>
+   <receiver>QT::MainWindow</receiver>
+   <slot>openImage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>507</x>
+     <y>379</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pathFindingButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QT::MainWindow</receiver>
+   <slot>findPath()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>119</x>
+     <y>462</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>166</x>
+     <y>463</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
   <slot>openImage()</slot>
+  <slot>findPath()</slot>
  </slots>
 </ui>

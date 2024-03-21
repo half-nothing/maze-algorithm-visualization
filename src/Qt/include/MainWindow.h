@@ -1,7 +1,10 @@
 #ifndef DAC_MAINWINDOW_H
 #define DAC_MAINWINDOW_H
 
+#include <DfsThread.h>
 #include <QMainWindow>
+#include <Thread.h>
+
 #include "ImageDisplay.h"
 
 namespace QT {
@@ -19,15 +22,28 @@ namespace QT {
     public slots:
         void openImage();
 
+        void findPath();
+
+    signals:
+        void dfsSignal();
+
+        void destroyThread();
+
     public:
         explicit MainWindow(QWidget *parent = nullptr);
 
-        ImageDisplay *getImageDisplay() const;
+        [[nodiscard]] ImageDisplay *getImageDisplay() const;
 
         ~MainWindow() override;
 
+        void dealDestroy();
+
+    protected:
+        void closeEvent(QCloseEvent *event) override;
+
     private:
         Ui::MainWindow *ui;
+        QPixmap pixmap;
     };
 }
 

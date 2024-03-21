@@ -3,7 +3,7 @@
 #include "MainWindow.h"
 
 int main(int argc, char *argv[]) {
-#if (WIN64 || WIN32)
+#if WIN64 || WIN32
     #ifndef NO_CONSOLE
         system("chcp 65001");
     #endif

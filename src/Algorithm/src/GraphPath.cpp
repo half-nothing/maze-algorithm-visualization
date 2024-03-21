@@ -15,14 +15,20 @@
 static bool returnFlag = false;
 constexpr QRgb black = qRgb(0, 0, 0);
 
+GraphPath *GraphPath::instance = new GraphPath();
+
+GraphPath *GraphPath::getInstance() {
+    return instance;
+}
+
 void GraphPath::bfs(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end) {}
 
-void GraphPath::dfs(QT::ImageDisplay *imageDisplay, const QPixmap &pixmap, const QPoint start, const QPoint end) {
+void GraphPath::dfs(const QPixmap &pixmap, const QPoint start, const QPoint end) {
     const clock_t timeStart = clock();
     std::vector vis(pixmap.width(), std::vector(pixmap.height(), false));
     QImage image = pixmap.toImage();
     returnFlag = false;
-    _dfs(imageDisplay, image, start, end, vis, [](const QRgb color) {
+    _dfs(image, start, end, vis, [](const QRgb color) {
         return color == black;
     });
     LOG(INFO) << "Dfs Time Consuming: "
@@ -32,7 +38,7 @@ void GraphPath::dfs(QT::ImageDisplay *imageDisplay, const QPixmap &pixmap, const
 
 void GraphPath::aStar(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end) {}
 
-void GraphPath::_dfs(QT::ImageDisplay *imageDisplay, QImage &image, const QPoint start, const QPoint end,
+void GraphPath::_dfs(QImage &image, const QPoint start, const QPoint end,
                      std::vector<std::vector<bool> > &vis, bool (*opt)(QRgb)) {
     if (returnFlag) return;
     if (start.x() == end.x() && start.y() == end.y()) {
@@ -43,12 +49,12 @@ void GraphPath::_dfs(QT::ImageDisplay *imageDisplay, QImage &image, const QPoint
     if (vis[start.x()][start.y()]) return;
     vis[start.x()][start.y()] = true;
     if (opt(image.pixel(start))) return;
-    imageDisplay->addPoint({start, Qt::blue});
+    emit updatePoint({start, Qt::blue});
 
     for (int i = -1; i <= 1; i++) {
         for (int j = -1; j <= 1; j++) {
             const auto temp = QPoint(start.x() + i, start.y() + j);
-            _dfs(imageDisplay, image, temp, end, vis, opt);
+            _dfs(image, temp, end, vis, opt);
         }
     }
 }

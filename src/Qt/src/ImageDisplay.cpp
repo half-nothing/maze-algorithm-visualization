@@ -1,4 +1,8 @@
 #include "ImageDisplay.h"
+
+#include <GraphPath.h>
+#include <QThreadPool>
+
 #include "ui_ImageDisplay.h"
 #include "glog/logging.h"
 
@@ -17,8 +21,10 @@ namespace QT {
     }
 
     void ImageDisplay::displayImage(const QPixmap &image) {
-        if (image.width() != this->imageWidth || image.height() != this->imageHeight) {
+        if (image.width() != this->imageWidth) {
             this->imageWidth = image.width();
+        }
+        if (image.height() != this->imageHeight) {
             this->imageHeight = image.height();
         }
         currentImage = image;
@@ -44,11 +50,16 @@ namespace QT {
 
     }
 
-    const std::vector<Point> &ImageDisplay::getPoints() const {
-        return points;
+    void ImageDisplay::clearPoints() {
+        start = end = QPointF(0, 0);
+        set = 0;
+        points.clear();
+        repaint();
+        emit startPointUpdate("(0, 0)");
+        emit endPointUpdate("(0, 0)");
     }
 
-    void ImageDisplay::addPoint(const Point &point) {
+    void ImageDisplay::addPoint(Point point) {
         this->points.push_back(point);
         this->repaint();
     }
@@ -111,20 +122,42 @@ namespace QT {
         }
     }
 
+    void ImageDisplay::checkRangeLimit(QPointF &point) const {
+        if (point.x() < 0) {
+            point.setX(0);
+        }
+        if (point.x() >= this->imageWidth) {
+            point.setX(this->imageWidth - 1);
+        }
+        if (point.y() < 0) {
+            point.setY(0);
+        }
+        if (point.y() >= this->imageHeight) {
+            point.setY(this->imageHeight - 1);
+        }
+    }
+
     void ImageDisplay::mousePressEvent(QMouseEvent *event) {
         if (event->button() == Qt::RightButton) {
             switch (set) {
                 case 0: {
                     start = getLocate(event->position());
-                    LOG(INFO) << "开始坐标: (" << static_cast<int>(start.x()) << ", " << static_cast<int>(start.y()) << ")"
+                    checkRangeLimit(start);
+                    LOG(INFO) << "开始坐标: (" << static_cast<int>(start.x()) << ", " << static_cast<int>(start.y()) <<
+                            ")"
                             << std::endl;
+                    emit startPointUpdate(
+                            QString::asprintf("(%d, %d)", static_cast<int>(start.x()), static_cast<int>(start.y())));
                     set++;
                     break;
                 }
                 case 1: {
                     end = getLocate(event->position());
+                    checkRangeLimit(end);
                     LOG(INFO) << "结束坐标: (" << static_cast<int>(end.x()) << ", " << static_cast<int>(end.y()) << ")"
                             << std::endl;
+                    emit endPointUpdate(QString::asprintf("(%d, %d)", static_cast<int>(end.x()),
+                                                          static_cast<int>(end.y())));
                     set = 0;
                     break;
                 }
@@ -168,4 +201,19 @@ namespace QT {
         return tmp / widthPerPix;
     }
 
+    void ImageDisplay::dealDestroy() const {
+        if (dfsThread != nullptr) dfsThread->stopThread();
+    }
+
+    void ImageDisplay::dfsSearch() {
+        dfsThread = new DFSThread(currentImage, {sc_int(start.x()), sc_int(start.y())},
+                                  {sc_int(end.x()), sc_int(end.y())});
+        // TODO: 这里需要屏蔽掉鼠标操作,不然会导致UI线程卡死,原因未知需要进一步排查
+        setDisabled(true);
+        connect(dfsThread, &DFSThread::threadFinishSignal, [this]() {
+            dfsThread = nullptr;
+            setDisabled(false);
+        });
+        QThreadPool::globalInstance()->start(dfsThread);
+    }
 }

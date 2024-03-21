@@ -2,12 +2,14 @@
 #define DAC_IMAGEDISPLAY_H
 
 #include <Definition.h>
+#include <DfsThread.h>
 #include <QWidget>
 #include <QImage>
 #include <QPixmap>
 #include <QPainter>
-#include <QPaintEvent>
 #include <QWheelEvent>
+
+#include "DfsThread.h"
 
 namespace QT {
     QT_BEGIN_NAMESPACE
@@ -28,14 +30,23 @@ namespace QT {
 
         void displayImage(const QPixmap &image);
 
-        void addPoint(const Point &point);
-
         void delPoint(const Point &point);
 
-        const std::vector<Point> &getPoints() const;
+        void clearPoints();
+
+    public slots:
+        void dfsSearch();
+
+        void addPoint(Point);
+
+        void dealDestroy() const;
+
+    signals:
+        void startPointUpdate(QString);
+
+        void endPointUpdate(QString);
 
     private:
-
         void paintEvent(QPaintEvent *event) override;
 
         void resizeEvent(QResizeEvent *event) override;
@@ -43,6 +54,8 @@ namespace QT {
         void wheelEvent(QWheelEvent *event) override;
 
         void mouseMoveEvent(QMouseEvent *event) override;
+
+        void checkRangeLimit(QPointF &point) const;
 
         void mousePressEvent(QMouseEvent *event) override;
 
@@ -73,6 +86,7 @@ namespace QT {
         QPointF end;
         int set = 0;
         Ui::ImageDisplay *ui;
+        DFSThread *dfsThread = nullptr;
     };
 }
 

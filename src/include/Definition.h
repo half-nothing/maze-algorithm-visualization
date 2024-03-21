@@ -14,6 +14,7 @@
 #include <QPoint>
 #include <initializer_list>
 
+#define sc_int(x) static_cast<int>(x)
 #define STACK_MINIMUM_SIZE 8
 
 template<class T>
@@ -22,6 +23,7 @@ using InitList = const std::initializer_list<T> &;
 using exceotion = std::exception;
 
 using uint = unsigned int;
+
 
 struct Point {
     QPoint point;
