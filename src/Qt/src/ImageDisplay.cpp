@@ -1,6 +1,5 @@
 #include "ImageDisplay.h"
 
-#include <GraphPath.h>
 #include <QThreadPool>
 
 #include "ui_ImageDisplay.h"
@@ -11,7 +10,7 @@ namespace QT {
         QWidget(parent), ui(new Ui::ImageDisplay) {
         ui->setupUi(this);
         timer = new QTimer(this);
-        timer->setInterval(10);
+        timer->setInterval(1);
         connect(timer, &QTimer::timeout, [this] {
             step++;
             if (step > points.size()) {
@@ -21,6 +20,10 @@ namespace QT {
             repaint();
         });
         connect(this, SIGNAL(drawPath()), this, SLOT(drawPathSlot()));
+    }
+
+    void ImageDisplay::setInterval(const int value) const {
+        timer->setInterval(value);
     }
 
     ImageDisplay::~ImageDisplay() {
@@ -39,6 +42,10 @@ namespace QT {
             this->imageHeight = image.height();
         }
         currentImage = image;
+        const double zoom_x = sc_double(this->width()) / imageWidth;
+        const double zoom_y = sc_double(this->height()) / imageHeight;
+        widthPerPix = zoom_x > zoom_y ? zoom_y : zoom_x;
+        zoom = widthPerPix / 4.0;
         this->repaint();
     }
 
@@ -63,11 +70,15 @@ namespace QT {
 
     void ImageDisplay::clearPoints() {
         start = end = QPointF(0, 0);
-        set = 0;
+        status = 0;
         points.clear();
         repaint();
         emit startPointUpdate("(0, 0)");
         emit endPointUpdate("(0, 0)");
+    }
+
+    void ImageDisplay::setSearchSequential(const bool searchSequential) {
+        this->searchSequential = searchSequential;
     }
 
     void ImageDisplay::paintEvent(QPaintEvent *event) {
@@ -104,9 +115,9 @@ namespace QT {
         if (const auto tmp = this->getLocate(nowpos); tmp != nowMouseImagePos) {
             nowMouseImagePos = tmp;
 
-            this->ui->cood->setText(QString::asprintf("图像坐标:(%d,%d)",
-                                                      static_cast<int>(nowMouseImagePos.x()),
-                                                      static_cast<int>(nowMouseImagePos.y())));
+            emit mousePointUpdate(QString::asprintf("(%d, %d)",
+                                                    static_cast<int>(nowMouseImagePos.x()),
+                                                    static_cast<int>(nowMouseImagePos.y())));
             this->repaint();
         }
 
@@ -134,7 +145,7 @@ namespace QT {
 
     void ImageDisplay::mousePressEvent(QMouseEvent *event) {
         if (event->button() == Qt::RightButton) {
-            switch (set) {
+            switch (status) {
                 case 0: {
                     start = getLocate(event->position());
                     checkRangeLimit(start);
@@ -143,7 +154,7 @@ namespace QT {
                             << std::endl;
                     emit startPointUpdate(
                             QString::asprintf("(%d, %d)", static_cast<int>(start.x()), static_cast<int>(start.y())));
-                    set++;
+                    status++;
                     break;
                 }
                 case 1: {
@@ -153,10 +164,10 @@ namespace QT {
                             << std::endl;
                     emit endPointUpdate(QString::asprintf("(%d, %d)", static_cast<int>(end.x()),
                                                           static_cast<int>(end.y())));
-                    set = 0;
+                    status = 0;
                     break;
                 }
-                default: set = 0;
+                default: status = 0;
             }
             return;
         }
@@ -204,14 +215,29 @@ namespace QT {
         timer->start();
     }
 
+    void ImageDisplay::clearPath() {
+        step = 0;
+        repaint();
+    }
+
+    void ImageDisplay::repaintPath() {
+        step = 0;
+        timer->start();
+    }
+
     void ImageDisplay::dfsSearch() {
         dfsThread = new DFSThread(currentImage, {sc_int(start.x()), sc_int(start.y())},
                                   {sc_int(end.x()), sc_int(end.y())});
         connect(dfsThread, &DFSThread::threadFinishSignal, [this] {
             points.clear();
-            step = 0;
             points = std::move(dfsThread->getResult());
-            emit drawPath();
+            if (this->searchSequential) {
+                step = 0;
+                emit drawPath();
+                return;
+            }
+            step = points.size();
+            repaint();
         });
         QThreadPool::globalInstance()->start(dfsThread);
     }

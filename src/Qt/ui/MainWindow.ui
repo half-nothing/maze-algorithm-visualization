@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../../../resource/resource.qrc">
+    <normaloff>:/image/image/half128x128.png</normaloff>:/image/image/half128x128.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="1" column="1" rowspan="2">
@@ -20,7 +24,90 @@
       <property name="sizeConstraint">
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
+      <item row="4" column="0" colspan="2">
+       <widget class="QPushButton" name="clearPointsButton">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>清空坐标</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0" colspan="2">
+       <widget class="QPushButton" name="pathFindingButton">
+        <property name="text">
+         <string>开始寻路</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="pathFindingLabel">
+        <property name="text">
+         <string>寻路算法</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="0" colspan="2">
+       <widget class="QPushButton" name="repaintPathButton">
+        <property name="text">
+         <string>重绘路径</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
+       <widget class="QLabel" name="mousePosLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>23</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>鼠标坐标：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="mousePosValueLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>2</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>(0, 0)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0" colspan="2">
+       <widget class="QCheckBox" name="showSearchPathCheckBox">
+        <property name="text">
+         <string>按搜索顺序绘制路径</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="searchCostLabel">
+        <property name="text">
+         <string>寻路耗时：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
        <widget class="QLabel" name="startPointLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -39,91 +126,21 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="endPointValueLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>2</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
+      <item row="7" column="1">
+       <widget class="QLabel" name="searchCostValueLabel">
         <property name="text">
-         <string>(0, 0)</string>
+         <string>0s</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="endPointLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>1</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>23</height>
-         </size>
-        </property>
+      <item row="11" column="0" colspan="2">
+       <widget class="QPushButton" name="clearPathButton">
         <property name="text">
-         <string>结束坐标：</string>
+         <string>清空路径</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QPushButton" name="openImageButton">
-        <property name="minimumSize">
-         <size>
-          <width>150</width>
-          <height>23</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>打开图片</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0" colspan="2">
-       <widget class="QPushButton" name="pathFindingButton">
-        <property name="text">
-         <string>开始寻路</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="2">
-       <widget class="QPushButton" name="clearPointsButton">
-        <property name="minimumSize">
-         <size>
-          <width>150</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>清空坐标</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="startPointValueLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>2</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>(0, 0)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
+      <item row="5" column="1">
        <widget class="QComboBox" name="pathFindingComboBox">
         <item>
          <property name="text">
@@ -142,27 +159,122 @@
         </item>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="pathFindingLabel">
+      <item row="1" column="1">
+       <widget class="QLabel" name="startPointValueLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>2</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
-         <string>寻路算法</string>
+         <string>(0, 0)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <widget class="QPushButton" name="openImageButton">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>23</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>打开图片</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="searchDelayLabel">
+        <property name="text">
+         <string>绘制延迟：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QSpinBox" name="searchDelaySpinBox">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+        <property name="value">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="endPointValueLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>2</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>(0, 0)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0" colspan="2">
+       <widget class="QSlider" name="searchDelaySlider">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+        <property name="singleStep">
+         <number>1</number>
+        </property>
+        <property name="pageStep">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="invertedAppearance">
+         <bool>false</bool>
+        </property>
+        <property name="invertedControls">
+         <bool>false</bool>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksBelow</enum>
+        </property>
+        <property name="tickInterval">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="endPointLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>23</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>结束坐标：</string>
         </property>
        </widget>
       </item>
      </layout>
-    </item>
-    <item row="0" column="1">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
     </item>
     <item row="4" column="1">
      <spacer name="verticalSpacer_2">
@@ -233,11 +345,17 @@
    <slots>
     <signal>startPointUpdate(QString)</signal>
     <signal>endPointUpdate(QString)</signal>
+    <signal>mousePointUpdate(QString)</signal>
     <slot>clearPoints()</slot>
+    <slot>clearPath()</slot>
+    <slot>repaintPath()</slot>
+    <slot>drawSequentially(bool)</slot>
    </slots>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../../resource/resource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>openImageButton</sender>
@@ -246,12 +364,12 @@
    <slot>openImage()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>97</x>
-     <y>387</y>
+     <x>117</x>
+     <y>146</y>
     </hint>
     <hint type="destinationlabel">
-     <x>168</x>
-     <y>376</y>
+     <x>165</x>
+     <y>139</y>
     </hint>
    </hints>
   </connection>
@@ -262,12 +380,12 @@
    <slot>setText(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>186</x>
-     <y>317</y>
+     <x>176</x>
+     <y>78</y>
     </hint>
     <hint type="destinationlabel">
      <x>159</x>
-     <y>317</y>
+     <y>78</y>
     </hint>
    </hints>
   </connection>
@@ -278,12 +396,12 @@
    <slot>setText(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>217</x>
-     <y>345</y>
+     <x>167</x>
+     <y>104</y>
     </hint>
     <hint type="destinationlabel">
      <x>159</x>
-     <y>345</y>
+     <y>104</y>
     </hint>
    </hints>
   </connection>
@@ -294,12 +412,76 @@
    <slot>clearPoints()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>131</x>
-     <y>405</y>
+     <x>151</x>
+     <y>170</y>
     </hint>
     <hint type="destinationlabel">
      <x>167</x>
-     <y>405</y>
+     <y>170</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pathFindingButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QT::MainWindow</receiver>
+   <slot>findPath()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>139</x>
+     <y>331</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>166</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clearPathButton</sender>
+   <signal>clicked()</signal>
+   <receiver>image</receiver>
+   <slot>clearPath()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>97</x>
+     <y>352</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>167</x>
+     <y>252</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>repaintPathButton</sender>
+   <signal>clicked()</signal>
+   <receiver>image</receiver>
+   <slot>repaintPath()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>115</x>
+     <y>381</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>216</x>
+     <y>281</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>image</sender>
+   <signal>mousePointUpdate(QString)</signal>
+   <receiver>mousePosValueLabel</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>182</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>126</x>
+     <y>51</y>
     </hint>
    </hints>
   </connection>
@@ -316,22 +498,6 @@
     <hint type="destinationlabel">
      <x>507</x>
      <y>379</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pathFindingButton</sender>
-   <signal>clicked()</signal>
-   <receiver>QT::MainWindow</receiver>
-   <slot>findPath()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>119</x>
-     <y>462</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>166</x>
-     <y>463</y>
     </hint>
    </hints>
   </connection>

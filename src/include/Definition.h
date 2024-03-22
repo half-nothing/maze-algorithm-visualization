@@ -15,6 +15,7 @@
 #include <initializer_list>
 
 #define sc_int(x) static_cast<int>(x)
+#define sc_double(x) static_cast<double>(x)
 #define STACK_MINIMUM_SIZE 8
 
 template<class T>

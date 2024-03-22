@@ -62,20 +62,23 @@ file(GLOB_RECURSE SOURCE
         src/Thread/src/*
 )
 
+file(GLOB_RECURSE QRC_FILES resource/*.qrc)
 file(GLOB_RECURSE FORMS src/Qt/ui/*)
 file(GLOB_RECURSE STATIC_LIBS lib/static/*)
 file(GLOB_RECURSE SHARED_LIBS lib/shared/*)
 
 if (NO_CONSOLE)
-    add_executable(${PROJECT_NAME} WIN32
+    add_executable(${PROJECT_NAME} WIN32 icon.rc
             main.cpp
+            ${QRC_FILES}
             ${HEADERS}
             ${SOURCE}
             ${FORMS}
     )
 else ()
-    add_executable(${PROJECT_NAME}
+    add_executable(${PROJECT_NAME} icon.rc
             main.cpp
+            ${QRC_FILES}
             ${HEADERS}
             ${SOURCE}
             ${FORMS}

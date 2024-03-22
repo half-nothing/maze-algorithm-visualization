@@ -16,6 +16,9 @@
 class GraphPath final : public QObject {
     Q_OBJECT
 
+signals:
+    void updateCostTime(QString);
+
 public:
     static GraphPath *getInstance();
 
@@ -32,7 +35,7 @@ private:
 
     void _bfs(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
 
-    void _dfs(std::vector<Point> &points, QImage &image, QPoint start, QPoint end,
+    void _dfs(std::vector<Point> &points, std::vector<Point> &path, QImage &image, QPoint start, QPoint end,
               std::vector<std::vector<bool> > &vis, bool (*opt)(QRgb));
 
     void _aStar(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);

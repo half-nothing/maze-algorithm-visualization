@@ -33,17 +33,27 @@ namespace QT {
 
         void clearPoints();
 
+        void setInterval(int value) const;
+
     public slots:
+        void setSearchSequential(bool);
+
         void dfsSearch();
 
         void dealDestroy() const;
 
         void drawPathSlot();
 
+        void clearPath();
+
+        void repaintPath();
+
     signals:
         void startPointUpdate(QString);
 
         void endPointUpdate(QString);
+
+        void mousePointUpdate(QString);
 
         void drawPath();
 
@@ -70,8 +80,8 @@ namespace QT {
 
         void paintGrid();
 
-        size_t imageWidth = 188;
-        size_t imageHeight = 120;
+        size_t imageWidth = 0;
+        size_t imageHeight = 0;
         float widthPerPix = 4;
 
         float zoom = 1;
@@ -85,11 +95,12 @@ namespace QT {
         QPixmap currentImage;
         QPointF start;
         QPointF end;
-        int set = 0;
+        int status = 0;
         Ui::ImageDisplay *ui;
         DFSThread *dfsThread = nullptr;
         QTimer *timer = nullptr;
         int step = 0;
+        bool searchSequential = true;
     };
 }
 
