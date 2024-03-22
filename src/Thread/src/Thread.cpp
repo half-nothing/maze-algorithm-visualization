@@ -36,6 +36,7 @@ void Thread::run() {
     }
     afterRunning();
     emit threadFinishSignal();
+    LOG(INFO) << "Sub thread exit";
 }
 
 void Thread::beforeRunning() {}

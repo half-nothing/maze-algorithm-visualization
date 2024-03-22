@@ -16,15 +16,12 @@
 class GraphPath final : public QObject {
     Q_OBJECT
 
-signals:
-    void updatePoint(Point);
-
 public:
     static GraphPath *getInstance();
 
     void bfs(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
 
-    void dfs(const QPixmap &pixmap, QPoint start, QPoint end);
+    void dfs(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end);
 
     void aStar(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
 
@@ -35,7 +32,7 @@ private:
 
     void _bfs(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
 
-    void _dfs(QImage &image, QPoint start, QPoint end,
+    void _dfs(std::vector<Point> &points, QImage &image, QPoint start, QPoint end,
               std::vector<std::vector<bool> > &vis, bool (*opt)(QRgb));
 
     void _aStar(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);

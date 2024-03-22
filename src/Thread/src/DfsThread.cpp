@@ -12,7 +12,9 @@
 
 #include <GraphPath.h>
 
+std::vector<Point> &DFSThread::getResult() { return result; }
+
 void DFSThread::execute() {
-    GraphPath::getInstance()->dfs(pixmap, start, end);
+    GraphPath::getInstance()->dfs(result, pixmap, start, end);
     isRunning = false;
 }

@@ -24,7 +24,6 @@ using exceotion = std::exception;
 
 using uint = unsigned int;
 
-
 struct Point {
     QPoint point;
     QColor color;
@@ -35,6 +34,30 @@ struct Point {
 
     friend bool operator!=(const Point &lhs, const Point &rhs) {
         return !(lhs == rhs);
+    }
+
+    Point(const QPoint &point, const QColor &color) :
+        point{point},
+        color{color} {}
+
+    Point(const Point &other) = default;
+
+    Point(Point &&other) noexcept :
+        point(other.point),
+        color(other.color) {}
+
+    Point &operator=(const Point &other) {
+        if (this == &other) return *this;
+        point = other.point;
+        color = other.color;
+        return *this;
+    }
+
+    Point &operator=(Point &&other) noexcept {
+        if (this == &other) return *this;
+        point = other.point;
+        color = other.color;
+        return *this;
     }
 };
 

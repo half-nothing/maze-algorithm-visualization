@@ -16,7 +16,6 @@ namespace QT {
         QMainWindow(parent), ui(new Ui::MainWindow) {
         ui->setupUi(this);
         connect(this, SIGNAL(dfsSignal()), ui->image, SLOT(dfsSearch()));
-        connect(GraphPath::getInstance(), SIGNAL(updatePoint(Point)), ui->image,SLOT(addPoint(Point)));
         connect(this, SIGNAL(destroyThread()), ui->image, SLOT(dealDestroy()));
         LOG(INFO) << "Main thread: " << QThread::currentThread();
     }

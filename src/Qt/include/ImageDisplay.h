@@ -5,6 +5,7 @@
 #include <DfsThread.h>
 #include <QWidget>
 #include <QImage>
+#include <QTimer>
 #include <QPixmap>
 #include <QPainter>
 #include <QWheelEvent>
@@ -30,21 +31,21 @@ namespace QT {
 
         void displayImage(const QPixmap &image);
 
-        void delPoint(const Point &point);
-
         void clearPoints();
 
     public slots:
         void dfsSearch();
 
-        void addPoint(Point);
-
         void dealDestroy() const;
+
+        void drawPathSlot();
 
     signals:
         void startPointUpdate(QString);
 
         void endPointUpdate(QString);
+
+        void drawPath();
 
     private:
         void paintEvent(QPaintEvent *event) override;
@@ -87,6 +88,8 @@ namespace QT {
         int set = 0;
         Ui::ImageDisplay *ui;
         DFSThread *dfsThread = nullptr;
+        QTimer *timer = nullptr;
+        int step = 0;
     };
 }
 

@@ -10,6 +10,17 @@ namespace QT {
     ImageDisplay::ImageDisplay(QWidget *parent) :
         QWidget(parent), ui(new Ui::ImageDisplay) {
         ui->setupUi(this);
+        timer = new QTimer(this);
+        timer->setInterval(10);
+        connect(timer, &QTimer::timeout, [this] {
+            step++;
+            if (step > points.size()) {
+                timer->stop();
+                return;
+            }
+            repaint();
+        });
+        connect(this, SIGNAL(drawPath()), this, SLOT(drawPathSlot()));
     }
 
     ImageDisplay::~ImageDisplay() {
@@ -57,22 +68,6 @@ namespace QT {
         repaint();
         emit startPointUpdate("(0, 0)");
         emit endPointUpdate("(0, 0)");
-    }
-
-    void ImageDisplay::addPoint(Point point) {
-        this->points.push_back(point);
-        this->repaint();
-    }
-
-    void ImageDisplay::delPoint(const Point &point) {
-        if (const auto it =
-                    std::find(this->points.begin(),
-                              this->points.end(),
-                              point);
-            it != this->points.end()) {
-            this->points.erase(it);
-            this->repaint();
-        }
     }
 
     void ImageDisplay::paintEvent(QPaintEvent *event) {
@@ -191,8 +186,8 @@ namespace QT {
     }
 
     void ImageDisplay::drawMap() {
-        for (auto &[point, color]: this->points) {
-            drawPixel(point.x(), point.y(), color);
+        for (int i = 0; i < step && i < points.size(); i++) {
+            drawPixel(points[i].point.x(), points[i].point.y(), points[i].color);
         }
     }
 
@@ -205,14 +200,18 @@ namespace QT {
         if (dfsThread != nullptr) dfsThread->stopThread();
     }
 
+    void ImageDisplay::drawPathSlot() {
+        timer->start();
+    }
+
     void ImageDisplay::dfsSearch() {
         dfsThread = new DFSThread(currentImage, {sc_int(start.x()), sc_int(start.y())},
                                   {sc_int(end.x()), sc_int(end.y())});
-        // TODO: 这里需要屏蔽掉鼠标操作,不然会导致UI线程卡死,原因未知需要进一步排查
-        setDisabled(true);
-        connect(dfsThread, &DFSThread::threadFinishSignal, [this]() {
-            dfsThread = nullptr;
-            setDisabled(false);
+        connect(dfsThread, &DFSThread::threadFinishSignal, [this] {
+            points.clear();
+            step = 0;
+            points = std::move(dfsThread->getResult());
+            emit drawPath();
         });
         QThreadPool::globalInstance()->start(dfsThread);
     }

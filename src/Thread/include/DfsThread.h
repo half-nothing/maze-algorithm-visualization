@@ -24,10 +24,13 @@ public:
         start{start},
         end{end} {}
 
+    [[nodiscard]] std::vector<Point> &getResult();
+
 protected:
     void execute() override;
 
 private:
+    std::vector<Point> result{};
     const QPixmap &pixmap;
     QPoint start;
     QPoint end;
