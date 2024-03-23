@@ -11,6 +11,7 @@
 #include "windows.h"
 #include "GraphPath.h"
 #define  GLOG_NO_ABBREVIATED_SEVERITIES
+#include <Config.h>
 #include <QThread>
 #include <glog/logging.h>
 
@@ -35,7 +36,7 @@ void GraphPath::dfs(std::vector<Point> &points, const QPixmap &pixmap, const QPo
     QImage image = pixmap.toImage();
     returnFlag = false;
     _dfs(points, path, image, start, end, vis, [](const QRgb color) {
-        return color == black;
+        return color == Config::getInstance()->getConfigField(WALL_COLOR);
     });
     points.insert(points.end(),
                   std::make_move_iterator(path.begin()),
@@ -63,7 +64,6 @@ void GraphPath::_dfs(std::vector<Point> &points, std::vector<Point> &path, QImag
                      std::vector<std::vector<bool> > &vis, bool (*opt)(QRgb)) {
     if (returnFlag) return;
     if (start.x() == end.x() && start.y() == end.y()) {
-        path.emplace_back(start, Qt::yellow);
         returnFlag = true;
         return;
     }
@@ -71,13 +71,13 @@ void GraphPath::_dfs(std::vector<Point> &points, std::vector<Point> &path, QImag
     if (vis[start.x()][start.y()]) return;
     vis[start.x()][start.y()] = true;
     if (opt(image.pixel(start))) return;
-    points.emplace_back(start, Qt::blue);
+    points.emplace_back(start, Config::getInstance()->getConfigField(SEARCHED_POINT_COLOR));
 
     for (const auto dir : dirs) {
         const auto temp = QPoint(start.x() + dir[0], start.y() + dir[1]);
         _dfs(points, path, image, temp, end, vis, opt);
         if (returnFlag) {
-            path.emplace_back(temp, Qt::yellow);
+            path.emplace_back(temp, Config::getInstance()->getConfigField(PATH_POINT_COLOR));
             return;
         }
     }

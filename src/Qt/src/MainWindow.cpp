@@ -1,6 +1,8 @@
 #include <BmpFactory.h>
 #include <BmpImage.h>
 #include <QFileDialog>
+#include <QPalette>
+#include <QStyleFactory>
 
 #include "MainWindow.h"
 
@@ -27,8 +29,19 @@ namespace QT {
             ui->searchDelaySlider->setValue(value);
             ui->image->setInterval(value);
         });
-        connect(GraphPath::getInstance(), &GraphPath::updateCostTime, [this](const QString& value) {
+        connect(GraphPath::getInstance(), &GraphPath::updateCostTime, [this](const QString &value) {
             ui->searchCostValueLabel->setText(value);
+        });
+        connect(ui->aboutAction, &QAction::triggered, [this] {
+            QMessageBox msgBox;
+            msgBox.setWindowTitle("关于本软件");
+            msgBox.setText("Half_nothing data structure course design homework.<hr/>"
+                    "HomePage: <a href='https://half-nothing.cn/'>https://half-nothing.cn/</a><br/>"
+                    "Github: <a href='https://github.com/half-nothing/DSCDesign'>https://github.com/half-nothing/DSCDesign</a><hr/>"
+                    "Copyright © 2024 Half_nothing, All Rights Reserved.");
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            msgBox.exec();
         });
         LOG(INFO) << "Main thread: " << QThread::currentThread();
     }
@@ -47,6 +60,27 @@ namespace QT {
             return;
         }
         event->ignore();
+    }
+
+    void MainWindow::styleInit(){
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/image/image/half128x128.png"), QSize(), QIcon::Normal, QIcon::Off);
+        QApplication::setWindowIcon(icon);
+        QApplication::setStyle(QStyleFactory::create("Fusion"));
+        QPalette palette;
+        palette.setColor(QPalette::ColorGroup::All, QPalette::ColorRole::WindowText, Qt::white);
+        palette.setColor(QPalette::ColorGroup::All, QPalette::ColorRole::Shadow, Qt::black);
+        palette.setColor(QPalette::ColorGroup::All, QPalette::ColorRole::ButtonText, Qt::white);
+        palette.setColor(QPalette::ColorGroup::All, QPalette::ColorRole::Highlight, QColor(142, 45, 197));
+        palette.setColor(QPalette::ColorGroup::All, QPalette::ColorRole::HighlightedText, Qt::white);
+        palette.setColor(QPalette::ColorGroup::All, QPalette::ColorRole::Text, Qt::white);
+        palette.setColor(QPalette::ColorGroup::All, QPalette::ColorRole::Window, QColor(30, 30, 30));
+        palette.setColor(QPalette::ColorGroup::All, QPalette::ColorRole::Button, QColor(30, 30, 30));
+        palette.setColor(QPalette::ColorGroup::All, QPalette::ColorRole::Base, QColor(87, 87, 87));
+        palette.setColor(QPalette::ColorGroup::Disabled, QPalette::ColorRole::Window, QColor(54, 54, 54));
+        palette.setColor(QPalette::ColorGroup::Disabled, QPalette::ColorRole::Button, QColor(54, 54, 54));
+        palette.setColor(QPalette::ColorGroup::Disabled, QPalette::ColorRole::Base, QColor(54, 54, 54));
+        QApplication::setPalette(palette);
     }
 
     void MainWindow::dealDestroy() {

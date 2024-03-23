@@ -14,7 +14,7 @@
 #include <QPixmap>
 #include <fstream>
 #include <string>
-#include "BmpStruct.h"
+#include "BmpDefinition.h"
 
 /**
  * @brief Bmp文件操作抽象父类

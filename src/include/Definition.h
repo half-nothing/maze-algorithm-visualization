@@ -12,11 +12,15 @@
 
 #include <QColor>
 #include <QPoint>
+#include <filesystem>
 #include <initializer_list>
 
 #define sc_int(x) static_cast<int>(x)
 #define sc_double(x) static_cast<double>(x)
+#define rc_char_p(x) reinterpret_cast<char *>(x)
+
 #define STACK_MINIMUM_SIZE 8
+#define STORE_DATA_LEN 5
 
 template<class T>
 using InitList = const std::initializer_list<T> &;
@@ -60,13 +64,6 @@ struct Point {
         color = other.color;
         return *this;
     }
-};
-
-enum BmpType {
-    UNKNOWN_BIT,
-    ONE_BIT,
-    EIGHT_BIT,
-    TWENTY_FOUR_BIT
 };
 
 #endif

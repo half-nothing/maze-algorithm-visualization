@@ -94,4 +94,11 @@ struct BmpPixelInfo {
     uint32_t paletteSize = 0;
 };
 
+enum BmpType {
+    UNKNOWN_BIT,
+    ONE_BIT,
+    EIGHT_BIT,
+    TWENTY_FOUR_BIT
+};
+
 #endif

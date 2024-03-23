@@ -38,6 +38,8 @@ namespace QT {
 
         void dealDestroy();
 
+        static void styleInit();
+
     protected:
         void closeEvent(QCloseEvent *event) override;
 

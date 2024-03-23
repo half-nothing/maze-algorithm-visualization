@@ -13,10 +13,6 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <property name="windowIcon">
-   <iconset resource="../../../resource/resource.qrc">
-    <normaloff>:/image/image/half128x128.png</normaloff>:/image/image/half128x128.png</iconset>
-  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="1" column="1" rowspan="2">

@@ -1,5 +1,6 @@
 #include "ImageDisplay.h"
 
+#include <Config.h>
 #include <QThreadPool>
 
 #include "ui_ImageDisplay.h"
@@ -88,8 +89,8 @@ namespace QT {
                            currentImage);
         drawPixel(nowMouseImagePos.x(), nowMouseImagePos.y(), QColor(255, 174, 201));
         drawMap();
-        drawPixel(start.x(), start.y(), Qt::green);
-        drawPixel(end.x(), end.y(), Qt::red);
+        drawPixel(start.x(), start.y(), Config::getInstance()->getConfigField(START_POINT_COLOR));
+        drawPixel(end.x(), end.y(), Config::getInstance()->getConfigField(END_POINT_COLOR));
         this->paintGrid();
     }
 
