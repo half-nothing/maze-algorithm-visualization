@@ -1,6 +1,7 @@
 #ifndef DAC_MAINWINDOW_H
 #define DAC_MAINWINDOW_H
 
+#include <ConfigWidget.h>
 #include <DfsThread.h>
 #include <QMainWindow>
 #include <Thread.h>
@@ -45,6 +46,7 @@ namespace QT {
 
     private:
         Ui::MainWindow *ui;
+        ConfigWidget * configWidget;
         QPixmap pixmap;
     };
 }

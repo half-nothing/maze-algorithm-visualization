@@ -1,6 +1,8 @@
 #include <Config.h>
 #include <QApplication>
 #include <QGlog.h>
+#include <QStyleFactory>
+
 #include "MainWindow.h"
 
 int main(int argc, char *argv[]) {

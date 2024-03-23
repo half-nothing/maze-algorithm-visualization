@@ -311,6 +311,9 @@
      <string>文件</string>
     </property>
     <addaction name="loadImageAction"/>
+    <addaction name="optionWidgetAction"/>
+    <addaction name="separator"/>
+    <addaction name="exitAction"/>
    </widget>
    <widget class="QMenu" name="aboutMenu">
     <property name="title">
@@ -329,6 +332,16 @@
   <action name="aboutAction">
    <property name="text">
     <string>关于</string>
+   </property>
+  </action>
+  <action name="optionWidgetAction">
+   <property name="text">
+    <string>选项</string>
+   </property>
+  </action>
+  <action name="exitAction">
+   <property name="text">
+    <string>退出</string>
    </property>
   </action>
  </widget>

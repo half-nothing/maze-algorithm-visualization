@@ -6,6 +6,7 @@
 
 #include "MainWindow.h"
 
+#include <ConfigWidget.h>
 #include <GraphPath.h>
 #include <QMessageBox>
 #include <QThreadPool>
@@ -17,6 +18,7 @@ namespace QT {
     MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent), ui(new Ui::MainWindow) {
         ui->setupUi(this);
+        configWidget = new ConfigWidget();
         setWindowTitle("Half_nothing");
         connect(this, SIGNAL(dfsSignal()), ui->image, SLOT(dfsSearch()));
         connect(this, SIGNAL(destroyThread()), ui->image, SLOT(dealDestroy()));
@@ -43,6 +45,13 @@ namespace QT {
             msgBox.setDefaultButton(QMessageBox::Ok);
             msgBox.exec();
         });
+        connect(ui->optionWidgetAction, &QAction::triggered, [this] {
+            if (!configWidget->isHidden()) {
+                configWidget->hide();
+            }
+            configWidget->show();
+        });
+        connect(ui->exitAction, &QAction::triggered, this, &QWidget::close);
         LOG(INFO) << "Main thread: " << QThread::currentThread();
     }
 
@@ -62,7 +71,7 @@ namespace QT {
         event->ignore();
     }
 
-    void MainWindow::styleInit(){
+    void MainWindow::styleInit() {
         QIcon icon;
         icon.addFile(QString::fromUtf8(":/image/image/half128x128.png"), QSize(), QIcon::Normal, QIcon::Off);
         QApplication::setWindowIcon(icon);
