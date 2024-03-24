@@ -9,7 +9,13 @@ set(CMAKE_AUTOUIC ON)
 list(APPEND CMAKE_AUTOMOC_SEARCH_PATHS "src/Qt/src")
 list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS "src/Qt/ui")
 
-set(CMAKE_PREFIX_PATH "D:/Qt/6.5.2/mingw_64")
+message("Github Action: " ${GITHUB_ACTION})
+
+if (GITHUB_ACTION)
+    set(CMAKE_PREFIX_PATH "D:/a/DSCDesign/Qt/6.5.2/mingw_64")
+else ()
+    set(CMAKE_PREFIX_PATH "D:/Qt/6.5.2/mingw_64")
+endif ()
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
