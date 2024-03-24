@@ -12,9 +12,19 @@
 
 #include <GraphPath.h>
 
-std::vector<Point> &DFSThread::getResult() { return result; }
+DFSThread::DFSThread(const QPixmap &pixmap, const QPoint &start, const QPoint &end,
+                     const bool useStack, QObject *const parent):
+    Thread{parent}, pixmap{pixmap}, start{start}, end{end}, useStack{useStack} {}
+
+std::vector<Point> &DFSThread::getResult() {
+    return result;
+}
 
 void DFSThread::execute() {
-    GraphPath::getInstance()->dfs(result, pixmap, start, end);
+    if (useStack) {
+        GraphPath::getInstance()->dfsStackVersion(result, pixmap, start, end);
+    } else {
+        GraphPath::getInstance()->dfsRecursiveVersion(result, pixmap, start, end);
+    }
     isRunning = false;
 }

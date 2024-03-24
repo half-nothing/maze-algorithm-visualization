@@ -140,12 +140,17 @@
        <widget class="QComboBox" name="pathFindingComboBox">
         <item>
          <property name="text">
-          <string>BFS</string>
+          <string>DFS递归</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>DFS</string>
+          <string>DFS非递归</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>BFS</string>
          </property>
         </item>
         <item>

@@ -2,7 +2,7 @@
 #define DAC_MAINWINDOW_H
 
 #include <ConfigWidget.h>
-#include <DfsThread.h>
+#include <DFSThread.h>
 #include <QMainWindow>
 #include <Thread.h>
 
@@ -26,7 +26,7 @@ namespace QT {
         void findPath();
 
     signals:
-        void dfsSignal();
+        void dfsSignal(bool);
 
         void destroyThread();
 

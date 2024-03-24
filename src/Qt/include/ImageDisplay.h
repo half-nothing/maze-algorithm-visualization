@@ -2,7 +2,7 @@
 #define DAC_IMAGEDISPLAY_H
 
 #include <Definition.h>
-#include <DfsThread.h>
+#include <DFSThread.h>
 #include <QWidget>
 #include <QImage>
 #include <QTimer>
@@ -10,7 +10,7 @@
 #include <QPainter>
 #include <QWheelEvent>
 
-#include "DfsThread.h"
+#include "DFSThread.h"
 
 namespace QT {
     QT_BEGIN_NAMESPACE
@@ -38,7 +38,7 @@ namespace QT {
     public slots:
         void setSearchSequential(bool);
 
-        void dfsSearch();
+        void dfsSearch(bool);
 
         void dealDestroy() const;
 

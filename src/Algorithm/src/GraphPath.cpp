@@ -13,12 +13,14 @@
 #define  GLOG_NO_ABBREVIATED_SEVERITIES
 #include <Config.h>
 #include <QThread>
+#include <Stack.hpp>
 #include <TimeDefinition.h>
 #include <glog/logging.h>
 
-static bool returnFlag = false;
-constexpr QRgb black = qRgb(0, 0, 0);
-constexpr int dirs[4][2] = {{1, 0}, {0, -1}, {-1, 0}, {0, 1}};
+static constexpr int dirs[4][2] = {{1, 0}, {0, -1}, {-1, 0}, {0, 1}};
+auto visitPoint = [](const QRgb color) {
+    return color == Config::getInstance()->getConfigField(WALL_COLOR);
+};
 
 void GraphPath::updateTime(const double time) {
     if (time < 1e-3) {
@@ -43,29 +45,73 @@ GraphPath *GraphPath::getInstance() {
 
 void GraphPath::bfs(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end) {}
 
-void GraphPath::dfs(std::vector<Point> &points, const QPixmap &pixmap, const QPoint start, const QPoint end) {
-    LOG(INFO) << "Dfs search start";
+void GraphPath::dfsStackVersion(std::vector<Point> &points, const QPixmap &pixmap, const QPoint start,
+                                const QPoint end) {
+    LOG(INFO) << "DfsStackVersion search start";
+    const QImage image = pixmap.toImage();
+    Stack<QPoint> stack;
+    std::vector vis(pixmap.width(), std::vector(pixmap.height(), false));
+    TIMER_START
+    stack.push(start);
+    while (!stack.isEmpty()) {
+        const QPoint temp = stack.top();
+        if (temp == end) {
+            break;
+        }
+        if (visitPoint(image.pixel(temp))) {
+            stack.pop();
+            continue;
+        }
+        for (const auto dir: dirs) {
+            const auto tmp = QPoint(temp.x() + dir[0], temp.y() + dir[1]);
+            if (tmp.x() < 0 || tmp.x() >= image.width() || tmp.y() < 0 || tmp.y() >= image.height()) continue;
+            if (vis[tmp.x()][tmp.y()] == false) {
+                vis[tmp.x()][tmp.y()] = true;
+                if (visitPoint(image.pixel(tmp))) {
+                    continue;
+                }
+                points.emplace_back(tmp, SEARCHED_POINT_COLOR);
+                stack.push(tmp);
+                goto end;
+            }
+        }
+        stack.pop();
+    end:
+        continue;
+    }
+    if (stack.pop() == end) {
+        while (!stack.isEmpty()) {
+            points.emplace_back(stack.pop(), PATH_POINT_COLOR);
+        }
+    }
+    TIMER_STOP
+    LOG(INFO) << "DfsStackVersion search finish";
+    updateTime(time);
+}
+
+void GraphPath::dfsRecursiveVersion(std::vector<Point> &points, const QPixmap &pixmap, const QPoint start,
+                                    const QPoint end) {
+    LOG(INFO) << "DfsRecursiveVersion search start";
     TIMER_START
     std::vector vis(pixmap.width(), std::vector(pixmap.height(), false));
     std::vector<Point> path;
     QImage image = pixmap.toImage();
     returnFlag = false;
-    _dfs(points, path, image, start, end, vis, [](const QRgb color) {
-        return color == Config::getInstance()->getConfigField(WALL_COLOR);
-    });
+    _dfsRecursiveVersion(points, path, image, start, end, vis);
     points.insert(points.end(),
                   std::make_move_iterator(path.begin()),
                   std::make_move_iterator(path.end()));
     TIMER_STOP
-    LOG(INFO) << "Dfs search stop";
+    LOG(INFO) << "DfsRecursiveVersion search finish";
     updateTime(time);
 }
 
 void GraphPath::aStar(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end) {}
 
-void GraphPath::_dfs(std::vector<Point> &points, std::vector<Point> &path, QImage &image, const QPoint start,
-                     const QPoint end,
-                     std::vector<std::vector<bool> > &vis, bool (*opt)(QRgb)) {
+void GraphPath::_dfsRecursiveVersion(std::vector<Point> &points, std::vector<Point> &path, QImage &image,
+                                     const QPoint start,
+                                     const QPoint end,
+                                     std::vector<std::vector<bool> > &vis) {
     if (returnFlag) return;
     if (start.x() == end.x() && start.y() == end.y()) {
         returnFlag = true;
@@ -74,12 +120,12 @@ void GraphPath::_dfs(std::vector<Point> &points, std::vector<Point> &path, QImag
     if (start.x() < 0 || start.x() >= image.width() || start.y() < 0 || start.y() >= image.height()) return;
     if (vis[start.x()][start.y()]) return;
     vis[start.x()][start.y()] = true;
-    if (opt(image.pixel(start))) return;
+    if (visitPoint(image.pixel(start))) return;
     points.emplace_back(start, SEARCHED_POINT_COLOR);
 
-    for (const auto dir : dirs) {
+    for (const auto dir: dirs) {
         const auto temp = QPoint(start.x() + dir[0], start.y() + dir[1]);
-        _dfs(points, path, image, temp, end, vis, opt);
+        _dfsRecursiveVersion(points, path, image, temp, end, vis);
         if (returnFlag) {
             path.emplace_back(temp, PATH_POINT_COLOR);
             return;

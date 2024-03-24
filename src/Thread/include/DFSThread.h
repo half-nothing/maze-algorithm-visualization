@@ -10,19 +10,14 @@
 
 #ifndef DFSTHREAD_H
 #define DFSTHREAD_H
+#include "Thread.h"
+
 #include "Definition.h"
-#include <Thread.h>
 
 class DFSThread final : public Thread {
 public:
-    explicit DFSThread(const QPixmap &pixmap,
-                       const QPoint &start,
-                       const QPoint &end,
-                       QObject *const parent = nullptr) :
-        Thread{parent},
-        pixmap{pixmap},
-        start{start},
-        end{end} {}
+    explicit DFSThread(const QPixmap &pixmap, const QPoint &start, const QPoint &end,
+                       bool useStack = false, QObject *parent = nullptr);
 
     [[nodiscard]] std::vector<Point> &getResult();
 
@@ -34,6 +29,7 @@ private:
     const QPixmap &pixmap;
     QPoint start;
     QPoint end;
+    bool useStack;
 };
 
 #endif

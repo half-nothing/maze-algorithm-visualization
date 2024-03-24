@@ -19,6 +19,7 @@
  */
 template<typename T>
 class LimitedSequentialStructure {
+public:
     virtual ~LimitedSequentialStructure() = default;
 
     virtual void push(const T &src) = 0;

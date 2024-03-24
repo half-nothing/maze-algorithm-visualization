@@ -17,7 +17,7 @@
 /**
  * @class Stack
  * @brief 顺序栈
- * @tparam T 链表存储的数据类型
+ * @tparam T 存储的数据类型
  */
 template<typename T>
 class Stack final : public LimitedSequentialStructure<T> {
@@ -25,12 +25,12 @@ public:
     Stack():
         Stack(STACK_MINIMUM_SIZE) {}
 
-    explicit Stack(const uint capacity) :
+    explicit Stack(const int capacity) :
         capacity(capacity) {
         data = new T[capacity];
     }
 
-    Stack(const T &src, const uint capacity) :
+    Stack(const T &src, const int capacity) :
         Stack(capacity) {
         std::fill(data, data + capacity, src);
     }

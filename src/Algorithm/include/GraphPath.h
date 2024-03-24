@@ -24,12 +24,15 @@ public:
 
     void bfs(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
 
-    void dfs(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end);
+    void dfsStackVersion(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end);
+
+    void dfsRecursiveVersion(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end);
 
     void aStar(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
 
 private:
     static GraphPath *instance;
+    bool returnFlag = false;
 
     GraphPath() = default;
 
@@ -37,8 +40,8 @@ private:
 
     void _bfs(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
 
-    void _dfs(std::vector<Point> &points, std::vector<Point> &path, QImage &image, QPoint start, QPoint end,
-              std::vector<std::vector<bool> > &vis, bool (*opt)(QRgb));
+    void _dfsRecursiveVersion(std::vector<Point> &points, std::vector<Point> &path, QImage &image, QPoint start,
+                              QPoint end, std::vector<std::vector<bool> > &vis);
 
     void _aStar(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
 };

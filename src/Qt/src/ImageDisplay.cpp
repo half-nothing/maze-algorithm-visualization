@@ -2,7 +2,6 @@
 
 #include <Config.h>
 #include <QThreadPool>
-#include <TimeDefinition.h>
 
 #include "ui_ImageDisplay.h"
 #include "glog/logging.h"
@@ -227,9 +226,9 @@ namespace QT {
         timer->start();
     }
 
-    void ImageDisplay::dfsSearch() {
+    void ImageDisplay::dfsSearch(const bool useStack) {
         dfsThread = new DFSThread(currentImage, {sc_int(start.x()), sc_int(start.y())},
-                                  {sc_int(end.x()), sc_int(end.y())});
+                                  {sc_int(end.x()), sc_int(end.y())}, useStack);
         connect(dfsThread, &DFSThread::threadFinishSignal, [this] {
             points.clear();
             points = std::move(dfsThread->getResult());
