@@ -1,0 +1,43 @@
+name: Windows-Build
+on:
+  push:
+    tags:
+      - 'v*'
+    branches:
+      - '*'
+    paths-ignore:
+      - README.md
+      - LICENSE
+      - favicon.ico
+      - .clang-format
+      - .clang-tidy
+      - .gitignore
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Check Ref
+        run: |
+          echo "Current ref: ${{  github.ref  }}"
+
+      - name: CheckOut
+        uses: actions/checkout@v3.6.0
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          aqtversion: '==3.1.*'
+          version: '6.5.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_mingw'
+          cache: 'true'
+          cache-key-prefix: 'install-qt-action'
+
+      - name: Configure and Build Project
+        uses: threeal/cmake-action@main
+        with:
+          generator: 'MinGW Makefiles'
+          options: 'NO_CONSOLE:BOOL=OFF GITHUB_ACTION:BOOL=ON CMAKE_BUILD_TYPE:STRING=Release'
