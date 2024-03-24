@@ -79,7 +79,7 @@ void GraphPath::dfsStackVersion(std::vector<Point> &points, const QPixmap &pixma
     end:
         continue;
     }
-    if (stack.pop() == end) {
+    if (!stack.isEmpty() && stack.pop() == end) {
         while (!stack.isEmpty()) {
             points.emplace_back(stack.pop(), PATH_POINT_COLOR);
         }
