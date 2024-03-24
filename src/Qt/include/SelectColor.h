@@ -31,6 +31,8 @@ namespace QT {
 
         void setConfigField(ConfigField configField);
 
+        void setColor(const QColor &color);
+
         ~SelectColor() override;
 
     protected:

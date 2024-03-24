@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>183</width>
-    <height>235</height>
+    <height>269</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>183</width>
-    <height>235</height>
+    <height>269</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -241,6 +241,13 @@
          </widget>
         </item>
        </layout>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="resetColorSettingButton">
+        <property name="text">
+         <string>重置颜色设置</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

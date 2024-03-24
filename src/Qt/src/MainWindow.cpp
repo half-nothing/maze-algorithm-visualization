@@ -118,7 +118,6 @@ namespace QT {
                 LOG(INFO) << "BFS";
                 break;
             case 1:
-                LOG(INFO) << "DFS";
                 emit dfsSignal();
                 break;
             case 2:

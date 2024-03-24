@@ -65,12 +65,5 @@ struct StoreData {
             {255, 255, 0}};
 };
 
-enum ConfigField {
-    START_POINT_COLOR,
-    END_POINT_COLOR,
-    WALL_COLOR,
-    SEARCHED_POINT_COLOR,
-    PATH_POINT_COLOR
-};
 
 #endif

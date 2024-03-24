@@ -2,6 +2,7 @@
 
 #include <Config.h>
 #include <QThreadPool>
+#include <TimeDefinition.h>
 
 #include "ui_ImageDisplay.h"
 #include "glog/logging.h"
@@ -199,7 +200,7 @@ namespace QT {
 
     void ImageDisplay::drawMap() {
         for (int i = 0; i < step && i < points.size(); i++) {
-            drawPixel(points[i].point.x(), points[i].point.y(), points[i].color);
+            drawPixel(points[i].point.x(), points[i].point.y(), Config::getInstance()->getConfigField(points[i].color));
         }
     }
 

@@ -47,16 +47,20 @@ namespace QT {
     void SelectColor::mousePressEvent(QMouseEvent *event) {
         if (event->button() == Qt::LeftButton) {
             const QColor color = QColorDialog::getColor(Qt::white, this);
-            if (!color.isValid()) {
-                return;
-            }
-            if (color == this->color) {
-                return;
-            }
-            setStyleSheet("background-color: " + color.name() + ";");
-            this->color = color;
-            Config::getInstance()->setConfigField(configField, color);
-            update();
+            setColor(color);
         }
+    }
+
+    void SelectColor::setColor(const QColor &color) {
+        if (!color.isValid()) {
+            return;
+        }
+        if (color == this->color) {
+            return;
+        }
+        setStyleSheet("background-color: " + color.name() + ";");
+        this->color = color;
+        Config::getInstance()->setConfigField(configField, color);
+        update();
     }
 }

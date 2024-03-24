@@ -29,34 +29,38 @@ using exceotion = std::exception;
 
 using uint = unsigned int;
 
+enum ConfigField {
+    START_POINT_COLOR,
+    END_POINT_COLOR,
+    WALL_COLOR,
+    SEARCHED_POINT_COLOR,
+    PATH_POINT_COLOR
+};
+
 struct Point {
     QPoint point;
-    QColor color;
+    ConfigField color;
+
+    Point(const QPoint &point, const ConfigField color) :
+        point{point},
+        color{color} {}
 
     friend bool operator==(const Point &lhs, const Point &rhs) {
-        return lhs.point == rhs.point && lhs.color == rhs.color;
+        return lhs.point == rhs.point
+               && lhs.color == rhs.color;
     }
 
     friend bool operator!=(const Point &lhs, const Point &rhs) {
         return !(lhs == rhs);
     }
 
-    Point(const QPoint &point, const QColor &color) :
-        point{point},
-        color{color} {}
-
     Point(const Point &other) = default;
 
     Point(Point &&other) noexcept :
-        point(other.point),
-        color(other.color) {}
+        point{other.point},
+        color{other.color} {}
 
-    Point &operator=(const Point &other) {
-        if (this == &other) return *this;
-        point = other.point;
-        color = other.color;
-        return *this;
-    }
+    Point &operator=(const Point &other) = default;
 
     Point &operator=(Point &&other) noexcept {
         if (this == &other) return *this;

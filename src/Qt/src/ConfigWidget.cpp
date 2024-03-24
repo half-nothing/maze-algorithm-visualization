@@ -23,6 +23,13 @@ namespace QT {
         ui->wallPointColorWidget->setConfigField(WALL_COLOR);
         ui->searchedPointColorWidget->setConfigField(SEARCHED_POINT_COLOR);
         ui->pathPointColorWidget->setConfigField(PATH_POINT_COLOR);
+        connect(ui->resetColorSettingButton, &QPushButton::clicked, [this] {
+            ui->startPointColorWidget->setColor({0, 255, 0});
+            ui->endPointColorWidget->setColor({255, 0, 0});
+            ui->wallPointColorWidget->setColor({0, 0, 0});
+            ui->searchedPointColorWidget->setColor({0, 0, 255});
+            ui->pathPointColorWidget->setColor({255, 255, 0});
+        });
     }
 
     ConfigWidget::~ConfigWidget() {

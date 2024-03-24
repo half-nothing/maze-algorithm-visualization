@@ -33,6 +33,8 @@ private:
 
     GraphPath() = default;
 
+    void updateTime(double time);
+
     void _bfs(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end);
 
     void _dfs(std::vector<Point> &points, std::vector<Point> &path, QImage &image, QPoint start, QPoint end,
