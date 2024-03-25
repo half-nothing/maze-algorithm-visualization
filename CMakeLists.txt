@@ -12,7 +12,7 @@ list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS "src/Qt/ui")
 message("Github Action: " ${GITHUB_ACTION})
 
 if (GITHUB_ACTION)
-    set(CMAKE_PREFIX_PATH "D:/a/DSCDesign/Qt/6.5.2/mingw_64")
+    set(CMAKE_PREFIX_PATH "D:/a/maze-algorithm-visualization/Qt/6.5.2/mingw_64")
 else ()
     set(CMAKE_PREFIX_PATH "D:/Qt/6.5.2/mingw_64")
 endif ()
