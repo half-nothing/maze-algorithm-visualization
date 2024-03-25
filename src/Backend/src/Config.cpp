@@ -15,8 +15,8 @@
 #include <glog/logging.h>
 
 Config *Config::instance = nullptr;
-static constexpr QDir configPath = QDir::cleanPath(QDir::currentPath() + QDir::separator() + "config");
-static constexpr QDir configFilePath = QDir::cleanPath(configPath.absolutePath() + QDir::separator() + "config.dat");
+static const QDir configPath = QDir::cleanPath(QDir::currentPath() + QDir::separator() + "config");
+static const QDir configFilePath = QDir::cleanPath(configPath.absolutePath() + QDir::separator() + "config.dat");
 
 Config::Config() {
     LOG(INFO) << "Config path: " << configPath.absolutePath().toStdString();

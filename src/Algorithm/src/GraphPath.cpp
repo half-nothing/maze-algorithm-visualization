@@ -21,7 +21,7 @@
 static constexpr int fourDirs[4][2] = {{1, 0}, {0, -1}, {-1, 0}, {0, 1}};
 static constexpr int eightDirs[8][2] = {{1, 0}, {0, -1}, {-1, 0}, {0, 1}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
 static constexpr QPoint invalidPoint(-1, -1);
-auto visitPoint = [](const QRgb color) {
+static constexpr auto visitPoint = [](const QRgb color) {
     return color == Config::getInstance()->getConfigField(WALL_COLOR);
 };
 
