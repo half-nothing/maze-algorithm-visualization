@@ -227,9 +227,9 @@ namespace QT {
     }
 
     void ImageDisplay::dfsSearch(const bool useStack) {
-        dfsThread = new DFSThread(currentImage, {sc_int(start.x()), sc_int(start.y())},
+        dfsThread = new DfsThread(currentImage, {sc_int(start.x()), sc_int(start.y())},
                                   {sc_int(end.x()), sc_int(end.y())}, useStack);
-        connect(dfsThread, &DFSThread::threadFinishSignal, [this] {
+        connect(dfsThread, &DfsThread::threadFinishSignal, [this] {
             points.clear();
             points = std::move(dfsThread->getResult());
             if (this->searchSequential) {
@@ -241,5 +241,22 @@ namespace QT {
             repaint();
         });
         QThreadPool::globalInstance()->start(dfsThread);
+    }
+
+    void ImageDisplay::bfsSearch() {
+        bfsThread = new BfsThread(currentImage, {sc_int(start.x()), sc_int(start.y())},
+                                  {sc_int(end.x()), sc_int(end.y())});
+        connect(bfsThread, &BfsThread::threadFinishSignal, [this] {
+            points.clear();
+            points = std::move(bfsThread->getResult());
+            if (this->searchSequential) {
+                step = 0;
+                emit drawPath();
+                return;
+            }
+            step = points.size();
+            repaint();
+        });
+        QThreadPool::globalInstance()->start(bfsThread);
     }
 }

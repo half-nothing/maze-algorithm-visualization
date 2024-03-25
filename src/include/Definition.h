@@ -25,7 +25,7 @@
 template<class T>
 using InitList = const std::initializer_list<T> &;
 
-using exceotion = std::exception;
+using exception = std::exception;
 
 using uint = unsigned int;
 

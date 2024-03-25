@@ -2,7 +2,7 @@
 #define DAC_MAINWINDOW_H
 
 #include <ConfigWidget.h>
-#include <DFSThread.h>
+#include <DfsThread.h>
 #include <QMainWindow>
 #include <Thread.h>
 
@@ -27,6 +27,7 @@ namespace QT {
 
     signals:
         void dfsSignal(bool);
+        void bfsSignal();
 
         void destroyThread();
 

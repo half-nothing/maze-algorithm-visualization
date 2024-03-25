@@ -14,9 +14,9 @@
 
 #include "Definition.h"
 
-class DFSThread final : public Thread {
+class DfsThread final : public Thread {
 public:
-    explicit DFSThread(const QPixmap &pixmap, const QPoint &start, const QPoint &end,
+    explicit DfsThread(const QPixmap &pixmap, const QPoint &start, const QPoint &end,
                        bool useStack = false, QObject *parent = nullptr);
 
     [[nodiscard]] std::vector<Point> &getResult();

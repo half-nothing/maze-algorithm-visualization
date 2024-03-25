@@ -21,6 +21,7 @@ namespace QT {
         configWidget = new ConfigWidget();
         setWindowTitle("Half_nothing");
         connect(this, SIGNAL(dfsSignal(bool)), ui->image, SLOT(dfsSearch(bool)));
+        connect(this, SIGNAL(bfsSignal()), ui->image, SLOT(bfsSearch()));
         connect(this, SIGNAL(destroyThread()), ui->image, SLOT(dealDestroy()));
         connect(ui->showSearchPathCheckBox, SIGNAL(clicked(bool)), ui->image, SLOT(setSearchSequential(bool)));
         connect(ui->searchDelaySlider, &QSlider::valueChanged, [this](const int value) {
@@ -121,7 +122,7 @@ namespace QT {
                 emit dfsSignal(true);
                 break;
             case 2:
-                LOG(INFO) << "A*";
+                emit bfsSignal();
                 break;
             default: return;
         }

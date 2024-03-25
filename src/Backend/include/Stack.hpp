@@ -12,7 +12,7 @@
 
 #include <exception>
 #include <iostream>
-#include "LimitedSequentialStructure.hpp"
+#include "StackStructure.hpp"
 
 /**
  * @class Stack
@@ -20,7 +20,7 @@
  * @tparam T 存储的数据类型
  */
 template<typename T>
-class Stack final : public LimitedSequentialStructure<T> {
+class Stack final : public StackStructure<T> {
 public:
     Stack():
         Stack(STACK_MINIMUM_SIZE) {}

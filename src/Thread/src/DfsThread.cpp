@@ -12,15 +12,15 @@
 
 #include <GraphPath.h>
 
-DFSThread::DFSThread(const QPixmap &pixmap, const QPoint &start, const QPoint &end,
+DfsThread::DfsThread(const QPixmap &pixmap, const QPoint &start, const QPoint &end,
                      const bool useStack, QObject *const parent):
     Thread{parent}, pixmap{pixmap}, start{start}, end{end}, useStack{useStack} {}
 
-std::vector<Point> &DFSThread::getResult() {
+std::vector<Point> &DfsThread::getResult() {
     return result;
 }
 
-void DFSThread::execute() {
+void DfsThread::execute() {
     if (useStack) {
         GraphPath::getInstance()->dfsStackVersion(result, pixmap, start, end);
     } else {

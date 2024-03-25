@@ -1,8 +1,9 @@
 #ifndef DAC_IMAGEDISPLAY_H
 #define DAC_IMAGEDISPLAY_H
 
+#include <BfsThread.h>
 #include <Definition.h>
-#include <DFSThread.h>
+#include <DfsThread.h>
 #include <QWidget>
 #include <QImage>
 #include <QTimer>
@@ -10,7 +11,7 @@
 #include <QPainter>
 #include <QWheelEvent>
 
-#include "DFSThread.h"
+#include "DfsThread.h"
 
 namespace QT {
     QT_BEGIN_NAMESPACE
@@ -39,6 +40,8 @@ namespace QT {
         void setSearchSequential(bool);
 
         void dfsSearch(bool);
+        void bfsSearch();
+
 
         void dealDestroy() const;
 
@@ -97,7 +100,8 @@ namespace QT {
         QPointF end;
         int status = 0;
         Ui::ImageDisplay *ui;
-        DFSThread *dfsThread = nullptr;
+        DfsThread *dfsThread = nullptr;
+        BfsThread *bfsThread = nullptr;
         QTimer *timer = nullptr;
         int step = 0;
         bool searchSequential = true;
