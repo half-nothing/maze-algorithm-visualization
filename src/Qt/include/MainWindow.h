@@ -26,8 +26,7 @@ namespace QT {
         void findPath();
 
     signals:
-        void dfsSignal(bool);
-        void bfsSignal();
+        void searchPathSignal(PathSearchMethod);
 
         void destroyThread();
 

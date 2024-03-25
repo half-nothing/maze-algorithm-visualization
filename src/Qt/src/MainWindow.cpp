@@ -20,8 +20,7 @@ namespace QT {
         ui->setupUi(this);
         configWidget = new ConfigWidget();
         setWindowTitle("Half_nothing");
-        connect(this, SIGNAL(dfsSignal(bool)), ui->image, SLOT(dfsSearch(bool)));
-        connect(this, SIGNAL(bfsSignal()), ui->image, SLOT(bfsSearch()));
+        connect(this, SIGNAL(searchPathSignal(PathSearchMethod)), ui->image, SLOT(searchPath(PathSearchMethod)));
         connect(this, SIGNAL(destroyThread()), ui->image, SLOT(dealDestroy()));
         connect(ui->showSearchPathCheckBox, SIGNAL(clicked(bool)), ui->image, SLOT(setSearchSequential(bool)));
         connect(ui->searchDelaySlider, &QSlider::valueChanged, [this](const int value) {
@@ -116,13 +115,13 @@ namespace QT {
     void MainWindow::findPath() {
         switch (ui->pathFindingComboBox->currentIndex()) {
             case 0:
-                emit dfsSignal(false);
+                emit searchPathSignal(DFS_RECURSIVE);
                 break;
             case 1:
-                emit dfsSignal(true);
+                emit searchPathSignal(DFS_STACK);
                 break;
             case 2:
-                emit bfsSignal();
+                emit searchPathSignal(BFS);
                 break;
             default: return;
         }

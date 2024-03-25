@@ -11,24 +11,26 @@
 #ifndef BFSTHREAD_H
 #define BFSTHREAD_H
 
-#include "Thread.h"
+#include "SearchThread.h"
 
 #include "Definition.h"
 
-class BfsThread final : public Thread {
+class BfsThread final : public SearchThread {
 public:
-    explicit BfsThread(const QPixmap &pixmap, const QPoint &start, const QPoint &end, QObject *parent = nullptr);
+    BfsThread(const QPixmap &pixmap, const QPoint &start, const QPoint &end, QObject * parent = nullptr);
 
-    [[nodiscard]] std::vector<Point> &getResult();
+    [[nodiscard]] std::vector<Point> &getResult() override;
+
+    BfsThread(const BfsThread &other) = delete;
+
+    BfsThread(BfsThread &&other) noexcept = delete;
+
+    BfsThread & operator=(const BfsThread &other) = delete;
+
+    BfsThread & operator=(BfsThread &&other) noexcept = delete;
 
 protected:
     void execute() override;
-
-private:
-    std::vector<Point> result{};
-    const QPixmap &pixmap;
-    QPoint start;
-    QPoint end;
 };
 
 #endif //BFSTHREAD_H

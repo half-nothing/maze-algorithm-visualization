@@ -10,6 +10,7 @@
 
 #ifndef THREAD_H
 #define THREAD_H
+#include <Definition.h>
 #include <QObject>
 #include <QRunnable>
 #include <Thread.h>
@@ -25,8 +26,17 @@ public:
 
     void stopThread();
 
+    Thread(const Thread &other) = delete;
+
+    Thread(Thread &&other) noexcept = delete;
+
+    Thread & operator=(const Thread &other) = delete;
+
+    Thread & operator=(Thread &&other) noexcept = delete;
+
 signals:
     void threadLoopSignal();
+
     void threadFinishSignal();
 
 protected:

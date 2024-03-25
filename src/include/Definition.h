@@ -29,6 +29,15 @@ using exception = std::exception;
 
 using uint = unsigned int;
 
+enum PathSearchMethod {
+    DFS_STACK,
+    DFS_RECURSIVE,
+    BFS,
+    GBFS,
+    DIJKSTRA,
+    A_STAR
+};
+
 enum ConfigField {
     START_POINT_COLOR,
     END_POINT_COLOR,

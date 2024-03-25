@@ -18,7 +18,8 @@
 #include <TimeDefinition.h>
 #include <glog/logging.h>
 
-static constexpr int dirs[4][2] = {{1, 0}, {0, -1}, {-1, 0}, {0, 1}};
+static constexpr int fourDirs[4][2] = {{1, 0}, {0, -1}, {-1, 0}, {0, 1}};
+static constexpr int eightDirs[8][2] = {{1, 0}, {0, -1}, {-1, 0}, {0, 1}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
 static constexpr QPoint invalidPoint(-1, -1);
 auto visitPoint = [](const QRgb color) {
     return color == Config::getInstance()->getConfigField(WALL_COLOR);
@@ -61,7 +62,7 @@ void GraphPath::bfs(std::vector<Point> &points, const QPixmap &pixmap, const QPo
         if (temp == end) {
             break;
         }
-        for (const auto dir: dirs) {
+        for (const auto dir: fourDirs) {
             const auto tmp = QPoint(temp.x() + dir[0], temp.y() + dir[1]);
             if (tmp.x() < 0 || tmp.x() >= image.width() || tmp.y() < 0 || tmp.y() >= image.height()) continue;
             if (vis[tmp.x()][tmp.y()] == invalidPoint) {
@@ -108,7 +109,7 @@ void GraphPath::dfsStackVersion(std::vector<Point> &points, const QPixmap &pixma
         if (temp == end) {
             break;
         }
-        for (const auto dir: dirs) {
+        for (const auto dir: fourDirs) {
             const auto tmp = QPoint(temp.x() + dir[0], temp.y() + dir[1]);
             if (tmp.x() < 0 || tmp.x() >= image.width() || tmp.y() < 0 || tmp.y() >= image.height()) continue;
             if (vis[tmp.x()][tmp.y()] == false) {
@@ -153,8 +154,6 @@ void GraphPath::dfsRecursiveVersion(std::vector<Point> &points, const QPixmap &p
     updateTime(time);
 }
 
-void GraphPath::aStar(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end) {}
-
 void GraphPath::_dfsRecursiveVersion(std::vector<Point> &points, std::vector<Point> &path, QImage &image,
                                      const QPoint start,
                                      const QPoint end,
@@ -170,7 +169,7 @@ void GraphPath::_dfsRecursiveVersion(std::vector<Point> &points, std::vector<Poi
     if (visitPoint(image.pixel(start))) return;
     points.emplace_back(start, SEARCHED_POINT_COLOR);
 
-    for (const auto dir: dirs) {
+    for (const auto dir: fourDirs) {
         const auto temp = QPoint(start.x() + dir[0], start.y() + dir[1]);
         _dfsRecursiveVersion(points, path, image, temp, end, vis);
         if (returnFlag) {
@@ -180,4 +179,6 @@ void GraphPath::_dfsRecursiveVersion(std::vector<Point> &points, std::vector<Poi
     }
 }
 
-void GraphPath::_aStar(QPainter &painter, QPixmap &pixmap, QPoint start, QPoint end) {}
+void GraphPath::GBFS(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end) {}
+void GraphPath::Dijkstra(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end) {}
+void GraphPath::aStar(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end) {}

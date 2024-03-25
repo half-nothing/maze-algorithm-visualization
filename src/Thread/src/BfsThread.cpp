@@ -12,8 +12,8 @@
 
 #include <GraphPath.h>
 
-BfsThread::BfsThread(const QPixmap &pixmap, const QPoint &start, const QPoint &end, QObject *const parent):
-    Thread{parent}, pixmap{pixmap}, start{start}, end{end} {}
+BfsThread::BfsThread(const QPixmap &pixmap, const QPoint &start, const QPoint &end, QObject * const parent):
+    SearchThread{pixmap, start, end, parent} {}
 
 std::vector<Point> &BfsThread::getResult() {
     return result;

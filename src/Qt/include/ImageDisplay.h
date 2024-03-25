@@ -1,17 +1,14 @@
 #ifndef DAC_IMAGEDISPLAY_H
 #define DAC_IMAGEDISPLAY_H
 
-#include <BfsThread.h>
 #include <Definition.h>
-#include <DfsThread.h>
 #include <QWidget>
 #include <QImage>
 #include <QTimer>
 #include <QPixmap>
 #include <QPainter>
 #include <QWheelEvent>
-
-#include "DfsThread.h"
+#include <SearchThread.h>
 
 namespace QT {
     QT_BEGIN_NAMESPACE
@@ -39,9 +36,7 @@ namespace QT {
     public slots:
         void setSearchSequential(bool);
 
-        void dfsSearch(bool);
-        void bfsSearch();
-
+        void searchPath(PathSearchMethod);
 
         void dealDestroy() const;
 
@@ -100,8 +95,7 @@ namespace QT {
         QPointF end;
         int status = 0;
         Ui::ImageDisplay *ui;
-        DfsThread *dfsThread = nullptr;
-        BfsThread *bfsThread = nullptr;
+        SearchThread *thread = nullptr;
         QTimer *timer = nullptr;
         int step = 0;
         bool searchSequential = true;

@@ -14,7 +14,7 @@
 
 DfsThread::DfsThread(const QPixmap &pixmap, const QPoint &start, const QPoint &end,
                      const bool useStack, QObject *const parent):
-    Thread{parent}, pixmap{pixmap}, start{start}, end{end}, useStack{useStack} {}
+    SearchThread{pixmap, start, end, parent}, useStack{useStack} {}
 
 std::vector<Point> &DfsThread::getResult() {
     return result;
