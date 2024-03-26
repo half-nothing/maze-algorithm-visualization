@@ -32,7 +32,8 @@ void SearchThread::execute() {
             break;
         case DIJKSTRA: GraphPath::getInstance()->Dijkstra(result, pixmap, start, end, useManhattan);
             break;
-        case A_STAR: break;
+        case A_STAR: GraphPath::getInstance()->aStar(result, pixmap, start, end, useManhattan);
+            break;
         default: break;
     }
     isRunning = false;

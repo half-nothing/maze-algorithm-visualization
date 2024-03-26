@@ -34,13 +34,77 @@ static constexpr auto getEuclideanDistance = [](const QPoint &start, const QPoin
 };
 
 struct StorePoint {
-    QPoint point{invalidPoint};
-    double distance{-1};
+    QPoint point;
+    double distance;
+
+    StorePoint():
+        point{invalidPoint}, distance{-1} {};
+
+    StorePoint(const QPoint &point, const double distance) :
+        point{point},
+        distance{distance} {}
+
+    StorePoint(const StorePoint &other) = default;
+
+    StorePoint(StorePoint &&other) noexcept :
+        point{other.point},
+        distance{other.distance} {}
+
+    StorePoint &operator=(const StorePoint &other) {
+        if (this == &other) return *this;
+        point = other.point;
+        distance = other.distance;
+        return *this;
+    }
+
+    StorePoint &operator=(StorePoint &&other) noexcept {
+        if (this == &other) return *this;
+        point = other.point;
+        distance = other.distance;
+        return *this;
+    }
+};
+
+struct AStarPoint final : StorePoint {
+    double weight;
+
+    AStarPoint():
+        weight{1e9} {}
+
+    AStarPoint(const QPoint &point, const double distance, const double weight) :
+        StorePoint{point, distance},
+        weight{weight} {}
+
+    AStarPoint(const AStarPoint &other) = default;
+
+    AStarPoint(AStarPoint &&other) noexcept :
+        StorePoint{std::move(other)},
+        weight{other.weight} {}
+
+    AStarPoint &operator=(const AStarPoint &other) {
+        if (this == &other) return *this;
+        StorePoint::operator =(other);
+        weight = other.weight;
+        return *this;
+    }
+
+    AStarPoint &operator=(AStarPoint &&other) noexcept {
+        if (this == &other) return *this;
+        StorePoint::operator =(std::move(other));
+        weight = other.weight;
+        return *this;
+    }
 };
 
 struct StorePointCmp {
     bool operator()(const StorePoint &first, const StorePoint &second) const {
         return first.distance > second.distance;
+    }
+};
+
+struct AStarPointCmp {
+    bool operator()(const AStarPoint &first, const AStarPoint &second) const {
+        return first.weight > second.weight;
     }
 };
 
@@ -310,4 +374,62 @@ EndFunc:
 }
 
 void GraphPath::aStar(std::vector<Point> &points, const QPixmap &pixmap, const QPoint start, const QPoint end,
-                      const bool useManhattan) {}
+                      const bool useManhattan) {
+    LOG(INFO) << "A* search start";
+    const QImage image = pixmap.toImage();
+    double (*opt)(const QPoint &, const QPoint &) = getEuclideanDistance;
+    if (useManhattan) {
+        opt = getManhattanDistance;
+    }
+    std::priority_queue<AStarPoint, std::vector<AStarPoint>, AStarPointCmp> queue;
+    std::vector vis(pixmap.width(), std::vector<AStarPoint>(pixmap.height()));
+    std::vector startVis(pixmap.width(), std::vector(pixmap.height(), false));
+    TIMER_START
+    if (visitPoint(image.pixel(start))) {
+        goto EndFunc;
+    }
+    vis[start.x()][start.y()].distance = 0;
+    vis[start.x()][start.y()].weight = 0;
+    vis[start.x()][start.y()].point = start;
+    queue.emplace(start, vis[start.x()][start.y()].distance, vis[start.x()][start.y()].weight);
+    while (!queue.empty()) {
+        const QPoint temp = queue.top().point;
+        queue.pop();
+        if (startVis[temp.x()][temp.y()]) {
+            continue;
+        }
+        startVis[temp.x()][temp.y()] = true;
+        points.emplace_back(temp, SEARCHED_POINT_COLOR);
+        if (temp == end) {
+            break;
+        }
+        for (const auto dir: eightDirs) {
+            const auto tmp = QPoint(temp.x() + dir[0], temp.y() + dir[1]);
+            if (tmp.x() < 0 || tmp.x() >= image.width() || tmp.y() < 0 || tmp.y() >= image.height()) continue;
+            if (!visitPoint(image.pixel(tmp)) &&
+                (vis[tmp.x()][tmp.y()].point == invalidPoint ||
+                 vis[tmp.x()][tmp.y()].distance > vis[temp.x()][temp.y()].distance + opt(temp, tmp))) {
+                vis[tmp.x()][tmp.y()].point = temp;
+                vis[tmp.x()][tmp.y()].distance = vis[temp.x()][temp.y()].distance + opt(temp, tmp);
+                vis[tmp.x()][tmp.y()].weight = vis[tmp.x()][tmp.y()].distance + opt(tmp, end);
+                points.emplace_back(tmp, SEARCHING_POINT_COLOR);
+                queue.emplace(tmp, vis[tmp.x()][tmp.y()].distance, vis[tmp.x()][tmp.y()].weight);
+            }
+        }
+    }
+    if (vis[end.x()][end.y()].point != invalidPoint) {
+        QPoint tmp = end;
+        while (true) {
+            const QPoint temp = vis[tmp.x()][tmp.y()].point;
+            if (temp == start) {
+                break;
+            }
+            points.emplace_back(temp, PATH_POINT_COLOR);
+            tmp = temp;
+        }
+    }
+EndFunc:
+    TIMER_STOP
+    LOG(INFO) << "A* search finish";
+    updateTime(time);
+}

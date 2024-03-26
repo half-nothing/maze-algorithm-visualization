@@ -130,6 +130,9 @@ namespace QT {
             case 4:
                 emit searchPathSignal(DIJKSTRA);
                 break;
+            case 5:
+                emit searchPathSignal(A_STAR);
+                break;
             default: return;
         }
     }
