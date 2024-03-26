@@ -343,7 +343,14 @@
     </property>
     <addaction name="aboutAction"/>
    </widget>
+   <widget class="QMenu" name="toolMenu">
+    <property name="title">
+     <string>工具</string>
+    </property>
+    <addaction name="mazeGeneratorAction"/>
+   </widget>
    <addaction name="fileMenu"/>
+   <addaction name="toolMenu"/>
    <addaction name="aboutMenu"/>
   </widget>
   <action name="loadImageAction">
@@ -364,6 +371,11 @@
   <action name="exitAction">
    <property name="text">
     <string>退出</string>
+   </property>
+  </action>
+  <action name="mazeGeneratorAction">
+   <property name="text">
+    <string>迷宫生成器</string>
    </property>
   </action>
  </widget>

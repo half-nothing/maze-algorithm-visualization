@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>QT::ImageDisplay</class>
- <widget class="QWidget" name="QT::ImageDisplay">
+ <class>QT::GenerateDisplay</class>
+ <widget class="QWidget" name="QT::GenerateDisplay">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>1000</height>
+    <width>814</width>
+    <height>685</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>ImageDisplay</string>
+   <string>GenerateDisplay</string>
   </property>
  </widget>
  <resources/>

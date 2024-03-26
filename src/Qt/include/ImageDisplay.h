@@ -2,13 +2,11 @@
 #define DAC_IMAGEDISPLAY_H
 
 #include <Definition.h>
-#include <QWidget>
-#include <QImage>
 #include <QTimer>
-#include <QPixmap>
 #include <QPainter>
 #include <QWheelEvent>
 #include <SearchThread.h>
+#include <WidgetDisplay.h>
 
 namespace QT {
     QT_BEGIN_NAMESPACE
@@ -19,15 +17,13 @@ namespace QT {
 
     QT_END_NAMESPACE
 
-    class ImageDisplay final : public QWidget {
+    class ImageDisplay final : public WidgetDisplay {
         Q_OBJECT
 
     public:
         explicit ImageDisplay(QWidget *parent = nullptr);
 
         ~ImageDisplay() override;
-
-        void displayImage(const QPixmap &image);
 
         void clearPoints();
 
@@ -53,46 +49,18 @@ namespace QT {
 
         void endPointUpdate(QString);
 
-        void mousePointUpdate(QString);
-
         void drawPath();
 
     private:
         void paintEvent(QPaintEvent *event) override;
 
-        void resizeEvent(QResizeEvent *event) override;
-
-        void wheelEvent(QWheelEvent *event) override;
-
-        void mouseMoveEvent(QMouseEvent *event) override;
-
         void checkRangeLimit(QPointF &point) const;
 
         void mousePressEvent(QMouseEvent *event) override;
 
-        void mouseReleaseEvent(QMouseEvent *event) override;
-
-        QPointF getLocate(const QPointF &pos) const;
-
-        void drawPixel(int x, int y, QColor color);
-
         void drawMap();
 
-        void paintGrid();
-
-        size_t imageWidth = 0;
-        size_t imageHeight = 0;
-        float widthPerPix = 4;
-
-        float zoom = 1;
-        QPointF startPoint;
-
-        bool leftMousePressed = false;
-
         std::vector<Point> points;
-        QPointF preMousePos;
-        QPointF nowMouseImagePos;
-        QPixmap currentImage;
         QPointF start;
         QPointF end;
         int status = 0;

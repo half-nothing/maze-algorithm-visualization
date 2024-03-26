@@ -19,6 +19,7 @@ namespace QT {
         QMainWindow(parent), ui(new Ui::MainWindow) {
         ui->setupUi(this);
         configWidget = new ConfigWidget();
+        generateMaze = new GenerateMaze();
         setWindowTitle("Half_nothing");
         connect(this, SIGNAL(searchPathSignal(PathSearchMethod)), ui->image, SLOT(searchPath(PathSearchMethod)));
         connect(this, SIGNAL(destroyThread()), ui->image, SLOT(dealDestroy()));
@@ -51,6 +52,12 @@ namespace QT {
                 configWidget->hide();
             }
             configWidget->show();
+        });
+        connect(ui->mazeGeneratorAction, &QAction::triggered, [this] {
+            if (!generateMaze->isHidden()) {
+                generateMaze->hide();
+            }
+            generateMaze->show();
         });
         connect(ui->exitAction, &QAction::triggered, this, &QWidget::close);
         LOG(INFO) << "Main thread: " << QThread::currentThread();

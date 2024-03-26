@@ -8,8 +8,6 @@
  * @license GNU General Public License (GPL)
  **********************************************/
 
-// You may need to build the project (run Qt uic code generator) to get "ui_ConfigWidget.h" resolved
-
 #include "ConfigWidget.h"
 
 #include "ui_ConfigWidget.h"

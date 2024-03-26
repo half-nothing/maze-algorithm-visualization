@@ -2,6 +2,7 @@
 #define DAC_MAINWINDOW_H
 
 #include <ConfigWidget.h>
+#include <GenerateMaze.h>
 #include <QMainWindow>
 #include <Thread.h>
 
@@ -46,6 +47,7 @@ namespace QT {
     private:
         Ui::MainWindow *ui;
         ConfigWidget * configWidget;
+        GenerateMaze * generateMaze;
         QPixmap pixmap;
     };
 }
