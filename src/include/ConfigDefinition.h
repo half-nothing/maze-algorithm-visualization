@@ -11,6 +11,7 @@
 #ifndef CONFIGSTRUCT_H
 #define CONFIGSTRUCT_H
 #include <Definition.h>
+#include <QColor>
 #include <cstdint>
 
 struct ColorStore {
