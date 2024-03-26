@@ -27,21 +27,19 @@ static constexpr auto visitPoint = [](const QRgb color) {
     return color == Config::getInstance()->getConfigField(WALL_COLOR);
 };
 static constexpr auto getManhattanDistance = [](const QPoint &start, const QPoint &end) {
-    return abs(start.x() - end.x()) + std::abs(start.y() - end.y());
+    return sc_double(abs(start.x() - end.x()) + std::abs(start.y() - end.y()));
 };
 static constexpr auto getEuclideanDistance = [](const QPoint &start, const QPoint &end) {
     return sqrt(std::pow(start.x() - end.x(), 2) + std::pow(start.y() - end.y(), 2));
 };
 
-template<typename T>
 struct StorePoint {
     QPoint point{invalidPoint};
-    T distance{-1};
+    double distance{-1};
 };
 
-template<typename T>
 struct StorePointCmp {
-    bool operator()(const StorePoint<T> &first, const StorePoint<T> &second) {
+    bool operator()(const StorePoint &first, const StorePoint &second) const {
         return first.distance > second.distance;
     }
 };
@@ -177,8 +175,7 @@ void GraphPath::DFSRecursiveVersion(std::vector<Point> &points, const QPixmap &p
 }
 
 void GraphPath::_DFSRecursiveVersion(std::vector<Point> &points, std::vector<Point> &path, QImage &image,
-                                     const QPoint start,
-                                     const QPoint end,
+                                     const QPoint start, const QPoint end,
                                      std::vector<std::vector<bool> > &vis) {
     if (returnFlag) return;
     if (start.x() == end.x() && start.y() == end.y()) {
@@ -201,17 +198,21 @@ void GraphPath::_DFSRecursiveVersion(std::vector<Point> &points, std::vector<Poi
     }
 }
 
-void GraphPath::GBFS(std::vector<Point> &points, const QPixmap &pixmap, const QPoint start, const QPoint end) {
+void GraphPath::GBFS(std::vector<Point> &points, const QPixmap &pixmap, const QPoint start,
+                     const QPoint end, const bool useManhattan) {
     LOG(INFO) << "GBFS search start";
     const QImage image = pixmap.toImage();
-    using Point = StorePoint<double>;
-    std::priority_queue<Point, std::vector<Point>, StorePointCmp<double> > queue;
+    double (*opt)(const QPoint &, const QPoint &) = getEuclideanDistance;
+    if (useManhattan) {
+        opt = getManhattanDistance;
+    }
+    std::priority_queue<StorePoint, std::vector<StorePoint>, StorePointCmp> queue;
     std::vector vis(pixmap.width(), std::vector(pixmap.height(), invalidPoint));
     TIMER_START
     if (visitPoint(image.pixel(start))) {
         goto EndFunc;
     }
-    queue.emplace(start, getEuclideanDistance(start, end));
+    queue.emplace(start, opt(start, end));
     while (!queue.empty()) {
         const QPoint temp = queue.top().point;
         queue.pop();
@@ -228,7 +229,7 @@ void GraphPath::GBFS(std::vector<Point> &points, const QPixmap &pixmap, const QP
                     continue;
                 }
                 points.emplace_back(tmp, SEARCHING_POINT_COLOR);
-                queue.emplace(tmp, getEuclideanDistance(tmp, end));
+                queue.emplace(tmp, opt(tmp, end));
             }
         }
     }
@@ -249,12 +250,16 @@ EndFunc:
     updateTime(time);
 }
 
-void GraphPath::Dijkstra(std::vector<Point> &points, const QPixmap &pixmap, const QPoint start, const QPoint end) {
+void GraphPath::Dijkstra(std::vector<Point> &points, const QPixmap &pixmap, const QPoint start,
+                         const QPoint end, const bool useManhattan) {
     LOG(INFO) << "Dijkstra search start";
     const QImage image = pixmap.toImage();
-    using DijkstraPoint = StorePoint<double>;
-    std::priority_queue<DijkstraPoint, std::vector<DijkstraPoint>, StorePointCmp<double> > queue;
-    std::vector vis(pixmap.width(), std::vector<DijkstraPoint>(pixmap.height()));
+    double (*opt)(const QPoint &, const QPoint &) = getEuclideanDistance;
+    if (useManhattan) {
+        opt = getManhattanDistance;
+    }
+    std::priority_queue<StorePoint, std::vector<StorePoint>, StorePointCmp> queue;
+    std::vector vis(pixmap.width(), std::vector<StorePoint>(pixmap.height()));
     std::vector startVis(pixmap.width(), std::vector(pixmap.height(), false));
     TIMER_START
     if (visitPoint(image.pixel(start))) {
@@ -279,9 +284,9 @@ void GraphPath::Dijkstra(std::vector<Point> &points, const QPixmap &pixmap, cons
             if (tmp.x() < 0 || tmp.x() >= image.width() || tmp.y() < 0 || tmp.y() >= image.height()) continue;
             if (!visitPoint(image.pixel(tmp)) &&
                 (vis[tmp.x()][tmp.y()].point == invalidPoint ||
-                 vis[tmp.x()][tmp.y()].distance > vis[temp.x()][temp.y()].distance + getEuclideanDistance(temp, tmp))) {
+                 vis[tmp.x()][tmp.y()].distance > vis[temp.x()][temp.y()].distance + opt(temp, tmp))) {
                 vis[tmp.x()][tmp.y()].point = temp;
-                vis[tmp.x()][tmp.y()].distance = vis[temp.x()][temp.y()].distance + getEuclideanDistance(temp, tmp);
+                vis[tmp.x()][tmp.y()].distance = vis[temp.x()][temp.y()].distance + opt(temp, tmp);
                 points.emplace_back(tmp, SEARCHING_POINT_COLOR);
                 queue.emplace(tmp, vis[tmp.x()][tmp.y()].distance);
             }
@@ -304,4 +309,5 @@ EndFunc:
     updateTime(time);
 }
 
-void GraphPath::aStar(std::vector<Point> &points, const QPixmap &pixmap, const QPoint start, const QPoint end) {}
+void GraphPath::aStar(std::vector<Point> &points, const QPixmap &pixmap, const QPoint start, const QPoint end,
+                      const bool useManhattan) {}

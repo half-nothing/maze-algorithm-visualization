@@ -13,8 +13,8 @@
 #include <GraphPath.h>
 
 SearchThread::SearchThread(const PathSearchMethod &method, const QPixmap &pixmap, const QPoint &start,
-                           const QPoint &end, QObject *const parent):
-    Thread{parent}, searchMethod{method}, pixmap{pixmap}, start{start}, end{end} {}
+                           const QPoint &end, const bool useManhattan, QObject *const parent):
+    Thread{parent}, searchMethod{method}, pixmap{pixmap}, start{start}, end{end}, useManhattan{useManhattan} {}
 
 std::vector<Point> &SearchThread::getResult() {
     return result;
@@ -28,9 +28,9 @@ void SearchThread::execute() {
             break;
         case BFS: GraphPath::getInstance()->BFS(result, pixmap, start, end);
             break;
-        case GBFS: GraphPath::getInstance()->GBFS(result, pixmap, start, end);
+        case GBFS: GraphPath::getInstance()->GBFS(result, pixmap, start, end, useManhattan);
             break;
-        case DIJKSTRA: GraphPath::getInstance()->Dijkstra(result, pixmap, start, end);
+        case DIJKSTRA: GraphPath::getInstance()->Dijkstra(result, pixmap, start, end, useManhattan);
             break;
         case A_STAR: break;
         default: break;

@@ -36,6 +36,8 @@ namespace QT {
     public slots:
         void setSearchSequential(bool);
 
+        void setUseManhattan(bool);
+
         void searchPath(PathSearchMethod);
 
         void dealDestroy() const;
@@ -99,6 +101,7 @@ namespace QT {
         QTimer *timer = nullptr;
         int step = 0;
         bool searchSequential = true;
+        bool useManhattan = false;
     };
 }
 

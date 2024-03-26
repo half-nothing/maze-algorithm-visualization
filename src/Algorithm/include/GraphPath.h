@@ -28,11 +28,14 @@ public:
 
     void DFSRecursiveVersion(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end);
 
-    void GBFS(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end);
+    void GBFS(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end,
+              bool useManhattan = false);
 
-    void Dijkstra(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end);
+    void Dijkstra(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end,
+                  bool useManhattan = false);
 
-    void aStar(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end);
+    void aStar(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end,
+               bool useManhattan = false);
 
 private:
     static GraphPath *instance;

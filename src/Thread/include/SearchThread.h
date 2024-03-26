@@ -15,7 +15,7 @@
 class SearchThread final : public Thread {
 public:
     SearchThread(const PathSearchMethod &method, const QPixmap &pixmap, const QPoint &start,
-                 const QPoint &end, QObject *parent = nullptr);
+                 const QPoint &end, bool useManhattan = false, QObject *parent = nullptr);
 
     [[nodiscard]] std::vector<Point> &getResult();
 
@@ -36,6 +36,7 @@ private:
     const QPixmap &pixmap;
     QPoint start;
     QPoint end;
+    bool useManhattan;
 };
 
 #endif

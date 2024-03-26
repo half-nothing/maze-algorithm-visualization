@@ -82,6 +82,10 @@ namespace QT {
         this->searchSequential = searchSequential;
     }
 
+    void ImageDisplay::setUseManhattan(const bool useManhattan) {
+        this->useManhattan = useManhattan;
+    }
+
     void ImageDisplay::paintEvent(QPaintEvent *event) {
         QPainter painter(this);
         painter.drawPixmap(startPoint.x(), startPoint.y(),
@@ -228,7 +232,7 @@ namespace QT {
 
     void ImageDisplay::searchPath(const PathSearchMethod searchMethod) {
         thread = new SearchThread(searchMethod, currentImage, {sc_int(start.x()), sc_int(start.y())},
-                                  {sc_int(end.x()), sc_int(end.y())});
+                                  {sc_int(end.x()), sc_int(end.y())}, useManhattan);
         connect(thread, &SearchThread::threadFinishSignal, [this] {
             points.clear();
             points = std::move(thread->getResult());

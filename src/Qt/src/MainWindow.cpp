@@ -23,6 +23,7 @@ namespace QT {
         connect(this, SIGNAL(searchPathSignal(PathSearchMethod)), ui->image, SLOT(searchPath(PathSearchMethod)));
         connect(this, SIGNAL(destroyThread()), ui->image, SLOT(dealDestroy()));
         connect(ui->showSearchPathCheckBox, SIGNAL(clicked(bool)), ui->image, SLOT(setSearchSequential(bool)));
+        connect(ui->useManhattanCheckBox, SIGNAL(clicked(bool)), ui->image, SLOT(setUseManhattan(bool)));
         connect(ui->searchDelaySlider, &QSlider::valueChanged, [this](const int value) {
             ui->searchDelaySpinBox->setValue(value);
             ui->image->setInterval(value);
