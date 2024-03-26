@@ -12,21 +12,26 @@
 #define SEARCHPATHTHREAD_H
 #include <Thread.h>
 
-class SearchThread : public Thread {
+class SearchThread final : public Thread {
 public:
-    SearchThread(const QPixmap &pixmap, const QPoint &start, const QPoint &end, QObject *parent = nullptr) ;
+    SearchThread(const PathSearchMethod &method, const QPixmap &pixmap, const QPoint &start,
+                 const QPoint &end, QObject *parent = nullptr);
 
-    [[nodiscard]] virtual std::vector<Point> &getResult() = 0;
+    [[nodiscard]] std::vector<Point> &getResult();
 
     SearchThread(const SearchThread &other) = delete;
 
     SearchThread(SearchThread &&other) noexcept = delete;
 
-    SearchThread & operator=(const SearchThread &other) = delete;
+    SearchThread &operator=(const SearchThread &other) = delete;
 
-    SearchThread & operator=(SearchThread &&other) noexcept = delete;
+    SearchThread &operator=(SearchThread &&other) noexcept = delete;
 
 protected:
+    void execute() override;
+
+private:
+    PathSearchMethod searchMethod;
     std::vector<Point> result{};
     const QPixmap &pixmap;
     QPoint start;

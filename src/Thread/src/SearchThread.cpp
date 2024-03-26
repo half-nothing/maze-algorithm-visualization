@@ -10,5 +10,29 @@
 
 #include "SearchThread.h"
 
-SearchThread::SearchThread(const QPixmap &pixmap, const QPoint &start, const QPoint &end, QObject *const parent):
-    Thread{parent}, pixmap{pixmap}, start{start}, end{end} {}
+#include <GraphPath.h>
+
+SearchThread::SearchThread(const PathSearchMethod &method, const QPixmap &pixmap, const QPoint &start,
+                           const QPoint &end, QObject *const parent):
+    Thread{parent}, searchMethod{method}, pixmap{pixmap}, start{start}, end{end} {}
+
+std::vector<Point> &SearchThread::getResult() {
+    return result;
+}
+
+void SearchThread::execute() {
+    switch (searchMethod) {
+        case DFS_STACK: GraphPath::getInstance()->DFSStackVersion(result, pixmap, start, end);
+            break;
+        case DFS_RECURSIVE: GraphPath::getInstance()->DFSRecursiveVersion(result, pixmap, start, end);
+            break;
+        case BFS: GraphPath::getInstance()->BFS(result, pixmap, start, end);
+            break;
+        case GBFS: GraphPath::getInstance()->GBFS(result, pixmap, start, end);
+            break;
+        case DIJKSTRA: break;
+        case A_STAR: break;
+        default: break;
+    }
+    isRunning = false;
+}

@@ -1,8 +1,6 @@
 #include "ImageDisplay.h"
 
-#include <BfsThread.h>
 #include <Config.h>
-#include <DfsThread.h>
 #include <QThreadPool>
 
 #include "ui_ImageDisplay.h"
@@ -229,20 +227,8 @@ namespace QT {
     }
 
     void ImageDisplay::searchPath(const PathSearchMethod searchMethod) {
-        switch (searchMethod) {
-            case DFS_STACK: thread = new DfsThread(currentImage, {sc_int(start.x()), sc_int(start.y())},
-                                                   {sc_int(end.x()), sc_int(end.y())}, true);
-                break;
-            case DFS_RECURSIVE: thread = new DfsThread(currentImage, {sc_int(start.x()), sc_int(start.y())},
-                                                       {sc_int(end.x()), sc_int(end.y())}, false);
-                break;
-            case BFS: thread = new BfsThread(currentImage, {sc_int(start.x()), sc_int(start.y())},
-                                             {sc_int(end.x()), sc_int(end.y())});
-                break;
-            case GBFS: return;
-            case A_STAR: return;
-            default: return;
-        }
+        thread = new SearchThread(searchMethod, currentImage, {sc_int(start.x()), sc_int(start.y())},
+                                  {sc_int(end.x()), sc_int(end.y())});
         connect(thread, &SearchThread::threadFinishSignal, [this] {
             points.clear();
             points = std::move(thread->getResult());

@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>183</width>
-    <height>269</height>
+    <height>304</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>183</width>
-    <height>269</height>
+    <height>304</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -59,14 +59,8 @@
         <property name="bottomMargin">
          <number>4</number>
         </property>
-        <item row="4" column="1">
-         <widget class="SelectColor" name="pathPointColorWidget" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
+        <item row="0" column="1">
+         <widget class="SelectColor" name="startPointColorWidget" native="true">
           <property name="minimumSize">
            <size>
             <width>30</width>
@@ -97,6 +91,117 @@
           </property>
           <property name="text">
            <string>结束点颜色：</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="pathPointColorLabel">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>找到的路径颜色：</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="SelectColor" name="pathPointColorWidget" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="autoFillBackground">
+           <bool>true</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="SelectColor" name="searchedPointColorWidget" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="autoFillBackground">
+           <bool>true</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="SelectColor" name="wallPointColorWidget" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="autoFillBackground">
+           <bool>true</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="searchedPointColorLabel">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>已搜寻节点颜色：</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="wallPointColorLabel">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>墙壁颜色：</string>
           </property>
          </widget>
         </item>
@@ -135,91 +240,15 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="wallPointColorLabel">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>墙壁颜色：</string>
-          </property>
-         </widget>
-        </item>
         <item row="4" column="0">
-         <widget class="QLabel" name="pathPointColorLabel">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>30</height>
-           </size>
-          </property>
+         <widget class="QLabel" name="searchingPointColorLabel">
           <property name="text">
-           <string>找到的路径颜色：</string>
+           <string>待搜寻节点颜色：</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
-         <widget class="SelectColor" name="searchedPointColorWidget" native="true">
-          <property name="minimumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="autoFillBackground">
-           <bool>true</bool>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="searchedPointColorLabel">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>已搜寻节点颜色：</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="SelectColor" name="wallPointColorWidget" native="true">
-          <property name="minimumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="autoFillBackground">
-           <bool>true</bool>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="SelectColor" name="startPointColorWidget" native="true">
+        <item row="4" column="1">
+         <widget class="SelectColor" name="searchingPointColorWidget" native="true">
           <property name="minimumSize">
            <size>
             <width>30</width>

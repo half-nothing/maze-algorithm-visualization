@@ -23,10 +23,10 @@ jobs:
           echo "Current ref: ${{  github.ref  }}"
 
       - name: CheckOut
-        uses: actions/checkout@v3.6.0
+        uses: actions/checkout@v4
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
           aqtversion: '==3.1.*'
           version: '6.5.2'

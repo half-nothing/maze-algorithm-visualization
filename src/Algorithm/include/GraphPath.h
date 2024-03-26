@@ -22,11 +22,11 @@ signals:
 public:
     static GraphPath *getInstance();
 
-    void bfs(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end);
+    void BFS(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end);
 
-    void dfsStackVersion(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end);
+    void DFSStackVersion(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end);
 
-    void dfsRecursiveVersion(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end);
+    void DFSRecursiveVersion(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end);
 
     void GBFS(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end);
 
@@ -42,7 +42,7 @@ private:
 
     void updateTime(double time);
 
-    void _dfsRecursiveVersion(std::vector<Point> &points, std::vector<Point> &path, QImage &image, QPoint start,
+    void _DFSRecursiveVersion(std::vector<Point> &points, std::vector<Point> &path, QImage &image, QPoint start,
                               QPoint end, std::vector<std::vector<bool> > &vis);
 };
 

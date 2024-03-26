@@ -46,7 +46,7 @@ namespace QT {
 
     void SelectColor::mousePressEvent(QMouseEvent *event) {
         if (event->button() == Qt::LeftButton) {
-            const QColor color = QColorDialog::getColor(Qt::white, this);
+            const QColor color = QColorDialog::getColor(Qt::white);
             setColor(color);
         }
     }

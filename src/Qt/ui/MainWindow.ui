@@ -155,6 +155,16 @@
         </item>
         <item>
          <property name="text">
+          <string>GBFS</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Dijkstra</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>A*</string>
          </property>
         </item>

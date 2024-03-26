@@ -20,7 +20,7 @@
 #define rc_char_p(x) reinterpret_cast<char *>(x)
 
 #define STACK_MINIMUM_SIZE 8
-#define STORE_DATA_LEN 5
+#define STORE_DATA_LEN 6
 
 template<class T>
 using InitList = const std::initializer_list<T> &;
@@ -42,6 +42,7 @@ enum ConfigField {
     START_POINT_COLOR,
     END_POINT_COLOR,
     WALL_COLOR,
+    SEARCHING_POINT_COLOR,
     SEARCHED_POINT_COLOR,
     PATH_POINT_COLOR
 };
