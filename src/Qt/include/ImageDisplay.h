@@ -58,7 +58,7 @@ namespace QT {
 
         void mousePressEvent(QMouseEvent *event) override;
 
-        void drawMap();
+        void drawMap(QPainter &painter);
 
         std::vector<Point> points;
         QPointF start;

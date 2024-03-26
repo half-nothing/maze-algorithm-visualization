@@ -39,8 +39,30 @@
    </item>
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="3" column="1">
-      <widget class="QLabel" name="mazeHeightLabel">
+     <item row="2" column="2">
+      <widget class="QComboBox" name="generateMethodComboBox">
+       <item>
+        <property name="text">
+         <string>DFS</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QSpinBox" name="mazeHeightSpinBox">
+       <property name="minimum">
+        <number>10</number>
+       </property>
+       <property name="maximum">
+        <number>1000</number>
+       </property>
+       <property name="value">
+        <number>50</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="generateMethodLabel">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -48,39 +70,39 @@
         </size>
        </property>
        <property name="text">
-        <string>迷宫高度</string>
+        <string>生成算法：</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
-      <widget class="QLabel" name="mazeWidthLabel">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>23</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>迷宫宽度</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="saveTypeLabel">
+     <item row="6" column="1" colspan="2">
+      <widget class="QPushButton" name="generateMazeButton">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>1</horstretch>
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>3</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
        <property name="minimumSize">
         <size>
-         <width>0</width>
-         <height>23</height>
+         <width>150</width>
+         <height>0</height>
         </size>
        </property>
        <property name="text">
-        <string>保存格式</string>
+        <string>生成</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QSpinBox" name="mazeWidthSpinBox">
+       <property name="minimum">
+        <number>10</number>
+       </property>
+       <property name="maximum">
+        <number>1000</number>
+       </property>
+       <property name="value">
+        <number>50</number>
        </property>
       </widget>
      </item>
@@ -109,85 +131,14 @@
        </item>
       </widget>
      </item>
-     <item row="4" column="2">
-      <widget class="QSpinBox" name="mazeWidthSpinBox">
-       <property name="minimum">
-        <number>50</number>
-       </property>
-       <property name="maximum">
-        <number>1000</number>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QComboBox" name="generateMethodComboBox">
-       <item>
-        <property name="text">
-         <string>DFS</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Kruskal</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Prim</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Recursive</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="6" column="1" colspan="2">
-      <widget class="QPushButton" name="saveToFileButton">
-       <property name="text">
-        <string>保存</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1" colspan="2">
-      <widget class="QPushButton" name="generateMazeButton">
+     <item row="1" column="1">
+      <widget class="QLabel" name="saveTypeLabel">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>3</horstretch>
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>150</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>生成</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QSpinBox" name="mazeHeightSpinBox">
-       <property name="minimum">
-        <number>50</number>
-       </property>
-       <property name="maximum">
-        <number>1000</number>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1" colspan="2">
-      <widget class="QPushButton" name="sendToMainPageButton">
-       <property name="text">
-        <string>发送到主页面</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="generateMethodLabel">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -195,7 +146,67 @@
         </size>
        </property>
        <property name="text">
-        <string>生成算法</string>
+        <string>保存格式：</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1" colspan="2">
+      <widget class="QPushButton" name="saveToFileButton">
+       <property name="text">
+        <string>保存</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1" colspan="2">
+      <widget class="QPushButton" name="sendToMainPageButton">
+       <property name="text">
+        <string>发送到主页面</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLabel" name="mazeWidthLabel">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>23</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>迷宫宽度：</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="mazeHeightLabel">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>23</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>迷宫高度：</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLabel" name="generateTimeCostLabel">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>23</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>生成耗时：</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QLabel" name="generateTimeCostValueLabel">
+       <property name="text">
+        <string>0s</string>
        </property>
       </widget>
      </item>

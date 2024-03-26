@@ -8,6 +8,8 @@
 
 #include <ConfigWidget.h>
 #include <GraphPath.h>
+#include <MazeGenerator.h>
+#include <MazeMap.h>
 #include <QMessageBox>
 #include <QThreadPool>
 #include <glog/logging.h>
@@ -60,6 +62,10 @@ namespace QT {
             generateMaze->show();
         });
         connect(ui->exitAction, &QAction::triggered, this, &QWidget::close);
+        connect(generateMaze, &GenerateMaze::sendToMainPage, [this](const QPixmap &pixmap) {
+            ui->image->clearPath();
+            ui->image->displayImage(pixmap);
+        });
         LOG(INFO) << "Main thread: " << QThread::currentThread();
     }
 
@@ -73,6 +79,8 @@ namespace QT {
         if (const int ret = msgBox.exec(); ret == QMessageBox::Ok) {
             QMainWindow::closeEvent(event);
             dealDestroy();
+            configWidget->close();
+            generateMaze->close();
             event->accept();
             return;
         }

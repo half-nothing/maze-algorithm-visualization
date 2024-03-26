@@ -18,6 +18,7 @@
 #define sc_int(x) static_cast<int>(x)
 #define sc_double(x) static_cast<double>(x)
 #define rc_char_p(x) reinterpret_cast<char *>(x)
+#define sc_size_t(x) static_cast<size_t>(x)
 
 #define STACK_MINIMUM_SIZE 8
 #define STORE_DATA_LEN 6
@@ -36,6 +37,10 @@ enum PathSearchMethod {
     GBFS,
     DIJKSTRA,
     A_STAR
+};
+
+enum MazeGenerateMethod {
+    DFS
 };
 
 enum ConfigField {

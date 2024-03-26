@@ -9,6 +9,11 @@
  **********************************************/
 
 #include "GenerateDisplay.h"
+
+#include <Config.h>
+#include <QPainter>
+#include <QThreadPool>
+
 #include "ui_GenerateDisplay.h"
 
 namespace QT {
@@ -17,6 +22,8 @@ namespace QT {
         ui->setupUi(this);
         imageHeight = 50;
         imageWidth = 50;
+        currentImage = QPixmap(imageWidth, imageHeight);
+        currentImage.fill(Config::getInstance()->getConfigField(WALL_COLOR));
         adjustZoom();
     }
 
@@ -28,8 +35,19 @@ namespace QT {
         imageHeight = height;
         adjustZoom();
     }
+
     void GenerateDisplay::setWidth(const int width) {
         imageWidth = width;
         adjustZoom();
+    }
+
+    void GenerateDisplay::generateMaze(const MazeGenerateMethod method) {
+        thread = new GenerateThread(imageHeight, imageWidth, method);
+        connect(thread, &GenerateThread::threadFinishSignal, [this] {
+            result = std::move(thread->getResult());
+            currentImage = result.toQPixmap();
+            repaint();
+        });
+        QThreadPool::globalInstance()->start(thread);
     }
 }

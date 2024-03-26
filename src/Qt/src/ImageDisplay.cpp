@@ -51,9 +51,11 @@ namespace QT {
     void ImageDisplay::paintEvent(QPaintEvent *event) {
         WidgetDisplay::paintEvent(event);
         QPainter painter(this);
-        drawMap();
-        drawPixel(start.x(), start.y(), Config::getInstance()->getConfigField(START_POINT_COLOR));
-        drawPixel(end.x(), end.y(), Config::getInstance()->getConfigField(END_POINT_COLOR));
+        painter.setPen(QPen(Qt::black, 1));
+        drawMap(painter);
+        drawPixel(painter, start, QColor(Config::getInstance()->getConfigField(START_POINT_COLOR)));
+        drawPixel(painter, end, QColor(Config::getInstance()->getConfigField(END_POINT_COLOR)));
+        painter.end();
     }
 
     void ImageDisplay::checkRangeLimit(QPointF &point) const {
@@ -101,9 +103,9 @@ namespace QT {
         }
     }
 
-    void ImageDisplay::drawMap() {
+    void ImageDisplay::drawMap(QPainter &painter) {
         for (int i = 0; i < step && i < points.size(); i++) {
-            drawPixel(points[i].point.x(), points[i].point.y(), Config::getInstance()->getConfigField(points[i].color));
+            drawPixel(painter, points[i].point, Config::getInstance()->getConfigField(points[i].color));
         }
     }
 

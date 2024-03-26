@@ -11,6 +11,7 @@
 #ifndef GENERATEMAZE_H
 #define GENERATEMAZE_H
 
+#include <Definition.h>
 #include <QWidget>
 
 namespace QT {
@@ -34,6 +35,10 @@ namespace QT {
         void saveMaze();
 
         void generateMaze();
+
+    signals:
+        void generateMazeSignal(MazeGenerateMethod);
+        void sendToMainPage(QPixmap);
 
     private:
         Ui::GenerateMaze *ui;

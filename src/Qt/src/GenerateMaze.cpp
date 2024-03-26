@@ -10,6 +10,7 @@
 
 #include "GenerateMaze.h"
 
+#include <MazeGenerator.h>
 #include <QFileDialog>
 
 #include "ui_GenerateMaze.h"
@@ -18,6 +19,14 @@ namespace QT {
     GenerateMaze::GenerateMaze(QWidget *parent) :
         QWidget(parent), ui(new Ui::GenerateMaze) {
         ui->setupUi(this);
+        connect(this, SIGNAL(generateMazeSignal(MazeGenerateMethod)), ui->image,
+                SLOT(generateMaze(MazeGenerateMethod)));
+        connect(ui->sendToMainPageButton, &QPushButton::clicked, [this] {
+            emit sendToMainPage(ui->image->getCurrentImage());
+        });
+        connect(MazeGenerator::getInstance(), &MazeGenerator::updateCostTime, [this](const QString &value) {
+            ui->generateTimeCostValueLabel->setText(value);
+        });
     }
 
     GenerateMaze::~GenerateMaze() {
@@ -40,5 +49,15 @@ namespace QT {
         }
     }
 
-    void GenerateMaze::generateMaze() {}
+    void GenerateMaze::generateMaze() {
+        switch (ui->generateMethodComboBox->currentIndex()) {
+            case 0:
+                emit generateMazeSignal(DFS);
+                break;
+            case 1: break;
+            case 2: break;
+            case 3: break;
+            default: return;
+        }
+    }
 }

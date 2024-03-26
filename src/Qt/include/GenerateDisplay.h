@@ -11,6 +11,7 @@
 #ifndef GENERATEDISPLAY_H
 #define GENERATEDISPLAY_H
 
+#include <GenerateThread.h>
 #include <WidgetDisplay.h>
 
 namespace QT {
@@ -35,8 +36,12 @@ namespace QT {
 
         void setWidth(int);
 
+        void generateMaze(MazeGenerateMethod);
+
     private:
         Ui::GenerateDisplay *ui;
+        GenerateThread *thread = nullptr;
+        MazeMap result{0, 0};
     };
 }
 

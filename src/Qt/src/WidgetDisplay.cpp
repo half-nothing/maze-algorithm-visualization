@@ -44,12 +44,7 @@ void WidgetDisplay::displayImage(const QPixmap &image) {
     adjustZoom();
 }
 
-void WidgetDisplay::paintGrid() {
-    if (zoom < 1) {
-        return;
-    }
-    QPainter painter(this);
-
+void WidgetDisplay::paintGrid(QPainter &painter) const {
     painter.setPen(QPen(Qt::black, 1));
     QList<QLineF> lines;
 
@@ -60,7 +55,6 @@ void WidgetDisplay::paintGrid() {
         lines.append(QLineF(startPoint.x(), y, startPoint.x() + widthPerPix * this->imageWidth, y));
     }
     painter.drawLines(lines);
-
 }
 
 void WidgetDisplay::paintEvent(QPaintEvent *event) {
@@ -68,8 +62,20 @@ void WidgetDisplay::paintEvent(QPaintEvent *event) {
     painter.drawPixmap(startPoint.x(), startPoint.y(),
                        imageWidth * widthPerPix, imageHeight * widthPerPix,
                        currentImage);
-    drawPixel(nowMouseImagePos.x(), nowMouseImagePos.y(), QColor(255, 174, 201));
-    paintGrid();
+    painter.setPen(QPen(Qt::black, 1));
+    drawPixel(painter, nowMouseImagePos, QColor(255, 174, 201));
+    if (zoom > 1) {
+        painter.setBrush(Qt::black);
+        paintGrid(painter);
+    }
+    painter.end();
+}
+
+void WidgetDisplay::drawPixel(QPainter &painter, const QPointF &point, const QColor color) const {
+    painter.setBrush(color);
+    const QRectF PixelArea(startPoint.x() + sc_int(point.x()) * widthPerPix, startPoint.y() + sc_int(point.y()) * widthPerPix, widthPerPix,
+                           widthPerPix);
+    painter.drawRect(PixelArea);
 }
 
 void WidgetDisplay::wheelEvent(QWheelEvent *event) {
@@ -122,17 +128,6 @@ void WidgetDisplay::mouseReleaseEvent(QMouseEvent *event) {
     leftMousePressed = false;
 }
 
-void WidgetDisplay::drawPixel(const int x, const int y, const QColor color) {
-    if (x < 0 || y < 0 || x >= imageWidth || y >= imageHeight) return;
-    QPainter painter(this);
-    painter.setPen(QPen(Qt::black, 1));
-    painter.setBrush(color);
-
-    const QRectF PixelArea(startPoint.x() + x * widthPerPix, startPoint.y() + y * widthPerPix, widthPerPix,
-                           widthPerPix);
-    painter.drawRect(PixelArea);
-}
-
 QPointF WidgetDisplay::getLocate(const QPointF &pos) const {
     const QPointF tmp = pos - startPoint;
     return tmp / widthPerPix;
@@ -144,4 +139,8 @@ void WidgetDisplay::saveImage(const QString &filePath, const QImage::Format form
         image = image.convertToFormat(format);
     }
     image.save(filePath, "BMP");
+}
+
+const QPixmap &WidgetDisplay::getCurrentImage() const {
+    return currentImage;
 }

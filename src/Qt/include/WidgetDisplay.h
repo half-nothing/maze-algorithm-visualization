@@ -24,7 +24,9 @@ public:
 
     void adjustZoom();
 
-    void saveImage(const QString& filePath, QImage::Format format) const;
+    void saveImage(const QString &filePath, QImage::Format format) const;
+
+    [[nodiscard]] const QPixmap &getCurrentImage() const;
 
 signals:
     void mousePointUpdate(QString);
@@ -44,9 +46,9 @@ protected:
 
     [[nodiscard]] QPointF getLocate(const QPointF &pos) const;
 
-    void drawPixel(int x, int y, QColor color);
+    void paintGrid(QPainter &painter) const;
 
-    void paintGrid();
+    void drawPixel(QPainter &painter, const QPointF &point, QColor color) const;
 
     size_t imageWidth = 0;
     size_t imageHeight = 0;
