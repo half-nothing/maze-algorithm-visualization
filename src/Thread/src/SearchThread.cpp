@@ -30,7 +30,8 @@ void SearchThread::execute() {
             break;
         case GBFS: GraphPath::getInstance()->GBFS(result, pixmap, start, end);
             break;
-        case DIJKSTRA: break;
+        case DIJKSTRA: GraphPath::getInstance()->Dijkstra(result, pixmap, start, end);
+            break;
         case A_STAR: break;
         default: break;
     }

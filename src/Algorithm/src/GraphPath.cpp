@@ -35,8 +35,8 @@ static constexpr auto getEuclideanDistance = [](const QPoint &start, const QPoin
 
 template<typename T>
 struct StorePoint {
-    QPoint point;
-    T distance;
+    QPoint point{invalidPoint};
+    T distance{-1};
 };
 
 template<typename T>
@@ -249,5 +249,59 @@ EndFunc:
     updateTime(time);
 }
 
-void GraphPath::Dijkstra(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end) {}
-void GraphPath::aStar(std::vector<Point> &points, const QPixmap &pixmap, QPoint start, QPoint end) {}
+void GraphPath::Dijkstra(std::vector<Point> &points, const QPixmap &pixmap, const QPoint start, const QPoint end) {
+    LOG(INFO) << "Dijkstra search start";
+    const QImage image = pixmap.toImage();
+    using DijkstraPoint = StorePoint<double>;
+    std::priority_queue<DijkstraPoint, std::vector<DijkstraPoint>, StorePointCmp<double> > queue;
+    std::vector vis(pixmap.width(), std::vector<DijkstraPoint>(pixmap.height()));
+    std::vector startVis(pixmap.width(), std::vector(pixmap.height(), false));
+    TIMER_START
+    if (visitPoint(image.pixel(start))) {
+        goto EndFunc;
+    }
+    vis[start.x()][start.y()].distance = 0;
+    vis[start.x()][start.y()].point = start;
+    queue.emplace(start, vis[start.x()][start.y()].distance);
+    while (!queue.empty()) {
+        const QPoint temp = queue.top().point;
+        queue.pop();
+        if (startVis[temp.x()][temp.y()]) {
+            continue;
+        }
+        startVis[temp.x()][temp.y()] = true;
+        points.emplace_back(temp, SEARCHED_POINT_COLOR);
+        if (temp == end) {
+            break;
+        }
+        for (const auto dir: eightDirs) {
+            const auto tmp = QPoint(temp.x() + dir[0], temp.y() + dir[1]);
+            if (tmp.x() < 0 || tmp.x() >= image.width() || tmp.y() < 0 || tmp.y() >= image.height()) continue;
+            if (!visitPoint(image.pixel(tmp)) &&
+                (vis[tmp.x()][tmp.y()].point == invalidPoint ||
+                 vis[tmp.x()][tmp.y()].distance > vis[temp.x()][temp.y()].distance + getEuclideanDistance(temp, tmp))) {
+                vis[tmp.x()][tmp.y()].point = temp;
+                vis[tmp.x()][tmp.y()].distance = vis[temp.x()][temp.y()].distance + getEuclideanDistance(temp, tmp);
+                points.emplace_back(tmp, SEARCHING_POINT_COLOR);
+                queue.emplace(tmp, vis[tmp.x()][tmp.y()].distance);
+            }
+        }
+    }
+    if (vis[end.x()][end.y()].point != invalidPoint) {
+        QPoint tmp = end;
+        while (true) {
+            const QPoint temp = vis[tmp.x()][tmp.y()].point;
+            if (temp == start) {
+                break;
+            }
+            points.emplace_back(temp, PATH_POINT_COLOR);
+            tmp = temp;
+        }
+    }
+EndFunc:
+    TIMER_STOP
+    LOG(INFO) << "Dijkstra search finish";
+    updateTime(time);
+}
+
+void GraphPath::aStar(std::vector<Point> &points, const QPixmap &pixmap, const QPoint start, const QPoint end) {}

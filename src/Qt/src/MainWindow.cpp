@@ -126,6 +126,9 @@ namespace QT {
             case 3:
                 emit searchPathSignal(GBFS);
                 break;
+            case 4:
+                emit searchPathSignal(DIJKSTRA);
+                break;
             default: return;
         }
     }
