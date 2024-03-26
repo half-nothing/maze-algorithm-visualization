@@ -10,7 +10,6 @@
 #ifndef DAC_DEFINITION_H
 #define DAC_DEFINITION_H
 
-#include <QColor>
 #include <QPoint>
 #include <filesystem>
 #include <initializer_list>
