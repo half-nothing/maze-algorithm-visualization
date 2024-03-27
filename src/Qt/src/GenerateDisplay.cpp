@@ -46,7 +46,7 @@ namespace QT {
         connect(thread, &GenerateThread::threadFinishSignal, [this] {
             result = std::move(thread->getResult());
             currentImage = result.toQPixmap();
-            repaint();
+            update();
         });
         QThreadPool::globalInstance()->start(thread);
     }

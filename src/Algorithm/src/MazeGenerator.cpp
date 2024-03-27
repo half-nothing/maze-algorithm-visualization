@@ -81,3 +81,54 @@ void MazeGenerator::DFS(MazeMap &mazeMap) {
     LOG(INFO) << "Dfs generate finish";
     updateTime(time);
 }
+
+void MazeGenerator::Prim(MazeMap &mazeMap) {
+    LOG(INFO) << "Prim generate start";
+    using stdParam = std::uniform_int_distribution<>::param_type;
+    const int height = mazeMap.getHeight();
+    const int width = mazeMap.getWidth();
+    std::mt19937 gen{std::random_device()()};
+    std::uniform_int_distribution distrib;
+    std::vector vis(height, std::vector(width, false));
+    std::vector direction{0, 1, 2, 3};
+    std::vector<QPoint> points;
+    TIMER_START
+    if (mazeMap.isHasBorder()) {
+        points.emplace_back(1, 3);
+        points.emplace_back(3, 1);
+        vis[1][1] = true;
+    } else {
+        points.emplace_back(0, 2);
+        points.emplace_back(2, 0);
+        vis[0][0] = true;
+    }
+    while (!points.empty()) {
+        distrib.param(stdParam{0, sc_int(points.size()) - 1});
+        const int temp = distrib(gen);
+        const QPoint tmp = points[temp];
+        if (vis[tmp.x()][tmp.y()]) {
+            points.erase(points.begin() + temp);
+            continue;
+        }
+        vis[tmp.x()][tmp.y()] = true;
+        std::ranges::shuffle(direction.begin(), direction.end(), gen);
+        for (const auto dir: direction) {
+            const auto t = QPoint(tmp.x() + fourDirs[dir][0], tmp.y() + fourDirs[dir][1]);
+            if (mazeMap.judgePos(t.x(), t.y())) continue;
+            if (vis[t.x()][t.y()]) {
+                mazeMap.linkRoad(t.x(), t.y(), tmp.x(), tmp.y());
+                break;
+            }
+        }
+        for (const auto dir: fourDirs) {
+            const auto t = QPoint(tmp.x() + dir[0], tmp.y() + dir[1]);
+            if (mazeMap.judgePos(t.x(), t.y())) continue;
+            if (vis[t.x()][t.y()]) continue;
+            points.push_back(t);
+        }
+        points.erase(points.begin() + temp);
+    }
+    TIMER_STOP
+    LOG(INFO) << "Prim generate finish";
+    updateTime(time);
+}

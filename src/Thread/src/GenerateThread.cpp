@@ -26,6 +26,8 @@ void GenerateThread::execute() {
     switch (searchMethod) {
         case DFS: MazeGenerator::getInstance()->DFS(result);
             break;
+        case PRIM: MazeGenerator::getInstance()->Prim(result);
+            break;
         default: break;
     }
     isRunning = false;

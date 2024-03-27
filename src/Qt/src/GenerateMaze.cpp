@@ -54,9 +54,9 @@ namespace QT {
             case 0:
                 emit generateMazeSignal(DFS);
                 break;
-            case 1: break;
-            case 2: break;
-            case 3: break;
+            case 1:
+                emit generateMazeSignal(PRIM);
+                break;
             default: return;
         }
     }

@@ -24,9 +24,11 @@ public:
 
     void DFS(MazeMap &mazeMap);
 
-private:
+    void Prim(MazeMap &mazeMap);
 
+private:
     void updateTime(double time);
+
     static MazeGenerator *instance;
 
     MazeGenerator() = default;

@@ -39,7 +39,8 @@ enum PathSearchMethod {
 };
 
 enum MazeGenerateMethod {
-    DFS
+    DFS,
+    PRIM
 };
 
 enum ConfigField {
