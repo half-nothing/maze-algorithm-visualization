@@ -13,6 +13,7 @@
 #include <BmpImage1Bit.h>
 #include <BmpImage24Bit.h>
 #include <BmpImage8Bit.h>
+#include <QMessageBox>
 #include <glog/logging.h>
 
 BmpImage *BmpFactory::createBmpImage(const std::string &filepath) {
@@ -26,6 +27,7 @@ BmpImage *BmpFactory::createBmpImage(const std::string &filepath) {
         case TWENTY_FOUR_BIT:
             return new BmpImage24Bit();
         case UNKNOWN_BIT:
+            QMessageBox::warning(nullptr, "无法加载图片", "不支持的BMP文件格式");
             LOG(ERROR) << "未知的bmp文件格式" << std::endl;
             return nullptr;
     }

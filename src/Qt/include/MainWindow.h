@@ -25,6 +25,8 @@ namespace QT {
 
         void findPath();
 
+        void saveImage();
+
     signals:
         void searchPathSignal(PathSearchMethod);
 

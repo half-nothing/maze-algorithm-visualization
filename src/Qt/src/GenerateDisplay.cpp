@@ -22,8 +22,8 @@ namespace QT {
         ui->setupUi(this);
         imageHeight = 50;
         imageWidth = 50;
-        currentImage = QPixmap(imageWidth, imageHeight);
-        currentImage.fill(Config::getInstance()->getConfigField(WALL_COLOR));
+        backGroundImage = QPixmap(imageWidth, imageHeight);
+        backGroundImage.fill(Config::getInstance()->getConfigField(WALL_COLOR));
         adjustZoom();
     }
 
@@ -45,7 +45,7 @@ namespace QT {
         thread = new GenerateThread(imageHeight, imageWidth, method);
         connect(thread, &GenerateThread::threadFinishSignal, [this] {
             result = std::move(thread->getResult());
-            currentImage = result.toQPixmap();
+            backGroundImage = result.toQPixmap();
             update();
         });
         QThreadPool::globalInstance()->start(thread);

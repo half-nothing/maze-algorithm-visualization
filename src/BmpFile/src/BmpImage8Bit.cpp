@@ -72,6 +72,6 @@ void BmpImage8Bit::readImage(const std::string &filename) {
 
 void BmpImage8Bit::toQPixMap(QPixmap &pixmap) {
     const QImage qImage(bmpPixelInfo.pixels, bmpPixelInfo.width, bmpPixelInfo.height, bmpPixelInfo.width,
-                        QImage::Format_Indexed8);
+                        QImage::Format_Grayscale8);
     pixmap = QPixmap::fromImage(qImage);
 }

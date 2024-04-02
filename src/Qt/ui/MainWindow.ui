@@ -20,58 +20,10 @@
       <property name="sizeConstraint">
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
-      <item row="1" column="1">
-       <widget class="QLabel" name="startPointValueLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>2</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
+      <item row="9" column="0">
+       <widget class="QLabel" name="searchDelayLabel">
         <property name="text">
-         <string>(0, 0)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="1">
-       <widget class="QSpinBox" name="searchDelaySpinBox">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-        <property name="value">
-         <number>1</number>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0" colspan="2">
-       <widget class="QCheckBox" name="showSearchPathCheckBox">
-        <property name="text">
-         <string>按搜索顺序绘制路径</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0" colspan="2">
-       <widget class="QPushButton" name="clearPointsButton">
-        <property name="minimumSize">
-         <size>
-          <width>150</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>清空坐标</string>
+         <string>绘制延迟：</string>
         </property>
        </widget>
       </item>
@@ -94,6 +46,40 @@
         </property>
        </widget>
       </item>
+      <item row="11" column="0" colspan="2">
+       <widget class="QPushButton" name="pathFindingButton">
+        <property name="text">
+         <string>开始寻路</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="searchCostLabel">
+        <property name="text">
+         <string>寻路耗时：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0" colspan="2">
+       <widget class="QCheckBox" name="useManhattanCheckBox">
+        <property name="text">
+         <string>使用霍夫曼距离</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1">
+       <widget class="QSpinBox" name="searchDelaySpinBox">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+        <property name="value">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="1">
        <widget class="QLabel" name="mousePosValueLabel">
         <property name="sizePolicy">
@@ -107,17 +93,39 @@
         </property>
        </widget>
       </item>
-      <item row="11" column="0" colspan="2">
-       <widget class="QPushButton" name="pathFindingButton">
+      <item row="1" column="0">
+       <widget class="QLabel" name="startPointLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>23</height>
+         </size>
+        </property>
         <property name="text">
-         <string>开始寻路</string>
+         <string>开始坐标：</string>
         </property>
        </widget>
       </item>
-      <item row="8" column="1">
-       <widget class="QLabel" name="searchCostValueLabel">
+      <item row="12" column="0" colspan="2">
+       <widget class="QPushButton" name="clearPathButton">
         <property name="text">
-         <string>0s</string>
+         <string>清空路径</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0" colspan="2">
+       <widget class="QCheckBox" name="showSearchPathCheckBox">
+        <property name="text">
+         <string>按搜索顺序绘制路径</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -128,24 +136,16 @@
         </property>
        </widget>
       </item>
-      <item row="13" column="0" colspan="2">
-       <widget class="QPushButton" name="repaintPathButton">
-        <property name="text">
-         <string>重绘路径</string>
+      <item row="4" column="0" colspan="2">
+       <widget class="QPushButton" name="clearPointsButton">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>0</height>
+         </size>
         </property>
-       </widget>
-      </item>
-      <item row="9" column="0">
-       <widget class="QLabel" name="searchDelayLabel">
         <property name="text">
-         <string>绘制延迟：</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="0">
-       <widget class="QLabel" name="searchCostLabel">
-        <property name="text">
-         <string>寻路耗时：</string>
+         <string>清空坐标</string>
         </property>
        </widget>
       </item>
@@ -159,37 +159,6 @@
         </property>
         <property name="text">
          <string>(0, 0)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="0" colspan="2">
-       <widget class="QSlider" name="searchDelaySlider">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-        <property name="singleStep">
-         <number>1</number>
-        </property>
-        <property name="pageStep">
-         <number>100</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="invertedAppearance">
-         <bool>false</bool>
-        </property>
-        <property name="invertedControls">
-         <bool>false</bool>
-        </property>
-        <property name="tickPosition">
-         <enum>QSlider::TicksBelow</enum>
-        </property>
-        <property name="tickInterval">
-         <number>100</number>
         </property>
        </widget>
       </item>
@@ -227,10 +196,60 @@
         </item>
        </widget>
       </item>
-      <item row="12" column="0" colspan="2">
-       <widget class="QPushButton" name="clearPathButton">
+      <item row="1" column="1">
+       <widget class="QLabel" name="startPointValueLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>2</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
-         <string>清空路径</string>
+         <string>(0, 0)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="0" colspan="2">
+       <widget class="QPushButton" name="repaintPathButton">
+        <property name="text">
+         <string>重绘路径</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0" colspan="2">
+       <widget class="QSlider" name="searchDelaySlider">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+        <property name="singleStep">
+         <number>1</number>
+        </property>
+        <property name="pageStep">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="invertedAppearance">
+         <bool>false</bool>
+        </property>
+        <property name="invertedControls">
+         <bool>false</bool>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksBelow</enum>
+        </property>
+        <property name="tickInterval">
+         <number>100</number>
         </property>
        </widget>
       </item>
@@ -253,25 +272,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="startPointLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>1</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>23</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>开始坐标：</string>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="0" colspan="2">
        <widget class="QPushButton" name="openImageButton">
         <property name="minimumSize">
@@ -285,10 +285,17 @@
         </property>
        </widget>
       </item>
-      <item row="7" column="0" colspan="2">
-       <widget class="QCheckBox" name="useManhattanCheckBox">
+      <item row="8" column="1">
+       <widget class="QLabel" name="searchCostValueLabel">
         <property name="text">
-         <string>使用霍夫曼距离</string>
+         <string>0s</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="0" colspan="2">
+       <widget class="QPushButton" name="saveImageButton">
+        <property name="text">
+         <string>保存图片</string>
         </property>
        </widget>
       </item>
@@ -544,9 +551,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>saveImageButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QT::MainWindow</receiver>
+   <slot>saveImage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>85</x>
+     <y>432</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>148</x>
+     <y>468</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openImage()</slot>
   <slot>findPath()</slot>
+  <slot>saveImage()</slot>
  </slots>
 </ui>

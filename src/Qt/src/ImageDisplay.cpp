@@ -32,7 +32,7 @@ namespace QT {
     }
 
     void ImageDisplay::clearPoints() {
-        start = end = QPointF(0, 0);
+        start = end = QPoint(0, 0);
         status = 0;
         points.clear();
         repaint();
@@ -48,17 +48,37 @@ namespace QT {
         this->useManhattan = useManhattan;
     }
 
-    void ImageDisplay::paintEvent(QPaintEvent *event) {
-        WidgetDisplay::paintEvent(event);
-        QPainter painter(this);
-        painter.setPen(QPen(Qt::black, 1));
-        drawMap(painter);
-        drawPixel(painter, start, QColor(Config::getInstance()->getConfigField(START_POINT_COLOR)));
-        drawPixel(painter, end, QColor(Config::getInstance()->getConfigField(END_POINT_COLOR)));
-        painter.end();
+    void ImageDisplay::updateShowImage(QPainter &painter) {
+        if (imageWidth == 0 || imageHeight == 0) {
+            return;
+        }
+        drawPixel(painter, start, Config::getInstance()->getConfigField(START_POINT_COLOR));
+        drawPixel(painter, end, Config::getInstance()->getConfigField(END_POINT_COLOR));
+        if (points.empty() || step < 0 || step >= points.size()) {
+            return;
+        }
+        if (!this->searchSequential) {
+            QPainter painter;
+            painter.begin(&showImage);
+            for (int i = step; i < points.size(); i++) {
+                painter.setPen(QPen(Config::getInstance()->getConfigField(points[i].color)));
+                painter.drawPoint(points[i].point);
+            }
+            painter.end();
+            step = points.size();
+            return;
+        }
+        if (points[step].point == start || points[step].point == end) {
+            return;
+        }
+        QPainter imagePainter;
+        imagePainter.begin(&showImage);
+        imagePainter.setPen(QPen(Config::getInstance()->getConfigField(points[step].color)));
+        imagePainter.drawPoint(points[step].point);
+        imagePainter.end();
     }
 
-    void ImageDisplay::checkRangeLimit(QPointF &point) const {
+    void ImageDisplay::checkRangeLimit(QPoint &point) const {
         if (point.x() < 0) {
             point.setX(0);
         }
@@ -78,34 +98,27 @@ namespace QT {
         if (event->button() == Qt::RightButton) {
             switch (status) {
                 case 0: {
-                    start = getLocate(event->position());
+                    start = getLocatePoint(event->position());
                     checkRangeLimit(start);
-                    LOG(INFO) << "开始坐标: (" << static_cast<int>(start.x()) << ", " << static_cast<int>(start.y()) <<
+                    LOG(INFO) << "开始坐标: (" << sc_int(start.x()) << ", " << sc_int(start.y()) <<
                             ")"
                             << std::endl;
                     emit startPointUpdate(
-                            QString::asprintf("(%d, %d)", static_cast<int>(start.x()), static_cast<int>(start.y())));
+                            QString::asprintf("(%d, %d)", sc_int(start.x()), sc_int(start.y())));
                     status++;
                     break;
                 }
                 case 1: {
-                    end = getLocate(event->position());
+                    end = getLocatePoint(event->position());
                     checkRangeLimit(end);
-                    LOG(INFO) << "结束坐标: (" << static_cast<int>(end.x()) << ", " << static_cast<int>(end.y()) << ")"
+                    LOG(INFO) << "结束坐标: (" << sc_int(end.x()) << ", " << sc_int(end.y()) << ")"
                             << std::endl;
-                    emit endPointUpdate(QString::asprintf("(%d, %d)", static_cast<int>(end.x()),
-                                                          static_cast<int>(end.y())));
+                    emit endPointUpdate(QString::asprintf("(%d, %d)", sc_int(end.x()), sc_int(end.y())));
                     status = 0;
                     break;
                 }
                 default: status = 0;
             }
-        }
-    }
-
-    void ImageDisplay::drawMap(QPainter &painter) {
-        for (int i = 0; i < step && i < points.size(); i++) {
-            drawPixel(painter, points[i].point, Config::getInstance()->getConfigField(points[i].color));
         }
     }
 
@@ -118,27 +131,31 @@ namespace QT {
     }
 
     void ImageDisplay::clearPath() {
-        step = 0;
+        showImage.fill(Qt::transparent);
         repaint();
     }
 
     void ImageDisplay::repaintPath() {
+        if (!this->searchSequential) {
+            return;
+        }
+        showImage.fill(Qt::transparent);
         step = 0;
         timer->start();
     }
 
     void ImageDisplay::searchPath(const PathSearchMethod searchMethod) {
-        thread = new SearchThread(searchMethod, currentImage, {sc_int(start.x()), sc_int(start.y())},
+        thread = new SearchThread(searchMethod, backGroundImage, {sc_int(start.x()), sc_int(start.y())},
                                   {sc_int(end.x()), sc_int(end.y())}, useManhattan);
         connect(thread, &SearchThread::threadFinishSignal, [this] {
             points.clear();
             points = std::move(thread->getResult());
+            showImage.fill(Qt::transparent);
+            step = 0;
             if (this->searchSequential) {
-                step = 0;
                 emit drawPath();
                 return;
             }
-            step = points.size();
             repaint();
         });
         QThreadPool::globalInstance()->start(thread);

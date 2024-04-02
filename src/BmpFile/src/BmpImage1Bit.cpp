@@ -49,9 +49,14 @@ void BmpImage1Bit::readImage(const std::string &filename) {
         LOG(ERROR) << "Not 1Bit Image." << std::endl;
         return;
     }
-    bmpPixelInfo.palettes = new BmpColorPalette[2]{{0x00, 0x00, 0x00, 0x00},
-                                              {0xff, 0xff, 0xff, 0x00}};
+
+    inputFile.seekg(sizeof(BmpFileHeader) + bmpInfoHeader.headerSize, std::ios::beg);
+    bmpPixelInfo.palettes = new BmpColorPalette[2];
+    memset(bmpPixelInfo.palettes, 0, sizeof(BmpColorPalette) * bmpInfoHeader.colors);
     bmpPixelInfo.paletteSize = 2;
+    for (int i = 0; i < 2; i++) {
+        inputFile.read(reinterpret_cast<char *>(bmpPixelInfo.palettes + i), sizeof(BmpColorPalette));
+    }
 
     inputFile.seekg(bmpFileHeader.offsetSize, std::ios::beg);
     bmpPixelInfo.bytePerLine = ((bmpPixelInfo.width + 7) / 8 + 3) / 4 * 4;
@@ -66,7 +71,7 @@ void BmpImage1Bit::readImage(const std::string &filename) {
                     flag = true;
                     continue;
                 }
-                bmpPixelInfo.pixels[i * bmpPixelInfo.width + k] = temp & 1 ? 0xFF : 0x00;
+                bmpPixelInfo.pixels[i * bmpPixelInfo.width + k] = temp & 1 ? bmpPixelInfo.palettes[1].blue : bmpPixelInfo.palettes[0].blue;
             }
             if (flag) break;
         }

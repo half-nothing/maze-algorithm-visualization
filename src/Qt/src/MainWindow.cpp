@@ -123,6 +123,9 @@ namespace QT {
             return;
         }
         BmpImage *image = BmpFactory::createBmpImage(filePath.toStdString());
+        if (image == nullptr) {
+            return;
+        }
         image->readImage(filePath.toStdString());
         image->toQPixMap(pixmap);
         ui->image->displayImage(pixmap);
@@ -150,6 +153,14 @@ namespace QT {
                 break;
             default: return;
         }
+    }
+
+    void MainWindow::saveImage() {
+        const QString filePath = QFileDialog::getSaveFileName(this, tr("要保存文件的位置"), "./", tr("位图文件 (*.bmp)"));
+        if (filePath.isEmpty()) {
+            return;
+        }
+        ui->image->saveImage(filePath, QImage::Format_BGR888);
     }
 
     MainWindow::~MainWindow() {

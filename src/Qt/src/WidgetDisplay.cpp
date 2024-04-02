@@ -9,6 +9,9 @@
  **********************************************/
 
 #include "WidgetDisplay.h"
+
+#include <Config.h>
+
 #include "Definition.h"
 
 #include <QPainter>
@@ -40,7 +43,11 @@ void WidgetDisplay::displayImage(const QPixmap &image) {
     if (image.height() != this->imageHeight) {
         this->imageHeight = image.height();
     }
-    currentImage = image;
+    if (showImage.width() != this->imageWidth || showImage.height() != this->imageHeight) {
+        showImage = QPixmap(this->imageWidth, this->imageWidth);
+    }
+    showImage.fill(Qt::transparent);
+    backGroundImage = image;
     adjustZoom();
 }
 
@@ -61,7 +68,11 @@ void WidgetDisplay::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
     painter.drawPixmap(startPoint.x(), startPoint.y(),
                        imageWidth * widthPerPix, imageHeight * widthPerPix,
-                       currentImage);
+                       backGroundImage);
+    updateShowImage(painter);
+    painter.drawPixmap(startPoint.x(), startPoint.y(),
+                       imageWidth * widthPerPix, imageHeight * widthPerPix,
+                       showImage);
     painter.setPen(QPen(Qt::black, 1));
     drawPixel(painter, nowMouseImagePos, QColor(255, 174, 201));
     if (zoom > 1) {
@@ -73,10 +84,13 @@ void WidgetDisplay::paintEvent(QPaintEvent *event) {
 
 void WidgetDisplay::drawPixel(QPainter &painter, const QPointF &point, const QColor color) const {
     painter.setBrush(color);
-    const QRectF PixelArea(startPoint.x() + sc_int(point.x()) * widthPerPix, startPoint.y() + sc_int(point.y()) * widthPerPix, widthPerPix,
+    const QRectF PixelArea(startPoint.x() + sc_int(point.x()) * widthPerPix,
+                           startPoint.y() + sc_int(point.y()) * widthPerPix, widthPerPix,
                            widthPerPix);
     painter.drawRect(PixelArea);
 }
+
+void WidgetDisplay::updateShowImage(QPainter &painter) {}
 
 void WidgetDisplay::wheelEvent(QWheelEvent *event) {
     event->angleDelta();
@@ -133,8 +147,18 @@ QPointF WidgetDisplay::getLocate(const QPointF &pos) const {
     return tmp / widthPerPix;
 }
 
+QPoint WidgetDisplay::getLocatePoint(const QPointF &pos) const {
+    QPointF tmp = pos - startPoint;
+    tmp /= widthPerPix;
+    return QPoint{sc_int(tmp.x()), sc_int(tmp.y())};
+}
+
 void WidgetDisplay::saveImage(const QString &filePath, const QImage::Format format) const {
-    QImage image = currentImage.toImage();
+    QImage image = backGroundImage.toImage();
+    QPainter painter;
+    painter.begin(&image);
+    painter.drawPixmap(0, 0, showImage);
+    painter.end();
     if (image.format() != format) {
         image = image.convertToFormat(format);
     }
@@ -142,5 +166,5 @@ void WidgetDisplay::saveImage(const QString &filePath, const QImage::Format form
 }
 
 const QPixmap &WidgetDisplay::getCurrentImage() const {
-    return currentImage;
+    return backGroundImage;
 }

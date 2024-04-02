@@ -46,9 +46,13 @@ protected:
 
     [[nodiscard]] QPointF getLocate(const QPointF &pos) const;
 
+    [[nodiscard]] QPoint getLocatePoint(const QPointF &pos) const;
+
     void paintGrid(QPainter &painter) const;
 
     void drawPixel(QPainter &painter, const QPointF &point, QColor color) const;
+
+    virtual void updateShowImage(QPainter &painter);
 
     size_t imageWidth = 0;
     size_t imageHeight = 0;
@@ -58,7 +62,9 @@ protected:
     bool leftMousePressed = false;
     QPointF preMousePos;
     QPointF nowMouseImagePos;
-    QPixmap currentImage;
+    QPixmap backGroundImage;
+    QPixmap showImage;
+    bool keepStatic = false;
 };
 
 #endif //WIDGETDISPLAY_H

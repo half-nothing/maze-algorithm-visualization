@@ -51,18 +51,18 @@ namespace QT {
 
         void drawPath();
 
-    private:
-        void paintEvent(QPaintEvent *event) override;
+    protected:
+        void updateShowImage(QPainter &painter) override;
 
-        void checkRangeLimit(QPointF &point) const;
+
+    private:
+        void checkRangeLimit(QPoint &point) const;
 
         void mousePressEvent(QMouseEvent *event) override;
 
-        void drawMap(QPainter &painter);
-
         std::vector<Point> points;
-        QPointF start;
-        QPointF end;
+        QPoint start;
+        QPoint end;
         int status = 0;
         Ui::ImageDisplay *ui;
         SearchThread *thread = nullptr;

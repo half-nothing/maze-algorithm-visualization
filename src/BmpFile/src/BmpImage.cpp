@@ -38,6 +38,8 @@ BmpType BmpImage::getBmpFileType() const {
         case 1: return ONE_BIT;
         case 8: return EIGHT_BIT;
         case 24: return TWENTY_FOUR_BIT;
-        default: return UNKNOWN_BIT;
+        default:
+            LOG(ERROR) << QString::asprintf("不支持的色深度：%d位", bmpInfoHeader.bitsPerPixel).toStdString();
+            return UNKNOWN_BIT;
     }
 }

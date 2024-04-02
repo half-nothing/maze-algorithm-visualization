@@ -40,12 +40,10 @@ namespace QT {
         }
         switch (ui->saveTypeComboBox->currentIndex()) {
             case 0: ui->image->saveImage(filePath, QImage::Format_Mono);
-                break;
-            case 1: ui->image->saveImage(filePath, QImage::Format_Indexed8);
-                break;
+            break;
+            case 1: ui->image->saveImage(filePath, QImage::Format_Grayscale8);
+            break;
             case 2: ui->image->saveImage(filePath, QImage::Format_RGB888);
-                break;
-            default: return;
         }
     }
 
