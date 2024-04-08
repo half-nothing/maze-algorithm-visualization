@@ -29,6 +29,8 @@ namespace QT {
 
         void setInterval(int value) const;
 
+        void startPlay(bool);
+
     public slots:
         void setSearchSequential(bool);
 
@@ -40,20 +42,19 @@ namespace QT {
 
         void drawPathSlot();
 
-        void clearPath();
-
-        void repaintPath();
+        void stopPlay();
 
     signals:
         void startPointUpdate(QString);
 
         void endPointUpdate(QString);
 
+        void updateButtonStatus(bool, bool);
+
         void drawPath();
 
     protected:
         void updateShowImage(QPainter &painter) override;
-
 
     private:
         void checkRangeLimit(QPoint &point) const;
@@ -70,6 +71,7 @@ namespace QT {
         int step = 0;
         bool searchSequential = true;
         bool useManhattan = false;
+        bool backup = false;
     };
 }
 

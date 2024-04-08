@@ -14,7 +14,7 @@ namespace QT {
         timer->setInterval(1);
         connect(timer, &QTimer::timeout, [this] {
             step++;
-            if (step > points.size()) {
+            if (step >= points.size()) {
                 timer->stop();
                 return;
             }
@@ -42,6 +42,7 @@ namespace QT {
 
     void ImageDisplay::setSearchSequential(const bool searchSequential) {
         this->searchSequential = searchSequential;
+        emit updateButtonStatus(searchSequential, searchSequential);
     }
 
     void ImageDisplay::setUseManhattan(const bool useManhattan) {
@@ -73,6 +74,11 @@ namespace QT {
         }
         QPainter imagePainter;
         imagePainter.begin(&showImage);
+        if (backup) {
+            imagePainter.setPen(QPen(Qt::transparent));
+            imagePainter.drawPoint(points[step + 1].point);
+            backup = false;
+        }
         imagePainter.setPen(QPen(Config::getInstance()->getConfigField(points[step].color)));
         imagePainter.drawPoint(points[step].point);
         imagePainter.end();
@@ -130,20 +136,6 @@ namespace QT {
         timer->start();
     }
 
-    void ImageDisplay::clearPath() {
-        showImage.fill(Qt::transparent);
-        repaint();
-    }
-
-    void ImageDisplay::repaintPath() {
-        if (!this->searchSequential) {
-            return;
-        }
-        showImage.fill(Qt::transparent);
-        step = 0;
-        timer->start();
-    }
-
     void ImageDisplay::searchPath(const PathSearchMethod searchMethod) {
         thread = new SearchThread(searchMethod, backGroundImage, {sc_int(start.x()), sc_int(start.y())},
                                   {sc_int(end.x()), sc_int(end.y())}, useManhattan);
@@ -152,6 +144,7 @@ namespace QT {
             points = std::move(thread->getResult());
             showImage.fill(Qt::transparent);
             step = 0;
+            emit updateButtonStatus(true, true);
             if (this->searchSequential) {
                 emit drawPath();
                 return;
@@ -161,4 +154,20 @@ namespace QT {
         QThreadPool::globalInstance()->start(thread);
     }
 
+    void ImageDisplay::stopPlay() {
+        step = 0;
+        if (timer->isActive()) {
+            timer->stop();
+        }
+        showImage.fill(Qt::transparent);
+        update();
+    }
+
+    void ImageDisplay::startPlay(const bool playing) {
+        if (playing) {
+            timer->stop();
+            return;
+        }
+        timer->start();
+    }
 }

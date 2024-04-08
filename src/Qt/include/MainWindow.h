@@ -27,6 +27,8 @@ namespace QT {
 
         void saveImage();
 
+        void updateButton(bool, bool);
+
     signals:
         void searchPathSignal(PathSearchMethod);
 
@@ -48,9 +50,10 @@ namespace QT {
 
     private:
         Ui::MainWindow *ui;
-        ConfigWidget * configWidget;
-        GenerateMaze * generateMaze;
+        ConfigWidget *configWidget;
+        GenerateMaze *generateMaze;
         QPixmap pixmap;
+        bool playing = false;
     };
 }
 

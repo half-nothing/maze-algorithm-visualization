@@ -22,9 +22,14 @@ namespace QT {
         ui->setupUi(this);
         configWidget = new ConfigWidget();
         generateMaze = new GenerateMaze();
+        ui->stopStepButton->setEnabled(false);
+        ui->playStepButton->setEnabled(false);
+        ui->saveImageButton->setEnabled(false);
+        ui->pathFindingButton->setEnabled(false);
         setWindowTitle("Half_nothing");
         connect(this, SIGNAL(searchPathSignal(PathSearchMethod)), ui->image, SLOT(searchPath(PathSearchMethod)));
         connect(this, SIGNAL(destroyThread()), ui->image, SLOT(dealDestroy()));
+        connect(ui->image, SIGNAL(updateButtonStatus(bool, bool)), this, SLOT(updateButton(bool, bool)));
         connect(ui->showSearchPathCheckBox, SIGNAL(clicked(bool)), ui->image, SLOT(setSearchSequential(bool)));
         connect(ui->useManhattanCheckBox, SIGNAL(clicked(bool)), ui->image, SLOT(setUseManhattan(bool)));
         connect(ui->searchDelaySlider, &QSlider::valueChanged, [this](const int value) {
@@ -63,10 +68,26 @@ namespace QT {
         });
         connect(ui->exitAction, &QAction::triggered, this, &QWidget::close);
         connect(generateMaze, &GenerateMaze::sendToMainPage, [this](const QPixmap &pixmap) {
-            ui->image->clearPath();
+            ui->image->stopPlay();
+            ui->pathFindingButton->setEnabled(true);
             ui->image->displayImage(pixmap);
         });
+        connect(ui->playStepButton, &QPushButton::clicked, [this] {
+            if (playing) {
+                ui->playStepButton->setText("播放");
+                playing = false;
+            } else {
+                ui->playStepButton->setText("暂停");
+                playing = true;
+            }
+            ui->image->startPlay(!playing);
+        });
         LOG(INFO) << "Main thread: " << QThread::currentThread();
+    }
+
+    void MainWindow::updateButton(const bool stop, const bool play) {
+        ui->stopStepButton->setEnabled(stop);
+        ui->playStepButton->setEnabled(play);
     }
 
     void MainWindow::closeEvent(QCloseEvent *event) {
@@ -129,9 +150,11 @@ namespace QT {
         image->readImage(filePath.toStdString());
         image->toQPixMap(pixmap);
         ui->image->displayImage(pixmap);
+        ui->pathFindingButton->setEnabled(true);
     }
 
     void MainWindow::findPath() {
+        ui->saveImageButton->setEnabled(true);
         switch (ui->pathFindingComboBox->currentIndex()) {
             case 0:
                 emit searchPathSignal(DFS_RECURSIVE);
