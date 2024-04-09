@@ -53,6 +53,8 @@ namespace QT {
 
         void drawPath();
 
+        void playFinish();
+
     protected:
         void updateShowImage(QPainter &painter) override;
 

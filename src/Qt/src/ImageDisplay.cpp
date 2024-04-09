@@ -15,6 +15,7 @@ namespace QT {
         connect(timer, &QTimer::timeout, [this] {
             step++;
             if (step >= points.size()) {
+                emit playFinish();
                 timer->stop();
                 return;
             }
@@ -159,6 +160,7 @@ namespace QT {
         if (timer->isActive()) {
             timer->stop();
         }
+        emit playFinish();
         showImage.fill(Qt::transparent);
         update();
     }

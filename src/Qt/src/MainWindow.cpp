@@ -29,7 +29,7 @@ namespace QT {
         setWindowTitle("Half_nothing");
         connect(this, SIGNAL(searchPathSignal(PathSearchMethod)), ui->image, SLOT(searchPath(PathSearchMethod)));
         connect(this, SIGNAL(destroyThread()), ui->image, SLOT(dealDestroy()));
-        connect(ui->image, SIGNAL(updateButtonStatus(bool, bool)), this, SLOT(updateButton(bool, bool)));
+        connect(ui->image, SIGNAL(updateButtonStatus(bool,bool)), this, SLOT(updateButton(bool,bool)));
         connect(ui->showSearchPathCheckBox, SIGNAL(clicked(bool)), ui->image, SLOT(setSearchSequential(bool)));
         connect(ui->useManhattanCheckBox, SIGNAL(clicked(bool)), ui->image, SLOT(setUseManhattan(bool)));
         connect(ui->searchDelaySlider, &QSlider::valueChanged, [this](const int value) {
@@ -81,6 +81,10 @@ namespace QT {
                 playing = true;
             }
             ui->image->startPlay(!playing);
+        });
+        connect(ui->image, &ImageDisplay::playFinish, [this] {
+            ui->playStepButton->setText("播放");
+            playing = false;
         });
         LOG(INFO) << "Main thread: " << QThread::currentThread();
     }
@@ -155,6 +159,8 @@ namespace QT {
 
     void MainWindow::findPath() {
         ui->saveImageButton->setEnabled(true);
+        ui->playStepButton->setText("暂停");
+        playing = true;
         switch (ui->pathFindingComboBox->currentIndex()) {
             case 0:
                 emit searchPathSignal(DFS_RECURSIVE);
