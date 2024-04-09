@@ -1,5 +1,5 @@
 /**********************************************
- * @file BmpStruct.h
+ * @file BmpDefinition.h
  * @brief Bmp文件信息结构体
  * @author Half_nothing
  * @email Half_nothing@163.com

@@ -1,5 +1,5 @@
 /**********************************************
- * @file BmpImage.hpp
+ * @file BmpImage.h
  * @brief Bmp文件操作的抽象父类
  * @author Half_nothing
  * @email Half_nothing@163.com
