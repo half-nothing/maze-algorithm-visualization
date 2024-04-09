@@ -21,7 +21,7 @@
  * @tparam T 链表存储的数据类型
  */
 template<typename T>
-class Queue final : public QueueStructure<T> {
+class Queue : public QueueStructure<T> {
     using Node = DoubleLinkNode<T>;
     using NodePtr = DoubleLinkNode<T> *;
 
@@ -88,7 +88,7 @@ public:
         return head->data;
     }
 
-    bool isEmpty() override {
+    bool empty() override {
         return length == 0;
     }
 
@@ -118,7 +118,7 @@ public:
         }
     }
 
-private:
+protected:
     NodePtr head = nullptr;
     NodePtr tail = nullptr;
     uint length = 0;

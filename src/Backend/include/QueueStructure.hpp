@@ -30,7 +30,7 @@ public:
 
     virtual T &top() = 0;
 
-    virtual bool isEmpty() = 0;
+    virtual bool empty() = 0;
 
     virtual void clear() = 0;
 

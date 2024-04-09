@@ -140,7 +140,7 @@ void GraphPath::BFS(std::vector<Point> &points, const QPixmap &pixmap, const QPo
     }
     queue.push(start);
     vis[start.x()][start.y()] = start;
-    while (!queue.isEmpty()) {
+    while (!queue.empty()) {
         const QPoint temp = queue.top();
         points.emplace_back(temp, SEARCHED_POINT_COLOR);
         if (temp == end) {
