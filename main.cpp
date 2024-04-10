@@ -1,7 +1,6 @@
 #include <Config.h>
 #include <QApplication>
 #include <QGlog.h>
-#include <QStyleFactory>
 
 #include "MainWindow.h"
 

@@ -1,13 +1,25 @@
 cmake_minimum_required(VERSION 3.27)
-project(DAC)
 
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+project(DAC LANGUAGES C CXX VERSION 1.1.0)
+
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 list(APPEND CMAKE_AUTOMOC_SEARCH_PATHS "src/Qt/src")
 list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS "src/Qt/ui")
+
+if (PROJECT_BINARY_DIR STREQUAL PROJECT_SOURCE_DIR)
+    message(WARNING "The binary directory of CMake cannot be the same as source directory!")
+endif()
+
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
 
 message("Github Action: " ${GITHUB_ACTION})
 
@@ -18,19 +30,33 @@ else ()
 endif ()
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -DNDEBUG")
+endif ()
+
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g")
 endif ()
 
 if (NO_CONSOLE)
     add_compile_definitions(NO_CONSOLE)
 endif ()
 
-message("Build Type: " ${CMAKE_BUILD_TYPE} ${CMAKE_CXX_FLAGS})
-
-set_target_properties(${TARGET_NAME} PROPERTIES DEBUG_POSTFIX "_d")
-set_target_properties(${TARGET_NAME} PROPERTIES RELEASE_POSTFIX "_r")
+message("Build Type: ${CMAKE_BUILD_TYPE} ${CMAKE_CXX_FLAGS}")
+message("PROJECT_NAME: ${PROJECT_NAME}")
+message("PROJECT_VERSION: ${PROJECT_VERSION}")
+message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
+message("PROJECT_BINARY_DIR: ${PROJECT_BINARY_DIR}")
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+
+if (NOT MSVC)
+    find_program(CCACHE_PROGRAM ccache)
+    if (CCACHE_PROGRAM)
+        message(STATUS "Found CCache: ${CCACHE_PROGRAM}")
+        set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ${CCACHE_PROGRAM})
+        set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ${CCACHE_PROGRAM})
+    endif()
+endif()
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/include
