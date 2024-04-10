@@ -187,6 +187,7 @@ void GraphPath::DFSStackVersion(std::vector<Point> &points, const QPixmap &pixma
     if (visitPoint(image.pixel(start))) {
         goto EndFunc;
     }
+    vis[start.x()][start.y()] = true;
     stack.push(start);
     while (!stack.isEmpty()) {
         const QPoint temp = stack.top();
