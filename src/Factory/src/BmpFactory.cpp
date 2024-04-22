@@ -29,6 +29,7 @@ BmpImage *BmpFactory::createBmpImage(const std::string &filepath) {
         case UNKNOWN_BIT:
             QMessageBox::warning(nullptr, "无法加载图片", "不支持的BMP文件格式");
             LOG(ERROR) << "未知的bmp文件格式" << std::endl;
+        case LOAD_FAIL:
             return nullptr;
     }
     return nullptr;

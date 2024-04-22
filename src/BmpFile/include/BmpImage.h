@@ -46,6 +46,7 @@ public:
     BmpType getBmpFileType() const;
 
 protected:
+    bool imageLoaded = false;
     BmpFileHeader bmpFileHeader{};
     BmpInfoHeader bmpInfoHeader{};
     std::ifstream inputFile = nullptr; //Bmp文件流

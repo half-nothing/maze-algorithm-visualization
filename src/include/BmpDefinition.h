@@ -95,7 +95,8 @@ struct BmpPixelInfo {
 };
 
 enum BmpType {
-    UNKNOWN_BIT = -1,
+    LOAD_FAIL = -1,
+    UNKNOWN_BIT = -2,
     ONE_BIT = 1,
     EIGHT_BIT = 8,
     TWENTY_FOUR_BIT = 24
