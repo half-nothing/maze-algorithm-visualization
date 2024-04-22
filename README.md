@@ -15,3 +15,16 @@
     <img alt="GPLv3" src="https://img.shields.io/badge/License-GPLv3-blue"/>
     <img alt="Platform Win32" src="https://img.shields.io/badge/Platform-Win32%20-blue"/>
 </p>  
+
+<h2 align="center"> 算法展示 </h2>
+
+### DFS
+![DFS](docs/images/DFS-Maze.gif)
+### BFS
+![BFS](docs/images/BFS-Maze.gif)
+### GBFS
+![GBFS](docs/images/GBFS-Maze.gif)
+### Dijkstra
+![Dijkstra](docs/images/Dijkstra-Maze.gif)
+### A*
+![A*](docs/images/AStar-Maze.gif)
