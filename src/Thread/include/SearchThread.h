@@ -19,14 +19,6 @@ public:
 
     [[nodiscard]] std::vector<Point> &getResult();
 
-    SearchThread(const SearchThread &other) = delete;
-
-    SearchThread(SearchThread &&other) noexcept = delete;
-
-    SearchThread &operator=(const SearchThread &other) = delete;
-
-    SearchThread &operator=(SearchThread &&other) noexcept = delete;
-
 protected:
     void execute() override;
 

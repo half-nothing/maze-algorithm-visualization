@@ -101,7 +101,7 @@ public:
      */
     void clear() override {
         delete[] data;
-        now  = -1;
+        now = -1;
         data = new T[capacity];
     }
 
@@ -124,8 +124,8 @@ public:
     }
 
 private:
-    T *data      = nullptr;
-    int now      = -1;
+    T *data = nullptr;
+    int now = -1;
     int capacity = 0;
 
     /**

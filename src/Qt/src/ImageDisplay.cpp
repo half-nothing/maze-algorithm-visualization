@@ -144,7 +144,7 @@ namespace QT {
             points.clear();
             points = std::move(thread->getResult());
             showImage.fill(Qt::transparent);
-            step = 0;
+            step = -1;
             emit updateButtonStatus(true, true);
             if (this->searchSequential) {
                 emit drawPath();
@@ -156,13 +156,13 @@ namespace QT {
     }
 
     void ImageDisplay::stopPlay() {
-        step = 0;
         if (timer->isActive()) {
             timer->stop();
         }
+        step = -1;
         emit playFinish();
         showImage.fill(Qt::transparent);
-        update();
+        repaint();
     }
 
     void ImageDisplay::startPlay(const bool playing) {
