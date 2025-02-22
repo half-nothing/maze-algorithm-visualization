@@ -11,7 +11,9 @@
 #include <queue>
 #include "windows.h"
 #include "GraphPath.h"
+
 #define  GLOG_NO_ABBREVIATED_SEVERITIES
+
 #include <Config.h>
 #include <QThread>
 #include <Queue.hpp>
@@ -20,8 +22,18 @@
 #include <complex>
 #include <glog/logging.h>
 
-static constexpr int fourDirs[4][2] = {{1, 0}, {0, -1}, {-1, 0}, {0, 1}};
-static constexpr int eightDirs[8][2] = {{1, 0}, {0, -1}, {-1, 0}, {0, 1}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
+static constexpr int fourDirs[4][2] = {{1,  0},
+                                       {0,  -1},
+                                       {-1, 0},
+                                       {0,  1}};
+static constexpr int eightDirs[8][2] = {{1,  0},
+                                        {0,  -1},
+                                        {-1, 0},
+                                        {0,  1},
+                                        {1,  1},
+                                        {-1, 1},
+                                        {1,  -1},
+                                        {-1, -1}};
 static constexpr QPoint invalidPoint(-1, -1);
 static constexpr auto visitPoint = [](const QRgb color) {
     return color == Config::getInstance()->getConfigField(WALL_COLOR);
@@ -37,18 +49,18 @@ struct StorePoint {
     QPoint point;
     double distance;
 
-    StorePoint():
-        point{invalidPoint}, distance{-1} {};
+    StorePoint() :
+            point{invalidPoint}, distance{-1} {};
 
     StorePoint(const QPoint &point, const double distance) :
-        point{point},
-        distance{distance} {}
+            point{point},
+            distance{distance} {}
 
     StorePoint(const StorePoint &other) = default;
 
-    StorePoint(StorePoint &&other) noexcept :
-        point{other.point},
-        distance{other.distance} {}
+    StorePoint(StorePoint &&other) noexcept:
+            point{other.point},
+            distance{other.distance} {}
 
     StorePoint &operator=(const StorePoint &other) {
         if (this == &other) return *this;
@@ -68,29 +80,29 @@ struct StorePoint {
 struct AStarPoint final : StorePoint {
     double weight;
 
-    AStarPoint():
-        weight{1e9} {}
+    AStarPoint() :
+            weight{1e9} {}
 
     AStarPoint(const QPoint &point, const double distance, const double weight) :
-        StorePoint{point, distance},
-        weight{weight} {}
+            StorePoint{point, distance},
+            weight{weight} {}
 
     AStarPoint(const AStarPoint &other) = default;
 
-    AStarPoint(AStarPoint &&other) noexcept :
-        StorePoint{std::move(other)},
-        weight{other.weight} {}
+    AStarPoint(AStarPoint &&other) noexcept:
+            StorePoint{std::move(other)},
+            weight{other.weight} {}
 
     AStarPoint &operator=(const AStarPoint &other) {
         if (this == &other) return *this;
-        StorePoint::operator =(other);
+        StorePoint::operator=(other);
         weight = other.weight;
         return *this;
     }
 
     AStarPoint &operator=(AStarPoint &&other) noexcept {
         if (this == &other) return *this;
-        StorePoint::operator =(std::move(other));
+        StorePoint::operator=(std::move(other));
         weight = other.weight;
         return *this;
     }
@@ -171,8 +183,8 @@ void GraphPath::BFS(std::vector<Point> &points, const QPixmap &pixmap, const QPo
             tmp = temp;
         }
     }
-EndFunc:
-    TIMER_STOP
+    EndFunc:
+TIMER_STOP
     LOG(INFO) << "Bfs search finish";
     updateTime(time);
 }
@@ -208,7 +220,7 @@ void GraphPath::DFSStackVersion(std::vector<Point> &points, const QPixmap &pixma
             }
         }
         stack.pop();
-    EndLoop:
+        EndLoop:
         continue;
     }
     if (!stack.isEmpty() && stack.pop() == end) {
@@ -216,8 +228,8 @@ void GraphPath::DFSStackVersion(std::vector<Point> &points, const QPixmap &pixma
             points.emplace_back(stack.pop(), PATH_POINT_COLOR);
         }
     }
-EndFunc:
-    TIMER_STOP
+    EndFunc:
+TIMER_STOP
     LOG(INFO) << "DfsStackVersion search finish";
     updateTime(time);
 }
@@ -226,7 +238,7 @@ void GraphPath::DFSRecursiveVersion(std::vector<Point> &points, const QPixmap &p
                                     const QPoint end) {
     LOG(INFO) << "DfsRecursiveVersion search start";
     TIMER_START
-    std::vector vis(pixmap.width(), std::vector(pixmap.height(), false));
+    std::vector<std::vector<char>> vis(pixmap.width(), std::vector<char>(pixmap.height(), 0));
     std::vector<Point> path;
     QImage image = pixmap.toImage();
     returnFlag = false;
@@ -241,7 +253,7 @@ void GraphPath::DFSRecursiveVersion(std::vector<Point> &points, const QPixmap &p
 
 void GraphPath::_DFSRecursiveVersion(std::vector<Point> &points, std::vector<Point> &path, QImage &image,
                                      const QPoint start, const QPoint end,
-                                     std::vector<std::vector<bool> > &vis) {
+                                     std::vector<std::vector<char> > &vis) {
     if (returnFlag) return;
     if (start.x() == end.x() && start.y() == end.y()) {
         returnFlag = true;
@@ -249,7 +261,7 @@ void GraphPath::_DFSRecursiveVersion(std::vector<Point> &points, std::vector<Poi
     }
     if (start.x() < 0 || start.x() >= image.width() || start.y() < 0 || start.y() >= image.height()) return;
     if (vis[start.x()][start.y()]) return;
-    vis[start.x()][start.y()] = true;
+    vis[start.x()][start.y()] = 1;
     if (visitPoint(image.pixel(start))) return;
     points.emplace_back(start, SEARCHED_POINT_COLOR);
 
@@ -309,8 +321,8 @@ void GraphPath::GBFS(std::vector<Point> &points, const QPixmap &pixmap, const QP
             tmp = temp;
         }
     }
-EndFunc:
-    TIMER_STOP
+    EndFunc:
+TIMER_STOP
     LOG(INFO) << "GBFS search finish";
     updateTime(time);
 }
@@ -368,8 +380,8 @@ void GraphPath::Dijkstra(std::vector<Point> &points, const QPixmap &pixmap, cons
             tmp = temp;
         }
     }
-EndFunc:
-    TIMER_STOP
+    EndFunc:
+TIMER_STOP
     LOG(INFO) << "Dijkstra search finish";
     updateTime(time);
 }
@@ -429,8 +441,8 @@ void GraphPath::aStar(std::vector<Point> &points, const QPixmap &pixmap, const Q
             tmp = temp;
         }
     }
-EndFunc:
-    TIMER_STOP
+    EndFunc:
+TIMER_STOP
     LOG(INFO) << "A* search finish";
     updateTime(time);
 }

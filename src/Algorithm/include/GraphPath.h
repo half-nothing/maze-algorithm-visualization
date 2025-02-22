@@ -46,7 +46,7 @@ private:
     void updateTime(double time);
 
     void _DFSRecursiveVersion(std::vector<Point> &points, std::vector<Point> &path, QImage &image, QPoint start,
-                              QPoint end, std::vector<std::vector<bool> > &vis);
+                              QPoint end, std::vector<std::vector<char> > &vis);
 };
 
 #endif
